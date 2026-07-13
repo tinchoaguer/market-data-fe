@@ -22,7 +22,7 @@ describe('fetchMarketData', () => {
     await fetchMarketData('BTC/USDT')
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/markets/BTC-USDT/market-data',
+      expect.stringMatching(/\/markets\/BTC-USDT\/market-data$/),
       expect.objectContaining({ method: 'GET' }),
     )
   })

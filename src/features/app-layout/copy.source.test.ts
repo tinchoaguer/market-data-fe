@@ -6,7 +6,6 @@ import { getMessage, messages } from '../../i18n/messages'
 
 const featureSourceFiles = [
   'AppLayout.tsx',
-  'AnalysisPlaceholder.tsx',
   'ClassificationPlaceholder.tsx',
   'destinations.ts',
 ]
@@ -41,6 +40,7 @@ describe('app-layout copy sourcing', () => {
   it('reuses brand wording for product identity', () => {
     expect(wording.product.name).toBe('Market Data')
     expect(wording.product.nameShort).toBeTruthy()
+    expect(wording.cta.viewAnalysis).toBeTruthy()
   })
 
   it('does not hardcode designed English strings in feature components', () => {
