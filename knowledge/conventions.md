@@ -26,6 +26,30 @@ Rules:
 - Do not fork brand tokens or rewrite shared DS copy locally
 - Do not expect brand to know about this app
 
+## UI primitives (mandatory)
+
+When the UI needs a control that exists in `@market-data/brand/ui`, Spec Writer and Implementer **must** use that brand component. Styling a native HTML element with brand tokens is **not** a substitute.
+
+Current brand primitives (extend as the UI kit grows):
+
+| Need | Use from `@market-data/brand/ui` |
+|------|----------------------------------|
+| Button / actions | `Button` |
+| Select / dropdown | `Select`, `SelectTrigger`, `SelectContent`, `SelectItem`, … |
+| Card layout | `Card`, `CardHeader`, `CardTitle`, … |
+| Tables | `Table`, `TableHeader`, `TableRow`, `TableCell`, … |
+| Badge | `Badge` |
+| Loading placeholder | `Skeleton` |
+| Inline alert / error chrome | `Alert`, `AlertTitle`, `AlertDescription` |
+
+Rules:
+
+- Specs (`design.md` / `tasks.md`) must name the brand primitive when one applies (e.g. “use brand `Select` for symbol selection”)
+- Implementers must import from `@market-data/brand/ui`, not reimplement or wrap native equivalents for the same role
+- Reviewers treat missing brand primitives as a **required** finding when a matching export exists
+- If no brand primitive exists yet: either add it in `market-data-brand` first, or document an explicit exception in `design.md` (why native/custom is allowed)
+- Token-only styling of native elements is allowed only for layout/structure that is not a DS primitive (e.g. page shell, feature-specific composition)
+
 ## Specifications
 
 Follow `../harness/governance/spec_guidelines.md`:

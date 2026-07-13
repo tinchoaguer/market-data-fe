@@ -1,3 +1,8 @@
 {
-  "app": {}
+  "app": {},
+  "viewMarketData": {
+    "title": "Market data",
+    "empty": "Select a symbol to view market data.",
+    "timeframe": "Timeframe"
+  }
 }
