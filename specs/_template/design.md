@@ -8,6 +8,10 @@
 
 <!-- Components involved and their responsibilities -->
 
+### Brand UI primitives
+
+<!-- Required when the feature uses interactive/chrome controls. Name the `@market-data/brand/ui` exports to use (Select, Button, Table, Alert, Skeleton, Badge, Card, …). Native HTML stand-ins for those roles are forbidden unless an explicit exception is documented here. See knowledge/conventions.md → UI primitives (mandatory). -->
+
 ## Data Flow
 
 <!-- How information moves through the system -->

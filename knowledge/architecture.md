@@ -28,6 +28,14 @@ market-data-fe/
 
 **Dependency direction:** this app depends on `@market-data/brand`. Brand must not reference this app.
 
+## UI kit consumption
+
+Product screens compose feature layout and call the API. Shared interactive and chrome primitives come from `@market-data/brand/ui` only.
+
+- Mandatory: use brand exports for Select, Button, Table, Alert, Skeleton, Badge, Card, and any future kit primitive that matches the need
+- Forbidden: native HTML stand-ins for those roles (e.g. `<select>` instead of brand `Select`) even when styled with brand CSS variables
+- Details and exceptions: `knowledge/conventions.md` → **UI primitives (mandatory)**
+
 ## UI copy ownership
 
 | Kind | Location | Access |
