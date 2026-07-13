@@ -48,14 +48,17 @@ describe('AppLayout', () => {
 
   it('updates outlet content when navigating between destinations', async () => {
     const user = userEvent.setup()
-    render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+    render(
+      <AppLayout
+        marketDataScreen={<div>Market data content</div>}
+        analysisScreen={<div>Analysis content</div>}
+      />,
+    )
 
     await user.click(
       screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
     )
-    expect(
-      screen.getByText(getMessage('appLayout.analysisPlaceholder')),
-    ).toBeInTheDocument()
+    expect(screen.getByText('Analysis content')).toBeInTheDocument()
     expect(screen.queryByText('Market data content')).not.toBeInTheDocument()
 
     await user.click(
@@ -66,9 +69,7 @@ describe('AppLayout', () => {
     expect(
       screen.getByText(getMessage('appLayout.classificationPlaceholder')),
     ).toBeInTheDocument()
-    expect(
-      screen.queryByText(getMessage('appLayout.analysisPlaceholder')),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText('Analysis content')).not.toBeInTheDocument()
 
     await user.click(
       screen.getByRole('button', { name: getMessage('appLayout.navMarketData') }),
@@ -78,7 +79,12 @@ describe('AppLayout', () => {
 
   it('visually indicates the active destination via aria-current', async () => {
     const user = userEvent.setup()
-    render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+    render(
+      <AppLayout
+        marketDataScreen={<div>Market data content</div>}
+        analysisScreen={<div>Analysis content</div>}
+      />,
+    )
 
     const analysis = screen.getByRole('button', {
       name: getMessage('appLayout.navAnalysis'),
@@ -98,7 +104,12 @@ describe('AppLayout', () => {
 
   it('keeps chrome structure mounted when switching destinations', async () => {
     const user = userEvent.setup()
-    render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+    render(
+      <AppLayout
+        marketDataScreen={<div>Market data content</div>}
+        analysisScreen={<div>Analysis content</div>}
+      />,
+    )
 
     const chrome = screen.getByTestId('app-layout-chrome')
     const nav = screen.getByTestId('app-layout-nav')
@@ -129,19 +140,22 @@ describe('AppLayout', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders Analysis and Classification stub placeholders', async () => {
+  it('renders the Analysis product view (not a stub) for the Analysis destination', async () => {
     const user = userEvent.setup()
-    render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+    render(
+      <AppLayout
+        marketDataScreen={<div>Market data content</div>}
+        analysisScreen={<div data-testid="analysis-product-view">Analysis product</div>}
+      />,
+    )
 
     await user.click(
       screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
     )
-    expect(messages.appLayout.analysisPlaceholder).toBe(
-      'Analysis is not available yet.',
-    )
+    expect(screen.getByTestId('analysis-product-view')).toBeInTheDocument()
     expect(
-      screen.getByText(messages.appLayout.analysisPlaceholder),
-    ).toBeInTheDocument()
+      screen.queryByText(messages.appLayout.analysisPlaceholder),
+    ).not.toBeInTheDocument()
 
     await user.click(
       screen.getByRole('button', {
@@ -156,9 +170,33 @@ describe('AppLayout', () => {
     ).toBeInTheDocument()
   })
 
-  it('resolves nav and stub copy from brand wording and feature locale keys', async () => {
+  it('mounts MarketAnalysisScreen by default on the Analysis destination', async () => {
     const user = userEvent.setup()
     render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+
+    await user.click(
+      screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
+    )
+
+    expect(
+      screen.getByRole('heading', { name: getMessage('viewMarketAnalysis.title') }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(getMessage('viewMarketAnalysis.empty')),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(messages.appLayout.analysisPlaceholder),
+    ).not.toBeInTheDocument()
+  })
+
+  it('resolves nav and destination copy from brand wording and feature locale keys', async () => {
+    const user = userEvent.setup()
+    render(
+      <AppLayout
+        marketDataScreen={<div>Market data content</div>}
+        analysisScreen={<div>Analysis content</div>}
+      />,
+    )
 
     expect(
       within(screen.getByTestId('app-layout-brand')).getByText(
@@ -178,8 +216,6 @@ describe('AppLayout', () => {
     await user.click(
       screen.getByRole('button', { name: messages.appLayout.navAnalysis }),
     )
-    expect(
-      screen.getByText(messages.appLayout.analysisPlaceholder),
-    ).toBeInTheDocument()
+    expect(screen.getByText('Analysis content')).toBeInTheDocument()
   })
 })

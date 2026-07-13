@@ -14,8 +14,8 @@ import {
 } from '@market-data/brand/ui'
 import { wording } from '@market-data/brand/wording'
 import { getMessage } from '../../i18n/messages'
+import { MarketAnalysisScreen } from '../view-market-analysis/MarketAnalysisScreen'
 import { MarketDataScreen } from '../view-market-data/MarketDataScreen'
-import { AnalysisPlaceholder } from './AnalysisPlaceholder'
 import { ClassificationPlaceholder } from './ClassificationPlaceholder'
 import {
   DEFAULT_DESTINATION,
@@ -28,6 +28,8 @@ export type AppLayoutProps = {
   initialDestination?: DestinationId
   /** Optional Market Data screen override for tests. */
   marketDataScreen?: ReactNode
+  /** Optional Analysis screen override for tests. */
+  analysisScreen?: ReactNode
 }
 
 const NAV_ITEMS: { id: DestinationId; labelKey: string }[] = [
@@ -48,6 +50,7 @@ function resolveInitialDestination(
 export function AppLayout({
   initialDestination,
   marketDataScreen,
+  analysisScreen,
 }: AppLayoutProps) {
   const [activeDestination, setActiveDestination] = useState<DestinationId>(
     () => resolveInitialDestination(initialDestination),
@@ -91,7 +94,9 @@ export function AppLayout({
         {activeDestination === 'market-data'
           ? (marketDataScreen ?? <MarketDataScreen />)
           : null}
-        {activeDestination === 'analysis' ? <AnalysisPlaceholder /> : null}
+        {activeDestination === 'analysis'
+          ? (analysisScreen ?? <MarketAnalysisScreen />)
+          : null}
         {activeDestination === 'classification' ? (
           <ClassificationPlaceholder />
         ) : null}

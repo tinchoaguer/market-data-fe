@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 4
-  slug: app-layout
+  id: 2
+  slug: view-market-analysis
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-13
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-13T14:51:00
+  recorded_at: 2026-07-13T16:43:00
   notes: User command — Approve Specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for app-layout
+  - Produce requirements.md, design.md, and tasks.md for view-market-analysis
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** App Layout (`app-layout`)
+**Feature:** View Market Analysis (`view-market-analysis`)
 
 **Stage:** Completed
 
@@ -41,13 +41,11 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Implementation satisfies specs/app-layout (requirements, design, tasks).
-  Shared AppLayout wraps all destinations with brand chrome (Logo + wording.product.name),
-  brand Button nav for Market Data / Analysis / Classification with active indication
-  (aria-current + primary/ghost), MarketDataScreen in the outlet, locale-backed stubs
-  for Analysis/Classification, and App.tsx integration. All 11 app-layout tests pass.
-  Pre-existing fetchMarketData failure when VITE_API_BASE_URL is set is out of scope
-  for this feature (no required findings).
+  View Market Analysis satisfies all REQ-001–REQ-013, NFR-001–NFR-006, and
+  acceptance criteria. Symbol select, GET analysis, success sections,
+  loading/error/retry, idle empty state, layout mount, and locale/brand copy
+  are implemented and covered by tests. No required findings; recommendations only.
 ```
 
-Workflow terminated successfully. History archived to `work/history/app-layout.md`.
+Workflow terminated successfully. History archived to `work/history/view-market-analysis.md`.
+Review report: `work/progress/reviews/view-market-analysis.md`.
