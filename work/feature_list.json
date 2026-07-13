@@ -47,5 +47,19 @@
         "Loading and error states are presented to the user."
       ],
       "status": "Pending"
+    },
+    {
+      "id": 4,
+      "slug": "app-layout",
+      "title": "App Layout",
+      "description": "Provide a shared application layout that wraps product views with consistent chrome, branding, and navigation between Market Data, Analysis, and Classification.",
+      "acceptance": [
+        "All product views render inside a shared application layout.",
+        "The layout shows the Market Data product brand as a primary chrome signal.",
+        "The user can navigate between Market Data, Analysis, and Classification views from the layout.",
+        "The active view is visually indicated in the navigation.",
+        "Layout chrome remains consistent across views (header/nav structure does not change per screen)."
+      ],
+      "status": "Done"
     }
   ]

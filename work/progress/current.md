@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 1
-  slug: view-market-data
+  id: 4
+  slug: app-layout
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-13
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-13T12:24:00
-  notes: User command — Approve specification
+  recorded_at: 2026-07-13T14:51:00
+  notes: User command — Approve Specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for view-market-data
+  - Produce requirements.md, design.md, and tasks.md for app-layout
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** View Market Data (`view-market-data`)
+**Feature:** App Layout (`app-layout`)
 
 **Stage:** Completed
 
@@ -41,11 +41,13 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  View Market Data satisfies the approved requirements, design, and tasks.
-  All REQ-001–REQ-010 and NFR-001–NFR-005 pass with implementation and automated
-  coverage; all acceptance criteria pass. Vitest: 4 files, 20 tests passed.
-  Findings are recommendations only (native select vs brand Select; candle OHLC
-  and order-book quantity column headers). No required fixes.
+  Implementation satisfies specs/app-layout (requirements, design, tasks).
+  Shared AppLayout wraps all destinations with brand chrome (Logo + wording.product.name),
+  brand Button nav for Market Data / Analysis / Classification with active indication
+  (aria-current + primary/ghost), MarketDataScreen in the outlet, locale-backed stubs
+  for Analysis/Classification, and App.tsx integration. All 11 app-layout tests pass.
+  Pre-existing fetchMarketData failure when VITE_API_BASE_URL is set is out of scope
+  for this feature (no required findings).
 ```
 
-Workflow terminated successfully. History archived to `work/history/view-market-data.md`.
+Workflow terminated successfully. History archived to `work/history/app-layout.md`.

@@ -32,8 +32,9 @@ market-data-fe/
 
 Product screens compose feature layout and call the API. Shared interactive and chrome primitives come from `@market-data/brand/ui` only.
 
-- Mandatory: use brand exports for Select, Button, Table, Alert, Skeleton, Badge, Card, and any future kit primitive that matches the need
+- Mandatory: use brand exports for Select, Button, Table, Alert, Skeleton, Badge, Card, AppShell/Page/Stack/Text (and related layout helpers), and any future kit primitive that matches the need
 - Forbidden: native HTML stand-ins for those roles (e.g. `<select>` instead of brand `Select`) even when styled with brand CSS variables
+- Forbidden: Tailwind / utility `className` strings in this app (they are not compiled for consumers)
 - Details and exceptions: `knowledge/conventions.md` → **UI primitives (mandatory)**
 
 ## UI copy ownership

@@ -4,6 +4,9 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  Cluster,
+  ClusterItem,
+  SectionHeading,
   Table,
   TableBody,
   TableCell,
@@ -26,8 +29,8 @@ function LevelsTable({
   label: string
 }) {
   return (
-    <div className="min-w-0 flex-1">
-      <h3 className="mb-2 text-sm font-medium text-[var(--muted-foreground)]">{label}</h3>
+    <ClusterItem>
+      <SectionHeading>{label}</SectionHeading>
       <Table>
         <TableHeader>
           <TableRow>
@@ -38,17 +41,13 @@ function LevelsTable({
         <TableBody>
           {levels.map((level, index) => (
             <TableRow key={`${label}-${level.price}-${level.quantity}-${index}`}>
-              <TableCell className="font-[family-name:var(--font-mono)] tabular-nums">
-                {level.price}
-              </TableCell>
-              <TableCell className="font-[family-name:var(--font-mono)] tabular-nums">
-                {level.quantity}
-              </TableCell>
+              <TableCell variant="mono">{level.price}</TableCell>
+              <TableCell variant="mono">{level.quantity}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </div>
+    </ClusterItem>
   )
 }
 
@@ -58,9 +57,11 @@ export function OrderBookSection({ bids, asks }: OrderBookSectionProps) {
       <CardHeader>
         <CardTitle>{wording.labels.orderBook}</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-6 md:flex-row">
-        <LevelsTable levels={bids} label={wording.labels.bids} />
-        <LevelsTable levels={asks} label={wording.labels.asks} />
+      <CardContent>
+        <Cluster>
+          <LevelsTable levels={bids} label={wording.labels.bids} />
+          <LevelsTable levels={asks} label={wording.labels.asks} />
+        </Cluster>
       </CardContent>
     </Card>
   )
