@@ -1,6 +1,14 @@
 # market-data-fe
 
-Frontend for the market-data project.
+Frontend for the market-data project. Consumes `@market-data/brand` for tokens, shared wording, logo, and UI kit.
+
+## UI copy
+
+- Shared / design-system: `import { wording } from '@market-data/brand/wording'`
+- Feature / app: `src/locales/en.json` via `src/i18n/messages.ts`
+- Agent guidelines (mirrored from brand): `knowledge/writing/`
+
+See `knowledge/conventions.md` and `HARNESS.md`.
 
 ## Logo / favicon
 

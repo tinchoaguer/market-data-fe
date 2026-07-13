@@ -1,5 +1,7 @@
+import { MarketDataScreen } from './features/view-market-data/MarketDataScreen'
+
 function App() {
-  return <h1>Market Data UI</h1>
+  return <MarketDataScreen />
 }
 
 export default App
