@@ -17,7 +17,7 @@ function App() {
           color: 'var(--color-text-muted)',
         }}
       >
-        {wording.productNameShort}
+        {wording.product.nameShort}
       </p>
       <h1
         style={{
@@ -27,7 +27,7 @@ function App() {
           letterSpacing: 'var(--letter-spacing-tight)',
         }}
       >
-        {wording.productName}
+        {wording.product.name}
       </h1>
       <p
         style={{
@@ -36,7 +36,7 @@ function App() {
           maxWidth: '32rem',
         }}
       >
-        {wording.tagline}
+        {wording.product.tagline}
       </p>
     </main>
   )
