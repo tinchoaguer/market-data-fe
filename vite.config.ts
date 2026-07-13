@@ -8,6 +8,11 @@ export default defineConfig({
     alias: {
       react: resolve(__dirname, 'node_modules/react'),
       'react-dom': resolve(__dirname, 'node_modules/react-dom'),
+      // Brand package exports Logo but not defaultLogoConfig; resolve via linked package source.
+      '@market-data/brand/logo-config': resolve(
+        __dirname,
+        'node_modules/@market-data/brand/src/brand/logo-config.ts',
+      ),
     },
     dedupe: ['react', 'react-dom'],
   },

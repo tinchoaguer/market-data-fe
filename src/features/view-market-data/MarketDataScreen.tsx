@@ -4,7 +4,13 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
+  Page,
+  PageEyebrow,
+  PageHeader,
+  PageTitle,
   Skeleton,
+  Stack,
+  Text,
 } from '@market-data/brand/ui'
 import { wording } from '@market-data/brand/wording'
 import { fetchMarketData } from '../../api/marketData/fetchMarketData'
@@ -73,15 +79,11 @@ export function MarketDataScreen({
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 p-8">
-      <header className="flex flex-col gap-2">
-        <p className="text-sm uppercase tracking-[var(--letter-spacing-wide)] text-[var(--muted-foreground)]">
-          {wording.product.nameShort}
-        </p>
-        <h1 className="text-3xl font-bold tracking-[var(--letter-spacing-tight)]">
-          {getMessage('viewMarketData.title')}
-        </h1>
-      </header>
+    <Page>
+      <PageHeader>
+        <PageEyebrow>{wording.product.nameShort}</PageEyebrow>
+        <PageTitle>{getMessage('viewMarketData.title')}</PageTitle>
+      </PageHeader>
 
       <SymbolSelector
         value={selectedSymbol}
@@ -89,21 +91,21 @@ export function MarketDataScreen({
       />
 
       {state.status === 'idle' ? (
-        <p className="text-[var(--muted-foreground)]">{getMessage('viewMarketData.empty')}</p>
+        <Text tone="muted">{getMessage('viewMarketData.empty')}</Text>
       ) : null}
 
       {state.status === 'loading' ? (
-        <div role="status" aria-live="polite" className="flex flex-col gap-3">
-          <p>{wording.common.loading}</p>
-          <Skeleton className="h-24 w-full" />
-          <Skeleton className="h-40 w-full" />
-        </div>
+        <Stack gap="md" role="status" aria-live="polite">
+          <Text>{wording.common.loading}</Text>
+          <Skeleton size="card" />
+          <Skeleton size="panel" />
+        </Stack>
       ) : null}
 
       {state.status === 'error' ? (
         <Alert variant="destructive">
           <AlertTitle>{wording.common.error}</AlertTitle>
-          <AlertDescription className="mt-3">
+          <AlertDescription>
             <Button type="button" variant="outline" size="sm" onClick={handleRetry}>
               {wording.common.retry}
             </Button>
@@ -112,12 +114,12 @@ export function MarketDataScreen({
       ) : null}
 
       {state.status === 'success' ? (
-        <div className="flex flex-col gap-6">
+        <Stack gap="lg">
           <PriceSection price={state.data.price} />
           <OrderBookSection bids={state.data.orderBook.bids} asks={state.data.orderBook.asks} />
           <CandlesSection series={state.data.candlesByTimeframe} />
-        </div>
+        </Stack>
       ) : null}
-    </div>
+    </Page>
   )
 }

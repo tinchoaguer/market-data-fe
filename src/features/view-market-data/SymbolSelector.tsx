@@ -1,9 +1,11 @@
 import {
+  Label,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Stack,
 } from '@market-data/brand/ui'
 import { wording } from '@market-data/brand/wording'
 import { SUPPORTED_SYMBOLS } from '../../config/symbols'
@@ -16,10 +18,8 @@ export type SymbolSelectorProps = {
 
 export function SymbolSelector({ value, onValueChange, disabled = false }: SymbolSelectorProps) {
   return (
-    <div className="flex w-full max-w-xs flex-col gap-2">
-      <label className="text-sm font-medium text-[var(--muted-foreground)]" htmlFor="symbol-select">
-        {wording.labels.symbol}
-      </label>
+    <Stack gap="sm" width="narrow">
+      <Label htmlFor="symbol-select">{wording.labels.symbol}</Label>
       <Select
         value={value ?? ''}
         onValueChange={onValueChange}
@@ -36,6 +36,6 @@ export function SymbolSelector({ value, onValueChange, disabled = false }: Symbo
           ))}
         </SelectContent>
       </Select>
-    </div>
+    </Stack>
   )
 }

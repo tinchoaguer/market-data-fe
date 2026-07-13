@@ -1,7 +1,7 @@
-import { MarketDataScreen } from './features/view-market-data/MarketDataScreen'
+import { AppLayout } from './features/app-layout/AppLayout'
 
 function App() {
-  return <MarketDataScreen />
+  return <AppLayout />
 }
 
 export default App

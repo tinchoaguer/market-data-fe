@@ -41,6 +41,10 @@ Current brand primitives (extend as the UI kit grows):
 | Badge | `Badge` |
 | Loading placeholder | `Skeleton` |
 | Inline alert / error chrome | `Alert`, `AlertTitle`, `AlertDescription` |
+| App chrome / shell | `AppShell`, `AppHeader`, `AppHeaderBar`, `AppBrand`, `AppNav`, `AppMain` |
+| Page structure | `Page`, `PageHeader`, `PageEyebrow`, `PageTitle` |
+| Spacing / clusters | `Stack`, `Inline`, `Cluster`, `ClusterItem` |
+| Typography helpers | `Text`, `Label`, `SectionHeading` |
 
 Rules:
 
@@ -48,7 +52,8 @@ Rules:
 - Implementers must import from `@market-data/brand/ui`, not reimplement or wrap native equivalents for the same role
 - Reviewers treat missing brand primitives as a **required** finding when a matching export exists
 - If no brand primitive exists yet: either add it in `market-data-brand` first, or document an explicit exception in `design.md` (why native/custom is allowed)
-- Token-only styling of native elements is allowed only for layout/structure that is not a DS primitive (e.g. page shell, feature-specific composition)
+- Do **not** put Tailwind / utility `className` strings in this app — those utilities are not compiled for consumers
+- Feature composition may nest brand primitives; avoid hand-authored CSS for shared chrome, page width, or typography that the kit already covers
 
 ## Specifications
 

@@ -4,6 +4,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  Text,
 } from '@market-data/brand/ui'
 
 export type PriceSectionProps = {
@@ -17,9 +18,9 @@ export function PriceSection({ price }: PriceSectionProps) {
         <CardTitle>{wording.labels.price}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="font-[family-name:var(--font-mono)] text-2xl font-semibold tabular-nums">
+        <Text as="p" size="2xl" weight="semibold" mono tabular>
           {price}
-        </p>
+        </Text>
       </CardContent>
     </Card>
   )
