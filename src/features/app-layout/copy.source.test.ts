@@ -6,7 +6,6 @@ import { getMessage, messages } from '../../i18n/messages'
 
 const featureSourceFiles = [
   'AppLayout.tsx',
-  'ClassificationPlaceholder.tsx',
   'destinations.ts',
 ]
 
