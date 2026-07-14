@@ -52,6 +52,7 @@ describe('AppLayout', () => {
       <AppLayout
         marketDataScreen={<div>Market data content</div>}
         analysisScreen={<div>Analysis content</div>}
+        classificationScreen={<div>Classification content</div>}
       />,
     )
 
@@ -66,9 +67,7 @@ describe('AppLayout', () => {
         name: getMessage('appLayout.navClassification'),
       }),
     )
-    expect(
-      screen.getByText(getMessage('appLayout.classificationPlaceholder')),
-    ).toBeInTheDocument()
+    expect(screen.getByText('Classification content')).toBeInTheDocument()
     expect(screen.queryByText('Analysis content')).not.toBeInTheDocument()
 
     await user.click(
@@ -83,6 +82,7 @@ describe('AppLayout', () => {
       <AppLayout
         marketDataScreen={<div>Market data content</div>}
         analysisScreen={<div>Analysis content</div>}
+        classificationScreen={<div>Classification content</div>}
       />,
     )
 
@@ -108,6 +108,7 @@ describe('AppLayout', () => {
       <AppLayout
         marketDataScreen={<div>Market data content</div>}
         analysisScreen={<div>Analysis content</div>}
+        classificationScreen={<div>Classification content</div>}
       />,
     )
 
@@ -146,6 +147,9 @@ describe('AppLayout', () => {
       <AppLayout
         marketDataScreen={<div>Market data content</div>}
         analysisScreen={<div data-testid="analysis-product-view">Analysis product</div>}
+        classificationScreen={
+          <div data-testid="classification-product-view">Classification product</div>
+        }
       />,
     )
 
@@ -162,17 +166,20 @@ describe('AppLayout', () => {
         name: getMessage('appLayout.navClassification'),
       }),
     )
-    expect(messages.appLayout.classificationPlaceholder).toBe(
-      'Classification is not available yet.',
-    )
+    expect(screen.getByTestId('classification-product-view')).toBeInTheDocument()
     expect(
-      screen.getByText(messages.appLayout.classificationPlaceholder),
-    ).toBeInTheDocument()
+      screen.queryByText(messages.appLayout.classificationPlaceholder),
+    ).not.toBeInTheDocument()
   })
 
   it('mounts MarketAnalysisScreen by default on the Analysis destination', async () => {
     const user = userEvent.setup()
-    render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+    render(
+      <AppLayout
+        marketDataScreen={<div>Market data content</div>}
+        classificationScreen={<div>Classification content</div>}
+      />,
+    )
 
     await user.click(
       screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
@@ -189,12 +196,41 @@ describe('AppLayout', () => {
     ).not.toBeInTheDocument()
   })
 
+  it('mounts MarketClassificationScreen by default on the Classification destination', async () => {
+    const user = userEvent.setup()
+    render(
+      <AppLayout
+        marketDataScreen={<div>Market data content</div>}
+        analysisScreen={<div>Analysis content</div>}
+      />,
+    )
+
+    await user.click(
+      screen.getByRole('button', {
+        name: getMessage('appLayout.navClassification'),
+      }),
+    )
+
+    expect(
+      screen.getByRole('heading', {
+        name: getMessage('viewMarketClassification.title'),
+      }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(getMessage('viewMarketClassification.empty')),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(messages.appLayout.classificationPlaceholder),
+    ).not.toBeInTheDocument()
+  })
+
   it('resolves nav and destination copy from brand wording and feature locale keys', async () => {
     const user = userEvent.setup()
     render(
       <AppLayout
         marketDataScreen={<div>Market data content</div>}
         analysisScreen={<div>Analysis content</div>}
+        classificationScreen={<div>Classification content</div>}
       />,
     )
 

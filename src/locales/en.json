@@ -22,5 +22,12 @@
     "factorWeight": "Weight",
     "catalogId": "Catalog ID",
     "rationale": "Rationale"
+  },
+  "viewMarketClassification": {
+    "title": "Classification",
+    "empty": "Select a symbol to view classification.",
+    "source": "Source",
+    "score": "Score",
+    "reason": "Reason"
   }
 }
