@@ -76,6 +76,23 @@
         "Existing market analysis success, loading, and error flows remain intact."
       ],
       "status": "Done"
+    },
+    {
+      "id": 6,
+      "slug": "extend-human-readable-labels",
+      "title": "Extend Human-Readable Labels",
+      "description": "Extend the existing locale-backed label helpers to humanize remaining analysis and classification DTO codes shown in the UI: classification reason codes, strategy catalog tokens, and analysis component/factor key names.",
+      "acceptance": [
+        "Classification regime, risk, economic, and exposure reason codes are displayed as human-readable text.",
+        "Analysis preferred strategy / catalog strategy tokens (e.g. TREND_FOLLOWING) are displayed as human-readable text.",
+        "Analysis exposure factor names (e.g. vol_budget_pct) are displayed as human-readable text.",
+        "Analysis risk and economic component names in summaries are displayed as human-readable text.",
+        "Label catalogs live in locale JSON; mappers use existing resolveLabel helpers (or thin wrappers) and do not hardcode display English inline.",
+        "Unknown codes fall back safely to the raw code without failing payload mapping.",
+        "Screens continue to consume view models only; UI components do not map raw DTO codes.",
+        "Existing analysis and classification success, loading, and error flows remain intact."
+      ],
+      "status": "Done"
     }
 
 ]

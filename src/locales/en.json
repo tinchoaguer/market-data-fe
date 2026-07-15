@@ -58,6 +58,55 @@
       "below_sma_falling": "Price below falling SMA",
       "taker_buy_flow": "Taker buy flow",
       "taker_sell_flow": "Taker sell flow"
+    },
+    "strategy": {
+      "TREND_FOLLOWING": "Trend following",
+      "RANGE_BOUNDING": "Range bounding",
+      "PING_PONG": "Ping pong",
+      "NEWS_TRADING": "News trading",
+      "OTHER": "Other"
+    },
+    "exposureFactor": {
+      "vol_budget_pct": "Vol budget %",
+      "liquidity_cap_value": "Liquidity cap value"
+    },
+    "riskComponent": {
+      "volatility": "Volatility",
+      "atr_expansion": "ATR expansion",
+      "regime": "Regime",
+      "liquidity_stress": "Liquidity stress"
+    },
+    "economicComponent": {
+      "microstructure": "Microstructure",
+      "activity": "Activity",
+      "range_economics": "Range economics",
+      "cost_drag": "Cost drag"
+    }
+  },
+  "classificationLabels": {
+    "regimeReason": {
+      "trend_up": "Trend up",
+      "trend_down": "Trend down",
+      "range": "Range",
+      "chaotic": "Chaotic",
+      "news_spike": "News spike"
+    },
+    "riskReason": {
+      "low_risk": "Low risk",
+      "moderate_risk": "Moderate risk",
+      "elevated_risk": "Elevated risk",
+      "high_risk": "High risk"
+    },
+    "economicReason": {
+      "strong_edge": "Strong edge",
+      "moderate_edge": "Moderate edge",
+      "neutral_edge": "Neutral edge",
+      "negative_edge": "Negative edge"
+    },
+    "exposureReason": {
+      "ample_capacity": "Ample capacity",
+      "limited_capacity": "Limited capacity",
+      "constrained_capacity": "Constrained capacity"
     }
   }
 }

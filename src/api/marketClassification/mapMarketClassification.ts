@@ -1,3 +1,9 @@
+import {
+  getClassificationEconomicReasonLabel,
+  getClassificationExposureReasonLabel,
+  getClassificationRegimeReasonLabel,
+  getClassificationRiskReasonLabel,
+} from '../../i18n/labels'
 import type {
   ClassificationSignal,
   MarketClassificationViewModel,
@@ -34,22 +40,32 @@ function parseNumber(value: unknown, field: string): number {
   throw new MarketClassificationMappingError(`Invalid number for ${field}`)
 }
 
-function parseSignal(value: unknown, field: string): ClassificationSignal {
+function parseSignal(
+  value: unknown,
+  field: string,
+  resolveReason: (code: string) => string,
+): ClassificationSignal {
   if (!isRecord(value)) {
     throw new MarketClassificationMappingError(`Invalid signal at ${field}`)
   }
   return {
     source: parseString(value.source, `${field}.source`),
     score: parseNumber(value.score, `${field}.score`),
-    reason: parseString(value.reason, `${field}.reason`),
+    reason: resolveReason(parseString(value.reason, `${field}.reason`)),
   }
 }
 
-function parseSignalArray(value: unknown, field: string): ClassificationSignal[] {
+function parseSignalArray(
+  value: unknown,
+  field: string,
+  resolveReason: (code: string) => string,
+): ClassificationSignal[] {
   if (!Array.isArray(value)) {
     throw new MarketClassificationMappingError(`Expected array at ${field}`)
   }
-  return value.map((signal, index) => parseSignal(signal, `${field}[${index}]`))
+  return value.map((signal, index) =>
+    parseSignal(signal, `${field}[${index}]`, resolveReason),
+  )
 }
 
 /**
@@ -80,9 +96,25 @@ export function mapMarketClassificationPayload(
       typeof payload.symbol === 'string' && payload.symbol.length > 0
         ? payload.symbol
         : fallbackSymbol,
-    regime: parseSignalArray(payload.regime, 'regime'),
-    risk: parseSignalArray(payload.risk, 'risk'),
-    economic: parseSignalArray(payload.economic, 'economic'),
-    exposure: parseSignalArray(payload.exposure, 'exposure'),
+    regime: parseSignalArray(
+      payload.regime,
+      'regime',
+      getClassificationRegimeReasonLabel,
+    ),
+    risk: parseSignalArray(
+      payload.risk,
+      'risk',
+      getClassificationRiskReasonLabel,
+    ),
+    economic: parseSignalArray(
+      payload.economic,
+      'economic',
+      getClassificationEconomicReasonLabel,
+    ),
+    exposure: parseSignalArray(
+      payload.exposure,
+      'exposure',
+      getClassificationExposureReasonLabel,
+    ),
   }
 }
