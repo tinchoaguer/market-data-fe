@@ -1,6 +1,8 @@
 import { describe, expect, it, vi, afterEach } from 'vitest'
 import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { wording } from '@market-data/brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import { SUPPORTED_SYMBOLS } from '../../config/symbols'
@@ -10,8 +12,11 @@ import { MarketAnalysisScreen } from './MarketAnalysisScreen'
 const fixtureViewModel: MarketAnalysisViewModel = {
   symbol: 'BTC/USDT',
   regime: {
-    summary: 'Strong directional bid flow',
-    level: 'TREND_UP',
+    summary: [
+      getMessage('analysisLabels.regimeReason.adx_strong'),
+      getMessage('analysisLabels.regimeReason.plus_di_dominant'),
+    ].join(', '),
+    level: getMessage('analysisLabels.regime.TREND_UP'),
   },
   risk: {
     summary: 'Moderate volatility pressure',
@@ -121,8 +126,17 @@ describe('MarketAnalysisScreen', () => {
       screen.getByRole('heading', { name: wording.labels.recommendation }),
     ).toBeInTheDocument()
 
-    expect(screen.getByText('TREND_UP')).toBeInTheDocument()
-    expect(screen.getByText('Strong directional bid flow')).toBeInTheDocument()
+    expect(screen.getByText(getMessage('analysisLabels.regime.TREND_UP'))).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        [
+          getMessage('analysisLabels.regimeReason.adx_strong'),
+          getMessage('analysisLabels.regimeReason.plus_di_dominant'),
+        ].join(', '),
+      ),
+    ).toBeInTheDocument()
+    expect(screen.queryByText('TREND_UP')).not.toBeInTheDocument()
+    expect(screen.queryByText('adx_strong')).not.toBeInTheDocument()
     expect(screen.getByText('moderate')).toBeInTheDocument()
     expect(screen.getByText('Moderate volatility pressure')).toBeInTheDocument()
     expect(screen.getByText('favorable')).toBeInTheDocument()
@@ -134,6 +148,22 @@ describe('MarketAnalysisScreen', () => {
     expect(
       screen.getByText('Preferred for TREND_UP with acceptable risk'),
     ).toBeInTheDocument()
+  })
+
+  it('does not map raw DTO regime codes inside analysis screen components', () => {
+    const componentFiles = [
+      'MarketAnalysisScreen.tsx',
+      'AssessmentSections.tsx',
+      'ExposureSection.tsx',
+      'RecommendationSection.tsx',
+    ]
+    for (const file of componentFiles) {
+      const source = readFileSync(resolve(import.meta.dirname, file), 'utf8')
+      expect(source).not.toContain('getAnalysisRegimeLabel')
+      expect(source).not.toContain('getAnalysisRegimeReasonLabel')
+      expect(source).not.toContain('analysisLabels.regime')
+      expect(source).not.toContain('TREND_UP')
+    }
   })
 
   it('shows an error state with retry that re-requests the selected symbol', async () => {

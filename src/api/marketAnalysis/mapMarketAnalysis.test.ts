@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { getMessage } from '../../i18n/messages'
 import {
   mapMarketAnalysisPayload,
   MarketAnalysisMappingError,
@@ -113,14 +116,19 @@ describe('mapMarketAnalysisPayload', () => {
     })
   })
 
-  it('maps a valid backend payload to the view model', () => {
+  it('maps a valid backend payload with humanized regime label and reasons', () => {
     const result = mapMarketAnalysisPayload(backendPayload, 'ETH/USDT')
 
     expect(result.symbol).toBe('ETH/USDT')
     expect(result.regime).toEqual({
-      level: 'TREND_UP',
-      summary: 'adx_strong, plus_di_dominant',
+      level: getMessage('analysisLabels.regime.TREND_UP'),
+      summary: [
+        getMessage('analysisLabels.regimeReason.adx_strong'),
+        getMessage('analysisLabels.regimeReason.plus_di_dominant'),
+      ].join(', '),
     })
+    expect(result.regime.level).not.toBe('TREND_UP')
+    expect(result.regime.summary).not.toContain('adx_strong')
     expect(result.risk).toEqual({
       level: '0.17',
       summary: 'atr_expansion=0, liquidity_stress=0.12',
@@ -141,6 +149,47 @@ describe('mapMarketAnalysisPayload', () => {
       name: 'TREND_FOLLOWING',
       rationale: 'Allowed TREND_FOLLOWING for regime=TREND_UP',
     })
+  })
+
+  it('falls back to raw codes for unknown regime label and reason without failing mapping', () => {
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        regime: {
+          regime: 'MYSTERY_REGIME',
+          reasons: ['adx_strong', 'totally_unknown_reason'],
+          insufficient_data: false,
+        },
+      },
+      'ETH/USDT',
+    )
+
+    expect(result.regime.level).toBe('MYSTERY_REGIME')
+    expect(result.regime.summary).toBe(
+      [
+        getMessage('analysisLabels.regimeReason.adx_strong'),
+        'totally_unknown_reason',
+      ].join(', '),
+    )
+    expect(result.risk.level).toBe('0.17')
+    expect(result.recommendation.catalogId).toBe('TREND_FOLLOWING')
+  })
+
+  it('treats an empty regime.reasons array as success with an empty summary', () => {
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        regime: {
+          regime: 'RANGE',
+          reasons: [],
+          insufficient_data: false,
+        },
+      },
+      'ETH/USDT',
+    )
+
+    expect(result.regime.level).toBe(getMessage('analysisLabels.regime.RANGE'))
+    expect(result.regime.summary).toBe('')
   })
 
   it('treats an empty exposure.factors array as success', () => {
@@ -228,5 +277,29 @@ describe('mapMarketAnalysisPayload', () => {
         'BTC/USDT',
       ),
     ).toThrow(MarketAnalysisMappingError)
+  })
+
+  it('does not hardcode analysis display English in the mapper source', () => {
+    const source = readFileSync(
+      resolve(import.meta.dirname, 'mapMarketAnalysis.ts'),
+      'utf8',
+    )
+    const forbiddenDisplayPhrases = [
+      'Trend up',
+      'Trend down',
+      'News spike',
+      'Strong ADX',
+      'Plus DI dominant',
+      'Insufficient candles',
+      'ADX in low band',
+    ]
+    for (const phrase of forbiddenDisplayPhrases) {
+      expect(source, `mapper must not hardcode "${phrase}"`).not.toContain(
+        `'${phrase}'`,
+      )
+      expect(source, `mapper must not hardcode "${phrase}"`).not.toContain(
+        `"${phrase}"`,
+      )
+    }
   })
 })

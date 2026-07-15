@@ -1,3 +1,7 @@
+import {
+  getAnalysisRegimeLabel,
+  getAnalysisRegimeReasonLabel,
+} from '../../i18n/labels'
 import type {
   Assessment,
   ExposureFactor,
@@ -188,9 +192,11 @@ function mapBackendPayload(
   if (!Array.isArray(regimeReasons)) {
     throw new MarketAnalysisMappingError('Invalid regime.reasons')
   }
-  for (let index = 0; index < regimeReasons.length; index += 1) {
-    parseString(regimeReasons[index], `regime.reasons[${index}]`)
-  }
+  const humanizedReasons = regimeReasons.map((reason, index) =>
+    getAnalysisRegimeReasonLabel(
+      parseString(reason, `regime.reasons[${index}]`),
+    ),
+  )
 
   const preferred = parseString(
     payload.catalog.preferred_strategy,
@@ -203,8 +209,10 @@ function mapBackendPayload(
         ? payload.symbol
         : fallbackSymbol,
     regime: {
-      level: parseString(payload.regime.regime, 'regime.regime'),
-      summary: regimeReasons.join(', '),
+      level: getAnalysisRegimeLabel(
+        parseString(payload.regime.regime, 'regime.regime'),
+      ),
+      summary: humanizedReasons.join(', '),
     },
     risk: {
       level: String(parseNumber(payload.risk.score, 'risk.score')),

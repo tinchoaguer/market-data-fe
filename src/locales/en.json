@@ -29,5 +29,35 @@
     "source": "Source",
     "score": "Score",
     "reason": "Reason"
+  },
+  "analysisLabels": {
+    "regime": {
+      "TREND_UP": "Trend up",
+      "TREND_DOWN": "Trend down",
+      "RANGE": "Range",
+      "CHAOTIC": "Chaotic",
+      "NEWS_SPIKE": "News spike"
+    },
+    "regimeReason": {
+      "insufficient_candles": "Insufficient candles",
+      "adx_low_band": "ADX in low band",
+      "default": "Default",
+      "abnormal_range_or_body": "Abnormal range or body",
+      "relative_volume_spike": "Relative volume spike",
+      "relative_trades_spike": "Relative trades spike",
+      "volatility_expansion": "Volatility expansion",
+      "low_adx_high_atr": "Low ADX with high ATR",
+      "frequent_direction_changes": "Frequent direction changes",
+      "sma_whipsaw": "SMA whipsaw",
+      "adx_strong": "Strong ADX",
+      "plus_di_dominant": "Plus DI dominant",
+      "minus_di_dominant": "Minus DI dominant",
+      "hh_hl_structure": "Higher highs and higher lows",
+      "lh_ll_structure": "Lower highs and lower lows",
+      "above_sma_rising": "Price above rising SMA",
+      "below_sma_falling": "Price below falling SMA",
+      "taker_buy_flow": "Taker buy flow",
+      "taker_sell_flow": "Taker sell flow"
+    }
   }
 }

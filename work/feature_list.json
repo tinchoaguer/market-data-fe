@@ -61,5 +61,21 @@
         "Layout chrome remains consistent across views (header/nav structure does not change per screen)."
       ],
       "status": "Done"
+    },
+    {
+      "id": 5,
+      "slug": "human-readable-labels",
+      "title": "Human-Readable Labels",
+      "description": "Map backend DTO enum and reason-code values to human-readable UI text in the frontend mapping layer so analysis (and shared label infrastructure) displays readable copy instead of raw API tokens.",
+      "acceptance": [
+        "Backend analysis regime labels (e.g. TREND_UP) are displayed as human-readable text.",
+        "Backend analysis regime reason codes are displayed as human-readable text in summaries.",
+        "Label catalogs live in locale JSON (or shared label helpers); mappers do not hardcode display English inline.",
+        "Unknown codes fall back safely without failing the entire payload mapping.",
+        "Screens continue to consume view models only; UI components do not map raw DTO codes.",
+        "Existing market analysis success, loading, and error flows remain intact."
+      ],
+      "status": "Done"
     }
-  ]
+
+]
