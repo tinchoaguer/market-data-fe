@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { getMessage } from '../../i18n/messages'
 import {
   mapMarketAnalysisPayload,
   MarketAnalysisMappingError,
@@ -27,7 +30,7 @@ const designPayload = {
   },
   recommendation: {
     catalogId: 'TREND_FOLLOWING',
-    name: 'Trend following',
+    name: 'TREND_FOLLOWING',
     rationale: 'Preferred for TREND_UP with acceptable risk',
   },
 }
@@ -81,7 +84,7 @@ const backendPayload = {
 }
 
 describe('mapMarketAnalysisPayload', () => {
-  it('maps a valid design-shaped payload to the view model', () => {
+  it('maps a valid design-shaped payload with humanized strategy and factors', () => {
     const result = mapMarketAnalysisPayload(designPayload, 'BTC/USDT')
 
     expect(result).toEqual({
@@ -101,46 +104,177 @@ describe('mapMarketAnalysisPayload', () => {
       exposure: {
         summary: 'Capacity available for allocation',
         factors: [
-          { name: 'vol_budget_pct', weight: 0.35 },
-          { name: 'liquidity_cap_value', weight: 186197.09 },
+          {
+            name: getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
+            weight: 0.35,
+          },
+          {
+            name: getMessage(
+              'analysisLabels.exposureFactor.liquidity_cap_value',
+            ),
+            weight: 186197.09,
+          },
         ],
       },
       recommendation: {
-        catalogId: 'TREND_FOLLOWING',
-        name: 'Trend following',
+        catalogId: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
+        name: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
         rationale: 'Preferred for TREND_UP with acceptable risk',
       },
     })
   })
 
-  it('maps a valid backend payload to the view model', () => {
+  it('maps a valid backend payload with humanized labels', () => {
     const result = mapMarketAnalysisPayload(backendPayload, 'ETH/USDT')
 
     expect(result.symbol).toBe('ETH/USDT')
     expect(result.regime).toEqual({
-      level: 'TREND_UP',
-      summary: 'adx_strong, plus_di_dominant',
+      level: getMessage('analysisLabels.regime.TREND_UP'),
+      summary: [
+        getMessage('analysisLabels.regimeReason.adx_strong'),
+        getMessage('analysisLabels.regimeReason.plus_di_dominant'),
+      ].join(', '),
     })
+    expect(result.regime.level).not.toBe('TREND_UP')
+    expect(result.regime.summary).not.toContain('adx_strong')
     expect(result.risk).toEqual({
       level: '0.17',
-      summary: 'atr_expansion=0, liquidity_stress=0.12',
+      summary: [
+        `${getMessage('analysisLabels.riskComponent.atr_expansion')}=0`,
+        `${getMessage('analysisLabels.riskComponent.liquidity_stress')}=0.12`,
+      ].join(', '),
     })
     expect(result.economic).toEqual({
       level: '0.42',
-      summary: 'activity=0.88, cost_drag=0.1',
+      summary: [
+        `${getMessage('analysisLabels.economicComponent.activity')}=0.88`,
+        `${getMessage('analysisLabels.economicComponent.cost_drag')}=0.1`,
+      ].join(', '),
     })
     expect(result.exposure).toEqual({
       summary: '0.35',
       factors: [
-        { name: 'vol_budget_pct', weight: 0.35 },
-        { name: 'liquidity_cap_value', weight: 1000.5 },
+        {
+          name: getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
+          weight: 0.35,
+        },
+        {
+          name: getMessage(
+            'analysisLabels.exposureFactor.liquidity_cap_value',
+          ),
+          weight: 1000.5,
+        },
       ],
     })
     expect(result.recommendation).toEqual({
-      catalogId: 'TREND_FOLLOWING',
-      name: 'TREND_FOLLOWING',
+      catalogId: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
+      name: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
       rationale: 'Allowed TREND_FOLLOWING for regime=TREND_UP',
     })
+    expect(result.recommendation.catalogId).not.toBe('TREND_FOLLOWING')
+    expect(result.exposure.factors[0].name).not.toBe('vol_budget_pct')
+    expect(result.risk.summary).not.toContain('atr_expansion=')
+  })
+
+  it('falls back to raw codes for unknown regime label and reason without failing mapping', () => {
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        regime: {
+          regime: 'MYSTERY_REGIME',
+          reasons: ['adx_strong', 'totally_unknown_reason'],
+          insufficient_data: false,
+        },
+      },
+      'ETH/USDT',
+    )
+
+    expect(result.regime.level).toBe('MYSTERY_REGIME')
+    expect(result.regime.summary).toBe(
+      [
+        getMessage('analysisLabels.regimeReason.adx_strong'),
+        'totally_unknown_reason',
+      ].join(', '),
+    )
+    expect(result.risk.level).toBe('0.17')
+    expect(result.recommendation.catalogId).toBe(
+      getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
+    )
+  })
+
+  it('falls back to raw codes for unknown strategy, factors, and components', () => {
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        risk: {
+          score: 0.2,
+          components: [
+            ['atr_expansion', 0.1],
+            ['mystery_risk_component', 0.5],
+          ],
+          insufficient_data: false,
+        },
+        economic: {
+          edge: 0.3,
+          components: [['unknown_econ', 0.9]],
+          insufficient_data: false,
+        },
+        exposure: {
+          ...backendPayload.exposure,
+          components: {
+            vol_budget_pct: 0.2,
+            weird_factor: 1.5,
+          },
+        },
+        catalog: {
+          ...backendPayload.catalog,
+          preferred_strategy: 'MYSTERY_STRATEGY',
+        },
+      },
+      'ETH/USDT',
+    )
+
+    expect(result.recommendation.catalogId).toBe('MYSTERY_STRATEGY')
+    expect(result.recommendation.name).toBe('MYSTERY_STRATEGY')
+    expect(result.risk.summary).toBe(
+      [
+        `${getMessage('analysisLabels.riskComponent.atr_expansion')}=0.1`,
+        'mystery_risk_component=0.5',
+      ].join(', '),
+    )
+    expect(result.economic.summary).toBe('unknown_econ=0.9')
+    expect(result.exposure.factors).toEqual([
+      {
+        name: getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
+        weight: 0.2,
+      },
+      { name: 'weird_factor', weight: 1.5 },
+    ])
+  })
+
+  it('does not rewrite free-text catalog_reason through strategy catalogs', () => {
+    const result = mapMarketAnalysisPayload(backendPayload, 'ETH/USDT')
+
+    expect(result.recommendation.rationale).toBe(
+      'Allowed TREND_FOLLOWING for regime=TREND_UP',
+    )
+  })
+
+  it('treats an empty regime.reasons array as success with an empty summary', () => {
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        regime: {
+          regime: 'RANGE',
+          reasons: [],
+          insufficient_data: false,
+        },
+      },
+      'ETH/USDT',
+    )
+
+    expect(result.regime.level).toBe(getMessage('analysisLabels.regime.RANGE'))
+    expect(result.regime.summary).toBe('')
   })
 
   it('treats an empty exposure.factors array as success', () => {
@@ -228,5 +362,34 @@ describe('mapMarketAnalysisPayload', () => {
         'BTC/USDT',
       ),
     ).toThrow(MarketAnalysisMappingError)
+  })
+
+  it('does not hardcode analysis display English in the mapper source', () => {
+    const source = readFileSync(
+      resolve(import.meta.dirname, 'mapMarketAnalysis.ts'),
+      'utf8',
+    )
+    const forbiddenDisplayPhrases = [
+      'Trend up',
+      'Trend down',
+      'News spike',
+      'Strong ADX',
+      'Plus DI dominant',
+      'Insufficient candles',
+      'ADX in low band',
+      'Trend following',
+      'Vol budget %',
+      'ATR expansion',
+      'Liquidity stress',
+      'Cost drag',
+    ]
+    for (const phrase of forbiddenDisplayPhrases) {
+      expect(source, `mapper must not hardcode "${phrase}"`).not.toContain(
+        `'${phrase}'`,
+      )
+      expect(source, `mapper must not hardcode "${phrase}"`).not.toContain(
+        `"${phrase}"`,
+      )
+    }
   })
 })

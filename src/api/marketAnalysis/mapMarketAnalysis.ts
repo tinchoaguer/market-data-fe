@@ -1,3 +1,11 @@
+import {
+  getAnalysisRegimeLabel,
+  getAnalysisRegimeReasonLabel,
+  getEconomicComponentLabel,
+  getExposureFactorLabel,
+  getRiskComponentLabel,
+  getStrategyLabel,
+} from '../../i18n/labels'
 import type {
   Assessment,
   ExposureFactor,
@@ -55,7 +63,7 @@ function parseFactor(value: unknown, field: string): ExposureFactor {
     throw new MarketAnalysisMappingError(`Invalid exposure factor at ${field}`)
   }
   return {
-    name: parseString(value.name, `${field}.name`),
+    name: getExposureFactorLabel(parseString(value.name, `${field}.name`)),
     weight: parseNumber(value.weight, `${field}.weight`),
   }
 }
@@ -67,26 +75,36 @@ function parseFactors(value: unknown, field: string): ExposureFactor[] {
   return value.map((factor, index) => parseFactor(factor, `${field}[${index}]`))
 }
 
-function formatComponentPair(value: unknown, field: string): string {
+function formatComponentPair(
+  value: unknown,
+  field: string,
+  resolveName: (name: string) => string,
+): string {
   if (Array.isArray(value) && value.length >= 2) {
-    const name = parseString(value[0], `${field}[0]`)
+    const name = resolveName(parseString(value[0], `${field}[0]`))
     const weight = parseNumber(value[1], `${field}[1]`)
     return `${name}=${weight}`
   }
   if (isRecord(value) && '0' in value && '1' in value) {
-    const name = parseString(value[0], `${field}.0`)
+    const name = resolveName(parseString(value[0], `${field}.0`))
     const weight = parseNumber(value[1], `${field}.1`)
     return `${name}=${weight}`
   }
   throw new MarketAnalysisMappingError(`Invalid component pair at ${field}`)
 }
 
-function formatComponentsSummary(value: unknown, field: string): string {
+function formatComponentsSummary(
+  value: unknown,
+  field: string,
+  resolveName: (name: string) => string,
+): string {
   if (!Array.isArray(value)) {
     throw new MarketAnalysisMappingError(`Expected array at ${field}`)
   }
   return value
-    .map((entry, index) => formatComponentPair(entry, `${field}[${index}]`))
+    .map((entry, index) =>
+      formatComponentPair(entry, `${field}[${index}]`, resolveName),
+    )
     .join(', ')
 }
 
@@ -126,11 +144,15 @@ function mapDesignPayload(
       factors: parseFactors(payload.exposure.factors, 'exposure.factors'),
     },
     recommendation: {
-      catalogId: parseString(
-        payload.recommendation.catalogId,
-        'recommendation.catalogId',
+      catalogId: getStrategyLabel(
+        parseString(
+          payload.recommendation.catalogId,
+          'recommendation.catalogId',
+        ),
       ),
-      name: parseString(payload.recommendation.name, 'recommendation.name'),
+      name: getStrategyLabel(
+        parseString(payload.recommendation.name, 'recommendation.name'),
+      ),
       rationale: parseString(
         payload.recommendation.rationale,
         'recommendation.rationale',
@@ -151,7 +173,7 @@ function mapBackendExposure(
 
   const factors: ExposureFactor[] = Object.entries(value.components).map(
     ([name, weight]) => ({
-      name,
+      name: getExposureFactorLabel(name),
       weight: parseNumber(weight, `exposure.components.${name}`),
     }),
   )
@@ -188,13 +210,14 @@ function mapBackendPayload(
   if (!Array.isArray(regimeReasons)) {
     throw new MarketAnalysisMappingError('Invalid regime.reasons')
   }
-  for (let index = 0; index < regimeReasons.length; index += 1) {
-    parseString(regimeReasons[index], `regime.reasons[${index}]`)
-  }
+  const humanizedReasons = regimeReasons.map((reason, index) =>
+    getAnalysisRegimeReasonLabel(
+      parseString(reason, `regime.reasons[${index}]`),
+    ),
+  )
 
-  const preferred = parseString(
-    payload.catalog.preferred_strategy,
-    'catalog.preferred_strategy',
+  const preferred = getStrategyLabel(
+    parseString(payload.catalog.preferred_strategy, 'catalog.preferred_strategy'),
   )
 
   return {
@@ -203,18 +226,25 @@ function mapBackendPayload(
         ? payload.symbol
         : fallbackSymbol,
     regime: {
-      level: parseString(payload.regime.regime, 'regime.regime'),
-      summary: regimeReasons.join(', '),
+      level: getAnalysisRegimeLabel(
+        parseString(payload.regime.regime, 'regime.regime'),
+      ),
+      summary: humanizedReasons.join(', '),
     },
     risk: {
       level: String(parseNumber(payload.risk.score, 'risk.score')),
-      summary: formatComponentsSummary(payload.risk.components, 'risk.components'),
+      summary: formatComponentsSummary(
+        payload.risk.components,
+        'risk.components',
+        getRiskComponentLabel,
+      ),
     },
     economic: {
       level: String(parseNumber(payload.economic.edge, 'economic.edge')),
       summary: formatComponentsSummary(
         payload.economic.components,
         'economic.components',
+        getEconomicComponentLabel,
       ),
     },
     exposure: mapBackendExposure(payload.exposure),

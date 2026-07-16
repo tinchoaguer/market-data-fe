@@ -1,6 +1,8 @@
 import { describe, expect, it, vi, afterEach } from 'vitest'
 import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { wording } from '@market-data/brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import { SUPPORTED_SYMBOLS } from '../../config/symbols'
@@ -13,28 +15,30 @@ const fixtureViewModel: MarketClassificationViewModel = {
     {
       source: 'regime',
       score: 0.92,
-      reason: 'Strong directional regime',
+      reason: getMessage('classificationLabels.regimeReason.trend_up'),
     },
   ],
   risk: [
     {
       source: 'risk',
       score: 0.31,
-      reason: 'Moderate volatility pressure',
+      reason: getMessage('classificationLabels.riskReason.moderate_risk'),
     },
   ],
   economic: [
     {
       source: 'economic',
       score: 0.64,
-      reason: 'Positive expected edge',
+      reason: getMessage('classificationLabels.economicReason.strong_edge'),
     },
   ],
   exposure: [
     {
       source: 'exposure',
       score: 0.4,
-      reason: 'Capacity available for allocation',
+      reason: getMessage(
+        'classificationLabels.exposureReason.ample_capacity',
+      ),
     },
   ],
 }
@@ -140,24 +144,57 @@ describe('MarketClassificationScreen', () => {
 
     expect(screen.getByText('regime')).toBeInTheDocument()
     expect(screen.getByText('0.92')).toBeInTheDocument()
-    expect(screen.getByText('Strong directional regime')).toBeInTheDocument()
+    expect(
+      screen.getByText(getMessage('classificationLabels.regimeReason.trend_up')),
+    ).toBeInTheDocument()
     expect(screen.getByText('risk')).toBeInTheDocument()
     expect(screen.getByText('0.31')).toBeInTheDocument()
-    expect(screen.getByText('Moderate volatility pressure')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        getMessage('classificationLabels.riskReason.moderate_risk'),
+      ),
+    ).toBeInTheDocument()
     expect(screen.getByText('economic')).toBeInTheDocument()
     expect(screen.getByText('0.64')).toBeInTheDocument()
-    expect(screen.getByText('Positive expected edge')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        getMessage('classificationLabels.economicReason.strong_edge'),
+      ),
+    ).toBeInTheDocument()
     expect(screen.getByText('exposure')).toBeInTheDocument()
     expect(screen.getByText('0.4')).toBeInTheDocument()
     expect(
-      screen.getByText('Capacity available for allocation'),
+      screen.getByText(
+        getMessage('classificationLabels.exposureReason.ample_capacity'),
+      ),
     ).toBeInTheDocument()
+
+    expect(screen.queryByText('trend_up')).not.toBeInTheDocument()
+    expect(screen.queryByText('moderate_risk')).not.toBeInTheDocument()
+    expect(screen.queryByText('strong_edge')).not.toBeInTheDocument()
+    expect(screen.queryByText('ample_capacity')).not.toBeInTheDocument()
 
     expect(screen.getAllByText(getMessage('viewMarketClassification.source')).length).toBe(
       4,
     )
     expect(screen.getAllByText(getMessage('viewMarketClassification.score')).length).toBe(4)
     expect(screen.getAllByText(getMessage('viewMarketClassification.reason')).length).toBe(4)
+  })
+
+  it('does not map raw DTO reason codes inside classification screen components', () => {
+    const componentFiles = [
+      'MarketClassificationScreen.tsx',
+      'SignalGroupSections.tsx',
+    ]
+    for (const file of componentFiles) {
+      const source = readFileSync(resolve(import.meta.dirname, file), 'utf8')
+      expect(source).not.toContain('getClassificationRegimeReasonLabel')
+      expect(source).not.toContain('getClassificationRiskReasonLabel')
+      expect(source).not.toContain('getClassificationEconomicReasonLabel')
+      expect(source).not.toContain('getClassificationExposureReasonLabel')
+      expect(source).not.toContain('classificationLabels.')
+      expect(source).not.toContain('trend_up')
+    }
   })
 
   it('keeps empty signal groups in success state without treating as error', async () => {

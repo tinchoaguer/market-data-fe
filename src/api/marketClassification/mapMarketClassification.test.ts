@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { getMessage } from '../../i18n/messages'
 import {
   mapMarketClassificationPayload,
   MarketClassificationMappingError,
@@ -10,34 +13,34 @@ const validPayload = {
     {
       source: 'regime',
       score: 0.92,
-      reason: 'Strong directional regime',
+      reason: 'trend_up',
     },
   ],
   risk: [
     {
       source: 'risk',
       score: 0.31,
-      reason: 'Moderate volatility pressure',
+      reason: 'moderate_risk',
     },
   ],
   economic: [
     {
       source: 'economic',
       score: 0.64,
-      reason: 'Positive expected edge',
+      reason: 'strong_edge',
     },
   ],
   exposure: [
     {
       source: 'exposure',
       score: 0.4,
-      reason: 'Capacity available for allocation',
+      reason: 'ample_capacity',
     },
   ],
 }
 
 describe('mapMarketClassificationPayload', () => {
-  it('maps a valid payload to the view model', () => {
+  it('maps a valid payload with humanized signal reasons', () => {
     const result = mapMarketClassificationPayload(validPayload, 'BTC/USDT')
 
     expect(result).toEqual({
@@ -46,31 +49,37 @@ describe('mapMarketClassificationPayload', () => {
         {
           source: 'regime',
           score: 0.92,
-          reason: 'Strong directional regime',
+          reason: getMessage('classificationLabels.regimeReason.trend_up'),
         },
       ],
       risk: [
         {
           source: 'risk',
           score: 0.31,
-          reason: 'Moderate volatility pressure',
+          reason: getMessage('classificationLabels.riskReason.moderate_risk'),
         },
       ],
       economic: [
         {
           source: 'economic',
           score: 0.64,
-          reason: 'Positive expected edge',
+          reason: getMessage('classificationLabels.economicReason.strong_edge'),
         },
       ],
       exposure: [
         {
           source: 'exposure',
           score: 0.4,
-          reason: 'Capacity available for allocation',
+          reason: getMessage(
+            'classificationLabels.exposureReason.ample_capacity',
+          ),
         },
       ],
     })
+    expect(result.regime[0].reason).not.toBe('trend_up')
+    expect(result.risk[0].reason).not.toBe('moderate_risk')
+    expect(result.economic[0].reason).not.toBe('strong_edge')
+    expect(result.exposure[0].reason).not.toBe('ample_capacity')
   })
 
   it('maps empty signal arrays as success', () => {
@@ -105,6 +114,32 @@ describe('mapMarketClassificationPayload', () => {
     )
 
     expect(result.symbol).toBe('ETH/USDT')
+  })
+
+  it('falls back to raw codes for unknown reasons without failing mapping', () => {
+    const result = mapMarketClassificationPayload(
+      {
+        symbol: 'BTC/USDT',
+        regime: [{ source: 'regime', score: 0.5, reason: 'totally_unknown' }],
+        risk: [{ source: 'risk', score: 0.2, reason: 'low_risk' }],
+        economic: [
+          { source: 'economic', score: 0.3, reason: 'mystery_edge' },
+        ],
+        exposure: [
+          { source: 'exposure', score: 0.1, reason: 'limited_capacity' },
+        ],
+      },
+      'BTC/USDT',
+    )
+
+    expect(result.regime[0].reason).toBe('totally_unknown')
+    expect(result.risk[0].reason).toBe(
+      getMessage('classificationLabels.riskReason.low_risk'),
+    )
+    expect(result.economic[0].reason).toBe('mystery_edge')
+    expect(result.exposure[0].reason).toBe(
+      getMessage('classificationLabels.exposureReason.limited_capacity'),
+    )
   })
 
   it('fails closed when a required group is missing', () => {
@@ -167,5 +202,28 @@ describe('mapMarketClassificationPayload', () => {
     expect(() => mapMarketClassificationPayload(null, 'BTC/USDT')).toThrow(
       MarketClassificationMappingError,
     )
+  })
+
+  it('does not hardcode classification display English in the mapper source', () => {
+    const source = readFileSync(
+      resolve(import.meta.dirname, 'mapMarketClassification.ts'),
+      'utf8',
+    )
+    const forbiddenDisplayPhrases = [
+      'Trend up',
+      'Low risk',
+      'Strong edge',
+      'Ample capacity',
+      'Moderate risk',
+      'News spike',
+    ]
+    for (const phrase of forbiddenDisplayPhrases) {
+      expect(source, `mapper must not hardcode "${phrase}"`).not.toContain(
+        `'${phrase}'`,
+      )
+      expect(source, `mapper must not hardcode "${phrase}"`).not.toContain(
+        `"${phrase}"`,
+      )
+    }
   })
 })
