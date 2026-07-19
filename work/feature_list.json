@@ -93,6 +93,64 @@
         "Existing analysis and classification success, loading, and error flows remain intact."
       ],
       "status": "Done"
+    },
+    {
+      "id": 7,
+      "slug": "content-message-contract",
+      "title": "Content Message Contract",
+      "description": "Define the FE Content module boundary and the stable MessageRef / ResolvedMessage schemas plus code-registry shape so catalogs and resolve can be added without redesign. Epic content-i18n; replaces ad-hoc DTO→label maps over later features in this epic.",
+      "acceptance": [
+        "A bounded Content module area exists in the FE package layout (clear directory/package boundary suitable for later extraction).",
+        "MessageRef is typed with at least code, optional params, optional severity, and optional channel.",
+        "ResolvedMessage is typed with at least code, locale, and text (optional meta allowed).",
+        "A code-registry shape is defined for catalog entries (semantic code id, params schema/severity metadata as designed).",
+        "Feature mappers and screens do not yet need to resolve messages; this Feature only establishes the contract and module skeleton.",
+        "Brand chrome wording via @market-data/brand remains out of scope for this module."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 8,
+      "slug": "content-catalogs-v1",
+      "title": "Content Catalogs v1",
+      "description": "Implement v1 Content catalogs and en/ui templates with an in-process resolve API inside the FE Content module (depends on content-message-contract). Epic content-i18n.",
+      "acceptance": [
+        "Content catalogs register the message codes needed for analysis/classification narrative planned in this epic.",
+        "en locale templates exist for the ui channel for those registered codes.",
+        "resolve({ locale, channel, messages }) returns ResolvedMessage[] for valid MessageRef inputs.",
+        "Param interpolation (and basic formatters as needed for v1) produces display text from params without callers owning copy.",
+        "Missing or unknown codes fall back safely (e.g. to code or default-locale behavior) without throwing across the whole batch.",
+        "Resolve remains in-process in FE; no remote content-service is required for v1."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 9,
+      "slug": "content-resolve-boundary",
+      "title": "Content Resolve Boundary",
+      "description": "Route app-boundary message resolution through the Content module resolve API and retire ad-hoc label SoT (analysisLabels.* and equivalent feature-local code→English maps). Depends on content-catalogs-v1; coordinates with BE MessageRef Features in epic content-i18n. Replaces, does not patch on top of, human-readable-labels / extend-human-readable-labels catalogs as SoT.",
+      "acceptance": [
+        "App mapping/boundary layer resolves user-facing narrative MessageRefs via Content resolve (locale + ui channel).",
+        "Feature-local DTO→label maps (e.g. analysisLabels.* style catalogs) are no longer the source of truth for analysis/classification narrative copy.",
+        "Unknown codes still fall back safely without failing the entire payload mapping.",
+        "Screens continue to consume view models; UI components do not own code→English maps.",
+        "Existing analysis and classification success, loading, and error flows remain intact at the boundary."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 10,
+      "slug": "analysis-classification-copy",
+      "title": "Analysis & Classification Copy Wiring",
+      "description": "Wire analysis and classification view models to Content-resolved messages (summaries, rationale, levels as designed) so screens bind resolved strings only. Depends on content-resolve-boundary and BE MessageRef delivery (analysis-message-refs / classification-message-refs). Epic content-i18n.",
+      "acceptance": [
+        "Analysis view models expose resolved narrative text (or refs already resolved at the boundary) for summaries/rationale/levels covered by this epic.",
+        "Classification view models expose resolved narrative text for signal reasons and related user-facing copy covered by this epic.",
+        "Analysis and Classification screens bind resolved strings; they do not map raw MessageRef codes to English inline.",
+        "Raw API tokens or prose dumps are not shown as the primary user-facing narrative where MessageRefs are provided.",
+        "Existing analysis and classification success, loading, and error flows remain intact."
+      ],
+      "status": "Pending"
     }
 
 ]
