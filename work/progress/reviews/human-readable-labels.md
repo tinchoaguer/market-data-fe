@@ -79,7 +79,7 @@ requirements:
       All 19 OpenAPI AnalysisRegimeReasonCode members present in
       en.json matching design Copy/Wording; labels.test.ts
       completeness + resolution coverage. Verified against
-      shared/openapi.json enums.
+      locale entries present; match API OpenAPI / in-app closed-set enums.
 
 acceptance_criteria:
   - criterion: >

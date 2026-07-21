@@ -10,7 +10,7 @@ Existing `AnalysisRegimeLabel` / `AnalysisRegimeReasonCode` catalogs and helpers
 
 | Component | Responsibility |
 |-----------|----------------|
-| Shared OpenAPI (`shared/openapi.json`) | Source of truth for `RegimeReasonCode`, `RiskReasonCode`, `EconomicReasonCode`, `ExposureReasonCode`, and `ExposureComponentsResponse` property names (REQ-013, REQ-015, NFR-002). |
+| API OpenAPI (classification / analysis enums) | Source of truth for `RegimeReasonCode`, `RiskReasonCode`, `EconomicReasonCode`, `ExposureReasonCode`, and `ExposureComponentsResponse` property names (REQ-013, REQ-015, NFR-002). Closed sets are mirrored in-app for label coverage tests. |
 | App locale catalog `src/locales/en.json` | Stores display English for every new closed-set member under stable nested keys (REQ-009, REQ-013–REQ-016, NFR-003). |
 | Existing `resolveLabel` / message helpers | Reused pattern: `(catalog prefix, code) → display text` with raw-code fallback (REQ-010, REQ-017). |
 | Thin wrappers (new) | Optional domain wrappers (for example `getClassificationRegimeReasonLabel`, `getStrategyLabel`, `getExposureFactorLabel`, `getRiskComponentLabel`, `getEconomicComponentLabel`) that call `resolveLabel` with fixed prefixes (REQ-017). |
@@ -219,7 +219,7 @@ Coverage: every REQ-* and NFR-* must have at least one automated test or an expl
 
 ## Copy / Wording
 
-Follow `knowledge/writing/` (mirrored from `@market-data/brand`).
+Follow `knowledge/writing/` (aligned with `@market-data/brand`).
 
 Tone: precise, calm, formal, data-first. Sentence case for labels. Technical abbreviations that are domain-meaningful (for example ATR) may remain. Prefer **Regime**, **Risk**, **Economic**, **Exposure**, **Analysis**, **Classification**, and **Recommendation** per terminology.
 

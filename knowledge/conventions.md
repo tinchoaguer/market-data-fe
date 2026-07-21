@@ -17,7 +17,7 @@ Rules:
 - Prefer shared keys from `@market-data/brand/wording` for product identity, shared chrome, and shared domain labels
 - Feature-specific strings go in `src/locales/en.json` and are read via `src/i18n/messages.ts`
 - Do not hardcode user-facing English in components
-- Brand is the source of truth for writing guidelines; this repo’s `knowledge/writing/` is a **mirror** — update it when brand guidelines change
+- Brand writing guidelines are published with `@market-data/brand`; this repo’s `knowledge/writing/` stays aligned with that package’s guidance
 - Include a **Copy / Wording** section in `design.md` when a feature adds or changes UI text
 
 ## Brand dependency
@@ -51,17 +51,18 @@ Rules:
 - Specs (`design.md` / `tasks.md`) must name the brand primitive when one applies (e.g. “use brand `Select` for symbol selection”)
 - Implementers must import from `@market-data/brand/ui`, not reimplement or wrap native equivalents for the same role
 - Reviewers treat missing brand primitives as a **required** finding when a matching export exists
-- If no brand primitive exists yet: either add it in `market-data-brand` first, or document an explicit exception in `design.md` (why native/custom is allowed)
+- If no brand primitive exists yet: either extend `@market-data/brand` (separate Brand Feature) first, or document an explicit exception in `design.md` (why native/custom is allowed)
 - Do **not** put Tailwind / utility `className` strings in this app — those utilities are not compiled for consumers
 - Feature composition may nest brand primitives; avoid hand-authored CSS for shared chrome, page width, or typography that the kit already covers
 
 ## Specifications
 
-Follow `../harness/governance/spec_guidelines.md`:
+Follow harness `governance/spec_guidelines.md` (see `HARNESS.md`):
 
 - EARS notation in `requirements.md`
 - REQ-NNN identifiers
 - Traceability across requirements, design, tasks, code, and tests
+- Specs stay inside this PROJECT_ROOT
 
 ## Git
 

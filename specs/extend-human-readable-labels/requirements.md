@@ -147,7 +147,7 @@ Compatibility: THIS FEATURE SHALL NOT require or introduce backend API or OpenAP
 ```text
 NFR-002
 
-Compatibility: Shared OpenAPI enums RegimeReasonCode, RiskReasonCode, EconomicReasonCode, ExposureReasonCode, and schema ExposureComponentsResponse property names SHALL be the source of truth for those closed sets. StrategyType tokens and risk/economic component name tokens SHALL match the closed sets documented in design.md Data Model (aligned with backend StrategyType and component-summary usage).
+Compatibility: API OpenAPI enums RegimeReasonCode, RiskReasonCode, EconomicReasonCode, ExposureReasonCode, and schema ExposureComponentsResponse property names SHALL be the source of truth for those closed sets. StrategyType tokens and risk/economic component name tokens SHALL match the closed sets documented in design.md Data Model (aligned with analysis StrategyType and component-summary usage).
 ```
 
 ```text

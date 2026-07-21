@@ -1,6 +1,6 @@
 # Terminology
 
-> **Mirror:** Brand is the source of truth (`market-data-brand/knowledge/writing/terminology.md`). Keep this file in sync when brand terminology changes.
+> Aligned with `@market-data/brand` writing docs. Prefer brand package guidance when wording conflicts.
 
 Canonical product language for Market Data. Use these terms consistently in specs, UI copy, and documentation. Do not invent synonyms for the same concept.
 

@@ -82,7 +82,7 @@ requirements:
     status: pass
     notes: >
       Full RegimeReasonCode, RiskReasonCode, EconomicReasonCode, ExposureReasonCode
-      locale entries present; match shared/openapi.json enums; completeness tests in
+      locale entries present; match API OpenAPI / in-app closed-set enums; completeness tests in
       labels.test.ts.
   - id: REQ-014
     status: pass

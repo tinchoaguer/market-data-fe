@@ -1,8 +1,8 @@
 # Writing Guidelines
 
-> **Mirror:** Brand is the source of truth (`market-data-brand/knowledge/writing/writing-guidelines.md`). Keep this file in sync when brand guidelines change.
+> Aligned with `@market-data/brand` writing docs. Prefer brand package guidance when wording conflicts.
 
-Agent-facing rules for all user-facing copy owned by this design system. Spec Writer and Implementer must follow these when authoring specs and implementing UI text.
+Agent-facing rules for user-facing copy in this app. Spec Writer and Implementer must follow these when authoring specs and implementing UI text.
 
 ## Voice
 

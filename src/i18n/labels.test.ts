@@ -14,7 +14,7 @@ import {
   resolveLabel,
 } from './labels'
 
-/** OpenAPI AnalysisRegimeLabel closed set (shared/openapi.json). */
+/** Closed set: AnalysisRegimeLabel (API OpenAPI / analysis contract). */
 const ANALYSIS_REGIME_LABELS = [
   'TREND_UP',
   'TREND_DOWN',
@@ -23,7 +23,7 @@ const ANALYSIS_REGIME_LABELS = [
   'NEWS_SPIKE',
 ] as const
 
-/** OpenAPI AnalysisRegimeReasonCode closed set (shared/openapi.json). */
+/** Closed set: AnalysisRegimeReasonCode (API OpenAPI / analysis contract). */
 const ANALYSIS_REGIME_REASON_CODES = [
   'insufficient_candles',
   'adx_low_band',

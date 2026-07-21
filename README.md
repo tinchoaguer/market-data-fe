@@ -6,12 +6,10 @@ Frontend for the market-data project. Consumes `@market-data/brand` for tokens, 
 
 - Shared / design-system: `import { wording } from '@market-data/brand/wording'`
 - Feature / app: `src/locales/en.json` via `src/i18n/messages.ts`
-- Agent guidelines (mirrored from brand): `knowledge/writing/`
+- Agent guidelines: `knowledge/writing/` (aligned with `@market-data/brand` writing docs)
 
 See `knowledge/conventions.md` and `HARNESS.md`.
 
-## Logo / favicon
+## Brand package
 
-Logo design lives in the separate [`market-data-brand`](../market-data-brand) repository.
-
-After exporting there (`npm run logo:export`), copy `market-data-brand/public/favicon.svg` to `public/favicon.svg` in this repo.
+Install `@market-data/brand` as a normal package dependency (see `package.json`). Import logo, tokens, wording, and UI kit from that package — do not fork brand assets in this app.

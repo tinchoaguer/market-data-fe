@@ -10,7 +10,7 @@ Classification reason-code catalogs are out of scope; the label helper is intent
 
 | Component | Responsibility |
 |-----------|----------------|
-| Shared OpenAPI (`shared/openapi.json`) | Source of truth for `AnalysisRegimeLabel` and `AnalysisRegimeReasonCode` member sets (REQ-008, REQ-009, NFR-002). |
+| API OpenAPI (analysis regime enums) | Source of truth for `AnalysisRegimeLabel` and `AnalysisRegimeReasonCode` member sets (REQ-008, REQ-009, NFR-002). Closed sets are mirrored in-app for label coverage tests. |
 | App locale catalog `src/locales/en.json` | Stores display English for each known analysis regime label and reason code under stable nested keys (REQ-003, REQ-008, REQ-009, NFR-003). |
 | Message helper `src/i18n/messages.ts` (`getMessage`) | Existing access path for feature locale strings. |
 | Label helpers (new, thin) | Reusable functions that resolve `(catalog prefix, code) → display text` with safe fallback; analysis catalogs are first consumers (REQ-004, REQ-007). |
@@ -206,7 +206,7 @@ Coverage: every REQ-* and NFR-* must have at least one automated test or an expl
 
 ## Copy / Wording
 
-Follow `knowledge/writing/` (mirrored from `@market-data/brand`).
+Follow `knowledge/writing/` (aligned with `@market-data/brand`).
 
 Tone: precise, calm, formal, data-first. Sentence case for labels. Technical abbreviations that appear in reason codes (ADX, ATR, SMA, DI) may remain when they carry domain meaning. Prefer **Regime** and **Analysis** per terminology; do not use State / Mode / Insights as primary labels for these concepts.
 

@@ -1,6 +1,6 @@
 # UI Copy (Design System)
 
-> **Mirror:** Brand is the source of truth for this document (`market-data-brand/knowledge/writing/ui-copy.md`). Paths such as `src/locales/en.json` below refer to the **brand package** unless stated otherwise. Feature copy for this app lives in `market-data-fe/src/locales/en.json`.
+> Aligned with `@market-data/brand` writing docs. Paths such as `src/locales/en.json` below refer to the **brand package** unless stated otherwise. Feature copy for this app lives in this repo’s `src/locales/en.json`.
 
 Reusable design-system copy for consumers of `@market-data/brand`. Spec Writer and Implementer must read this with [`writing-guidelines.md`](./writing-guidelines.md) and [`terminology.md`](./terminology.md).
 

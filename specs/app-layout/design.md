@@ -122,7 +122,7 @@ Coverage: every REQ-* and NFR-* must have at least one automated test or an expl
 
 ## Copy / Wording
 
-Follow `knowledge/writing/` (mirrored from `@market-data/brand`).
+Follow `knowledge/writing/` (aligned with `@market-data/brand`).
 
 ### Design-system keys reused
 
