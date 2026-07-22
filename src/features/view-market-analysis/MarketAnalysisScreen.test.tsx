@@ -49,6 +49,7 @@ const fixtureViewModel: MarketAnalysisViewModel = {
     catalogId: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
     name: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
     rationale: 'Preferred for TREND_UP with acceptable risk',
+    hardGateReason: null,
   },
 }
 
@@ -181,6 +182,49 @@ describe('MarketAnalysisScreen', () => {
     expect(
       screen.getByText('Preferred for TREND_UP with acceptable risk'),
     ).toBeInTheDocument()
+    expect(
+      screen.queryByText(getMessage('viewMarketAnalysis.hardGateReason')),
+    ).not.toBeInTheDocument()
+  })
+
+  it('renders Content-resolved rationale and hard-gate narrative when present', async () => {
+    const hardGateText = 'Hard gate: risk score 0.91 is too high.'
+    const loadMarketAnalysis = vi.fn().mockResolvedValue({
+      ...fixtureViewModel,
+      recommendation: {
+        ...fixtureViewModel.recommendation,
+        rationale: 'Strategy TREND_FOLLOWING is allowed for regime TREND_UP.',
+        hardGateReason: hardGateText,
+      },
+    } satisfies MarketAnalysisViewModel)
+
+    render(<MarketAnalysisScreen loadMarketAnalysis={loadMarketAnalysis} />)
+    await selectSymbol('BTC/USDT')
+
+    expect(
+      await screen.findByText(
+        'Strategy TREND_FOLLOWING is allowed for regime TREND_UP.',
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(getMessage('viewMarketAnalysis.hardGateReason')),
+    ).toBeInTheDocument()
+    expect(screen.getByText(hardGateText)).toBeInTheDocument()
+    expect(screen.queryByText('catalog.hard_gate.risk_too_high')).not.toBeInTheDocument()
+    expect(screen.queryByText(/"code"\s*:/)).not.toBeInTheDocument()
+  })
+
+  it('omits hard-gate narrative when hardGateReason is null', async () => {
+    const loadMarketAnalysis = vi.fn().mockResolvedValue(fixtureViewModel)
+    render(<MarketAnalysisScreen loadMarketAnalysis={loadMarketAnalysis} />)
+    await selectSymbol('BTC/USDT')
+
+    expect(
+      await screen.findByText('Preferred for TREND_UP with acceptable risk'),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(getMessage('viewMarketAnalysis.hardGateReason')),
+    ).not.toBeInTheDocument()
   })
 
   it('does not map raw DTO codes inside analysis screen components', () => {
@@ -202,6 +246,10 @@ describe('MarketAnalysisScreen', () => {
       expect(source).not.toContain('TREND_UP')
       expect(source).not.toContain('TREND_FOLLOWING')
       expect(source).not.toContain('vol_budget_pct')
+      expect(source).not.toContain('resolveUiMessages')
+      expect(source).not.toContain('v1CodeRegistry')
+      expect(source).not.toContain('catalog.strategy_allowed')
+      expect(source).not.toContain('catalog.hard_gate')
     }
   })
 
@@ -286,6 +334,7 @@ describe('MarketAnalysisScreen', () => {
       factorWeight: 'Weight',
       catalogId: 'Catalog ID',
       rationale: 'Rationale',
+      hardGateReason: 'Hard gate',
     })
   })
 

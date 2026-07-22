@@ -21,7 +21,8 @@
     "factorName": "Factor",
     "factorWeight": "Weight",
     "catalogId": "Catalog ID",
-    "rationale": "Rationale"
+    "rationale": "Rationale",
+    "hardGateReason": "Hard gate"
   },
   "viewMarketClassification": {
     "title": "Classification",

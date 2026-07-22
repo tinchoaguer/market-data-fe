@@ -96,6 +96,19 @@ function resolveNarrativeText(value: unknown, field: string): string {
   return resolved!.text
 }
 
+/**
+ * Resolves optional hard-gate narrative: null/undefined → null; MessageRef or string → Content text.
+ */
+function resolveOptionalNarrativeText(
+  value: unknown,
+  field: string,
+): string | null {
+  if (value === null || value === undefined) {
+    return null
+  }
+  return resolveNarrativeText(value, field)
+}
+
 function parseAssessment(
   value: unknown,
   field: string,
@@ -208,6 +221,7 @@ function mapDesignPayload(
         payload.recommendation.rationale,
         'recommendation.rationale',
       ),
+      hardGateReason: null,
     },
   }
 }
@@ -271,12 +285,13 @@ function mapBackendPayload(
     parseString(payload.catalog.preferred_strategy, 'catalog.preferred_strategy'),
   )
 
-  // Resolve catalog narrative MessageRef (or legacy string) onto rationale.
-  // hard_gate_reason MessageRef shape is accepted on the DTO; fuller VM wiring
-  // is deferred to analysis-classification-copy.
   const rationale = resolveNarrativeText(
     payload.catalog.catalog_reason,
     'catalog.catalog_reason',
+  )
+  const hardGateReason = resolveOptionalNarrativeText(
+    payload.catalog.hard_gate_reason,
+    'catalog.hard_gate_reason',
   )
 
   return {
@@ -311,6 +326,7 @@ function mapBackendPayload(
       catalogId: preferred,
       name: preferred,
       rationale,
+      hardGateReason,
     },
   }
 }

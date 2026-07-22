@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 9
-  slug: content-resolve-boundary
+  id: 10
+  slug: analysis-classification-copy
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-22
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-22T17:28:00
-  notes: User command — Approve specification
+  recorded_at: 2026-07-22T17:51:00
+  notes: User command — Approve Specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for content-resolve-boundary
+  - Produce requirements.md, design.md, and tasks.md for analysis-classification-copy
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Content Resolve Boundary (`content-resolve-boundary`)
+**Feature:** Analysis & Classification Copy Wiring (`analysis-classification-copy`)
 
 **Stage:** Completed
 
@@ -40,8 +40,8 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-22T17:28:00
-  notes: User command — Approve specification
+  recorded_at: 2026-07-22T17:51:00
+  notes: User command — Approve Specification
 ```
 
 ## Implementation result
@@ -50,9 +50,9 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  resolveUiMessages adapter; analysis/classification mappers resolve Content v1
-  narrative MessageRefs onto existing VM fields; retired classificationLabels.*;
-  screens VM-only. Related unit tests pass (115).
+  Analysis VM exposes recommendation.hardGateReason; RecommendationSection binds
+  rationale and optional hard-gate; classification reasons remain Content-resolved
+  VM strings. Related unit tests passed.
 ```
 
 ## Code Review result
@@ -62,9 +62,7 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Implementation satisfies content-resolve-boundary. Zero required fixes.
-  Recommendation: explicit note when analysis-classification-copy lands for
-  deferred hard_gate_reason VM wiring.
+  Implementation satisfies analysis-classification-copy. Zero required fixes.
 ```
 
-Workflow terminated successfully. History archived to `work/history/content-resolve-boundary.md`.
+Workflow terminated successfully. History archived to `work/history/analysis-classification-copy.md`.

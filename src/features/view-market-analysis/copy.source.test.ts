@@ -24,6 +24,7 @@ const forbiddenHardcoded = [
   'Weight',
   'Catalog ID',
   'Rationale',
+  'Hard gate',
   'Regime',
   'Risk',
   'Economic',
@@ -59,6 +60,9 @@ describe('view-market-analysis copy sourcing', () => {
     )
     expect(getMessage('viewMarketAnalysis.rationale')).toBe(
       messages.viewMarketAnalysis.rationale,
+    )
+    expect(getMessage('viewMarketAnalysis.hardGateReason')).toBe(
+      messages.viewMarketAnalysis.hardGateReason,
     )
   })
 

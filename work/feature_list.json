@@ -150,7 +150,7 @@
         "Raw API tokens or prose dumps are not shown as the primary user-facing narrative where MessageRefs are provided.",
         "Existing analysis and classification success, loading, and error flows remain intact."
       ],
-      "status": "Pending"
+      "status": "Done"
     }
 
 ]

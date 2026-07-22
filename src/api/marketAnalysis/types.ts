@@ -19,6 +19,8 @@ export type CatalogRecommendation = {
   catalogId: string
   name: string
   rationale: string
+  /** Content-resolved hard-gate narrative; null when wire hard_gate_reason is null/absent. */
+  hardGateReason: string | null
 }
 
 export type MarketAnalysisViewModel = {

@@ -136,6 +136,7 @@ describe('mapMarketAnalysisPayload', () => {
         catalogId: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
         name: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
         rationale: 'Preferred for TREND_UP with acceptable risk',
+        hardGateReason: null,
       },
     })
   })
@@ -191,6 +192,7 @@ describe('mapMarketAnalysisPayload', () => {
         risk_score: 0.17,
         edge: 0.42,
       }),
+      hardGateReason: null,
     })
     expect(result.recommendation.catalogId).not.toBe('TREND_FOLLOWING')
     expect(result.exposure.factors[0].name).not.toBe('vol_budget_pct')
@@ -211,6 +213,58 @@ describe('mapMarketAnalysisPayload', () => {
         edge: 0.42,
       }),
     )
+    expect(result.recommendation.hardGateReason).toBeNull()
+  })
+
+  it('resolves hard_gate_reason MessageRef onto recommendation.hardGateReason', () => {
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        catalog: {
+          ...backendPayload.catalog,
+          hard_gate_reason: {
+            code: 'catalog.hard_gate.risk_too_high',
+            params: { risk_score: 0.91 },
+          },
+        },
+      },
+      'ETH/USDT',
+    )
+
+    expect(result.recommendation.hardGateReason).toBe(
+      contentText('catalog.hard_gate.risk_too_high', { risk_score: 0.91 }),
+    )
+    expect(result.recommendation.hardGateReason).toBe(
+      'Hard gate: risk score 0.91 is too high.',
+    )
+    expect(result.recommendation.rationale).toBe(
+      contentText('catalog.strategy_allowed', {
+        strategy: 'TREND_FOLLOWING',
+        regime: 'TREND_UP',
+        risk_score: 0.17,
+        edge: 0.42,
+      }),
+    )
+  })
+
+  it('maps null hard_gate_reason to null hardGateReason without inventing copy', () => {
+    const result = mapMarketAnalysisPayload(backendPayload, 'ETH/USDT')
+
+    expect(result.recommendation.hardGateReason).toBeNull()
+  })
+
+  it('maps absent hard_gate_reason to null hardGateReason', () => {
+    const { hard_gate_reason: _omit, ...catalogWithoutHardGate } =
+      backendPayload.catalog
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        catalog: catalogWithoutHardGate,
+      },
+      'ETH/USDT',
+    )
+
+    expect(result.recommendation.hardGateReason).toBeNull()
   })
 
   it('falls back for unknown catalog narrative codes without failing mapping', () => {
@@ -223,12 +277,19 @@ describe('mapMarketAnalysisPayload', () => {
             code: 'catalog.not_a_real_code',
             params: { strategy: 'X' },
           },
+          hard_gate_reason: {
+            code: 'catalog.hard_gate.unknown_gate',
+            params: {},
+          },
         },
       },
       'ETH/USDT',
     )
 
     expect(result.recommendation.rationale).toBe('catalog.not_a_real_code')
+    expect(result.recommendation.hardGateReason).toBe(
+      'catalog.hard_gate.unknown_gate',
+    )
     expect(result.recommendation.catalogId).toBe(
       getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
     )

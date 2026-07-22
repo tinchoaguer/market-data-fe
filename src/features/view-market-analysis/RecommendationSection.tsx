@@ -42,6 +42,14 @@ export function RecommendationSection({
               {recommendation.rationale}
             </Text>
           </Stack>
+          {recommendation.hardGateReason !== null ? (
+            <Stack gap="sm">
+              <Label>{getMessage('viewMarketAnalysis.hardGateReason')}</Label>
+              <Text as="p" tone="muted">
+                {recommendation.hardGateReason}
+              </Text>
+            </Stack>
+          ) : null}
         </Stack>
       </CardContent>
     </Card>
