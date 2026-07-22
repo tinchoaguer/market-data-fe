@@ -2,10 +2,18 @@ import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { getMessage } from '../../i18n/messages'
+import { resolveUiMessages } from '../../content'
 import {
   mapMarketAnalysisPayload,
   MarketAnalysisMappingError,
 } from './mapMarketAnalysis'
+
+function contentText(
+  code: string,
+  params?: Record<string, string | number | boolean>,
+): string {
+  return resolveUiMessages([{ code, params }])[0]!.text
+}
 
 const designPayload = {
   symbol: 'BTC/USDT',
@@ -78,7 +86,15 @@ const backendPayload = {
     allowed_strategies: ['TREND_FOLLOWING'],
     forbidden_strategies: ['RANGE_BOUNDING'],
     preferred_strategy: 'TREND_FOLLOWING',
-    catalog_reason: 'Allowed TREND_FOLLOWING for regime=TREND_UP',
+    catalog_reason: {
+      code: 'catalog.strategy_allowed',
+      params: {
+        strategy: 'TREND_FOLLOWING',
+        regime: 'TREND_UP',
+        risk_score: 0.17,
+        edge: 0.42,
+      },
+    },
     hard_gate_reason: null,
   },
 }
@@ -124,7 +140,7 @@ describe('mapMarketAnalysisPayload', () => {
     })
   })
 
-  it('maps a valid backend payload with humanized labels', () => {
+  it('maps a valid backend payload with humanized labels and Content narrative', () => {
     const result = mapMarketAnalysisPayload(backendPayload, 'ETH/USDT')
 
     expect(result.symbol).toBe('ETH/USDT')
@@ -169,11 +185,53 @@ describe('mapMarketAnalysisPayload', () => {
     expect(result.recommendation).toEqual({
       catalogId: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
       name: getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
-      rationale: 'Allowed TREND_FOLLOWING for regime=TREND_UP',
+      rationale: contentText('catalog.strategy_allowed', {
+        strategy: 'TREND_FOLLOWING',
+        regime: 'TREND_UP',
+        risk_score: 0.17,
+        edge: 0.42,
+      }),
     })
     expect(result.recommendation.catalogId).not.toBe('TREND_FOLLOWING')
     expect(result.exposure.factors[0].name).not.toBe('vol_budget_pct')
     expect(result.risk.summary).not.toContain('atr_expansion=')
+  })
+
+  it('resolves catalog MessageRef narrative via Content boundary adapter', () => {
+    const result = mapMarketAnalysisPayload(backendPayload, 'ETH/USDT')
+
+    expect(result.recommendation.rationale).toBe(
+      'Strategy TREND_FOLLOWING is allowed for regime TREND_UP.',
+    )
+    expect(result.recommendation.rationale).toBe(
+      contentText('catalog.strategy_allowed', {
+        strategy: 'TREND_FOLLOWING',
+        regime: 'TREND_UP',
+        risk_score: 0.17,
+        edge: 0.42,
+      }),
+    )
+  })
+
+  it('falls back for unknown catalog narrative codes without failing mapping', () => {
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        catalog: {
+          ...backendPayload.catalog,
+          catalog_reason: {
+            code: 'catalog.not_a_real_code',
+            params: { strategy: 'X' },
+          },
+        },
+      },
+      'ETH/USDT',
+    )
+
+    expect(result.recommendation.rationale).toBe('catalog.not_a_real_code')
+    expect(result.recommendation.catalogId).toBe(
+      getMessage('analysisLabels.strategy.TREND_FOLLOWING'),
+    )
   })
 
   it('falls back to raw codes for unknown regime label and reason without failing mapping', () => {
@@ -252,8 +310,17 @@ describe('mapMarketAnalysisPayload', () => {
     ])
   })
 
-  it('does not rewrite free-text catalog_reason through strategy catalogs', () => {
-    const result = mapMarketAnalysisPayload(backendPayload, 'ETH/USDT')
+  it('preserves legacy free-text catalog_reason via Content unknown-code fallback', () => {
+    const result = mapMarketAnalysisPayload(
+      {
+        ...backendPayload,
+        catalog: {
+          ...backendPayload.catalog,
+          catalog_reason: 'Allowed TREND_FOLLOWING for regime=TREND_UP',
+        },
+      },
+      'ETH/USDT',
+    )
 
     expect(result.recommendation.rationale).toBe(
       'Allowed TREND_FOLLOWING for regime=TREND_UP',
@@ -382,6 +449,7 @@ describe('mapMarketAnalysisPayload', () => {
       'ATR expansion',
       'Liquidity stress',
       'Cost drag',
+      'Strategy TREND_FOLLOWING is allowed',
     ]
     for (const phrase of forbiddenDisplayPhrases) {
       expect(source, `mapper must not hardcode "${phrase}"`).not.toContain(

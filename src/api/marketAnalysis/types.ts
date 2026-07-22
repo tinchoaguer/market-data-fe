@@ -47,6 +47,14 @@ export type MarketAnalysisApiPayload = {
   }
 }
 
+/** Wire MessageRef (analysis narrative) as emitted by BE analysis-message-refs. */
+export type AnalysisNarrativeMessageRef = {
+  code: string
+  params?: Record<string, string | number | boolean>
+  severity?: string
+  channel?: string
+}
+
 /** Backend HTTP DTO shape for GET /markets/{symbol}/analysis. */
 export type MarketAnalysisBackendPayload = {
   symbol: string
@@ -82,7 +90,8 @@ export type MarketAnalysisBackendPayload = {
     allowed_strategies?: string[]
     forbidden_strategies?: string[]
     preferred_strategy: string
-    catalog_reason: string
-    hard_gate_reason?: string | null
+    /** MessageRef (preferred) or legacy free-text / bare code string. */
+    catalog_reason: AnalysisNarrativeMessageRef | string
+    hard_gate_reason?: AnalysisNarrativeMessageRef | string | null
   }
 }

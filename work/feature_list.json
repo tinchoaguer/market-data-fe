@@ -136,7 +136,7 @@
         "Screens continue to consume view models; UI components do not own code→English maps.",
         "Existing analysis and classification success, loading, and error flows remain intact at the boundary."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 10,

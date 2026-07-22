@@ -23,13 +23,6 @@ const ANALYSIS_EXPOSURE_FACTOR_PREFIX = 'analysisLabels.exposureFactor'
 const ANALYSIS_RISK_COMPONENT_PREFIX = 'analysisLabels.riskComponent'
 const ANALYSIS_ECONOMIC_COMPONENT_PREFIX = 'analysisLabels.economicComponent'
 
-const CLASSIFICATION_REGIME_REASON_PREFIX = 'classificationLabels.regimeReason'
-const CLASSIFICATION_RISK_REASON_PREFIX = 'classificationLabels.riskReason'
-const CLASSIFICATION_ECONOMIC_REASON_PREFIX =
-  'classificationLabels.economicReason'
-const CLASSIFICATION_EXPOSURE_REASON_PREFIX =
-  'classificationLabels.exposureReason'
-
 /** Human-readable AnalysisRegimeLabel from the analysis locale catalog. */
 export function getAnalysisRegimeLabel(code: string): string {
   return resolveLabel(ANALYSIS_REGIME_PREFIX, code)
@@ -58,24 +51,4 @@ export function getRiskComponentLabel(code: string): string {
 /** Human-readable economic component name from the analysis locale catalog. */
 export function getEconomicComponentLabel(code: string): string {
   return resolveLabel(ANALYSIS_ECONOMIC_COMPONENT_PREFIX, code)
-}
-
-/** Human-readable RegimeReasonCode from the classification locale catalog. */
-export function getClassificationRegimeReasonLabel(code: string): string {
-  return resolveLabel(CLASSIFICATION_REGIME_REASON_PREFIX, code)
-}
-
-/** Human-readable RiskReasonCode from the classification locale catalog. */
-export function getClassificationRiskReasonLabel(code: string): string {
-  return resolveLabel(CLASSIFICATION_RISK_REASON_PREFIX, code)
-}
-
-/** Human-readable EconomicReasonCode from the classification locale catalog. */
-export function getClassificationEconomicReasonLabel(code: string): string {
-  return resolveLabel(CLASSIFICATION_ECONOMIC_REASON_PREFIX, code)
-}
-
-/** Human-readable ExposureReasonCode from the classification locale catalog. */
-export function getClassificationExposureReasonLabel(code: string): string {
-  return resolveLabel(CLASSIFICATION_EXPOSURE_REASON_PREFIX, code)
 }

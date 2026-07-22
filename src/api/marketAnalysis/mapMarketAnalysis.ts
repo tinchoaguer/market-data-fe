@@ -6,6 +6,8 @@ import {
   getRiskComponentLabel,
   getStrategyLabel,
 } from '../../i18n/labels'
+import { resolveUiMessages } from '../../content'
+import type { MessageParams, MessageRef } from '../../content'
 import type {
   Assessment,
   ExposureFactor,
@@ -43,6 +45,55 @@ function parseNumber(value: unknown, field: string): number {
     }
   }
   throw new MarketAnalysisMappingError(`Invalid number for ${field}`)
+}
+
+function parseMessageParams(
+  value: unknown,
+  field: string,
+): MessageParams | undefined {
+  if (value === undefined) {
+    return undefined
+  }
+  if (!isRecord(value)) {
+    throw new MarketAnalysisMappingError(`Invalid params at ${field}`)
+  }
+  const params: MessageParams = {}
+  for (const [key, entry] of Object.entries(value)) {
+    if (
+      typeof entry !== 'string' &&
+      typeof entry !== 'number' &&
+      typeof entry !== 'boolean'
+    ) {
+      throw new MarketAnalysisMappingError(
+        `Invalid param value at ${field}.${key}`,
+      )
+    }
+    params[key] = entry
+  }
+  return params
+}
+
+/**
+ * Accepts a MessageRef object or a bare string (v1 code or legacy free-text).
+ * Resolves via Content boundary adapter; unknown codes / free-text fall back to the input string.
+ */
+function resolveNarrativeText(value: unknown, field: string): string {
+  let ref: MessageRef
+
+  if (typeof value === 'string') {
+    ref = { code: value }
+  } else if (isRecord(value) && typeof value.code === 'string') {
+    ref = { code: value.code }
+    const params = parseMessageParams(value.params, `${field}.params`)
+    if (params !== undefined) {
+      ref.params = params
+    }
+  } else {
+    throw new MarketAnalysisMappingError(`Invalid narrative at ${field}`)
+  }
+
+  const [resolved] = resolveUiMessages([ref])
+  return resolved!.text
 }
 
 function parseAssessment(
@@ -153,7 +204,7 @@ function mapDesignPayload(
       name: getStrategyLabel(
         parseString(payload.recommendation.name, 'recommendation.name'),
       ),
-      rationale: parseString(
+      rationale: resolveNarrativeText(
         payload.recommendation.rationale,
         'recommendation.rationale',
       ),
@@ -220,6 +271,14 @@ function mapBackendPayload(
     parseString(payload.catalog.preferred_strategy, 'catalog.preferred_strategy'),
   )
 
+  // Resolve catalog narrative MessageRef (or legacy string) onto rationale.
+  // hard_gate_reason MessageRef shape is accepted on the DTO; fuller VM wiring
+  // is deferred to analysis-classification-copy.
+  const rationale = resolveNarrativeText(
+    payload.catalog.catalog_reason,
+    'catalog.catalog_reason',
+  )
+
   return {
     symbol:
       typeof payload.symbol === 'string' && payload.symbol.length > 0
@@ -251,10 +310,7 @@ function mapBackendPayload(
     recommendation: {
       catalogId: preferred,
       name: preferred,
-      rationale: parseString(
-        payload.catalog.catalog_reason,
-        'catalog.catalog_reason',
-      ),
+      rationale,
     },
   }
 }

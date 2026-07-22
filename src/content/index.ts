@@ -30,3 +30,5 @@ export {
   DEFAULT_LOCALE,
 } from './resolve'
 export type { ResolveFallbackReason } from './resolve'
+
+export { resolveUiMessages } from './resolveUiMessages'
