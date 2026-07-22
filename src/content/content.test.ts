@@ -1,9 +1,11 @@
-import { readFileSync, readdirSync } from 'node:fs'
+import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import {
   emptyCodeRegistry,
+  resolve,
+  v1CodeRegistry,
   type CodeRegistryEntry,
   type MessageChannel,
   type MessageRef,
@@ -21,6 +23,24 @@ const ALLOWED_SEVERITIES: readonly MessageSeverity[] = [
 
 const ALLOWED_CHANNELS: readonly MessageChannel[] = ['ui']
 
+function listContentSourceFiles(dir: string): string[] {
+  const entries = readdirSync(dir)
+  const files: string[] = []
+
+  for (const name of entries) {
+    const fullPath = join(dir, name)
+    if (statSync(fullPath).isDirectory()) {
+      files.push(...listContentSourceFiles(fullPath))
+      continue
+    }
+    if (name.endsWith('.ts') && !name.endsWith('.test.ts')) {
+      files.push(fullPath)
+    }
+  }
+
+  return files
+}
+
 describe('Content module public barrel', () => {
   it('exports emptyCodeRegistry as an empty immutable object', () => {
     expect(emptyCodeRegistry).toEqual({})
@@ -28,14 +48,24 @@ describe('Content module public barrel', () => {
     expect(Object.isFrozen(emptyCodeRegistry)).toBe(true)
   })
 
+  it('exports v1CodeRegistry and resolve for later Features', () => {
+    expect(Object.keys(v1CodeRegistry)).toHaveLength(23)
+    expect(typeof resolve).toBe('function')
+    expect(
+      resolve({
+        locale: 'en',
+        channel: 'ui',
+        messages: [{ code: 'range' }],
+      }),
+    ).toEqual([{ code: 'range', locale: 'en', text: 'Range' }])
+  })
+
   it('does not import brand wording packages from Content sources', () => {
-    const sourceFiles = readdirSync(CONTENT_DIR).filter(
-      (name) => name.endsWith('.ts') && !name.endsWith('.test.ts'),
-    )
+    const sourceFiles = listContentSourceFiles(CONTENT_DIR)
     expect(sourceFiles.length).toBeGreaterThan(0)
 
-    for (const name of sourceFiles) {
-      const source = readFileSync(join(CONTENT_DIR, name), 'utf8')
+    for (const fullPath of sourceFiles) {
+      const source = readFileSync(fullPath, 'utf8')
       expect(source).not.toMatch(/@market-data\/brand(?:\/wording)?/)
     }
   })

@@ -122,7 +122,7 @@
         "Missing or unknown codes fall back safely (e.g. to code or default-locale behavior) without throwing across the whole batch.",
         "Resolve remains in-process in FE; no remote content-service is required for v1."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 9,
