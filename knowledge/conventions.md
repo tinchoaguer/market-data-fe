@@ -55,6 +55,17 @@ Rules:
 - Do **not** put Tailwind / utility `className` strings in this app — those utilities are not compiled for consumers
 - Feature composition may nest brand primitives; avoid hand-authored CSS for shared chrome, page width, or typography that the kit already covers
 
+## Tests
+
+Follow [`testing-policy.md`](testing-policy.md) (authoritative).
+
+Summary:
+
+- Vitest + Testing Library (jsdom); colocated `*.test.ts(x)` under `src/`
+- Strong oracles over file count or line coverage
+- Prefer mapper + labels + screen state machine; avoid per-AC scaffolding and weak `copy.source` clones
+- “Coverage” in specs means AC oracles, not line %
+
 ## Specifications
 
 Follow harness `governance/spec_guidelines.md` (see `HARNESS.md`):
@@ -63,6 +74,7 @@ Follow harness `governance/spec_guidelines.md` (see `HARNESS.md`):
 - REQ-NNN identifiers
 - Traceability across requirements, design, tasks, code, and tests
 - Specs stay inside this PROJECT_ROOT
+- Testing Strategy in `design.md` must align with [`testing-policy.md`](testing-policy.md)
 
 ## Git
 

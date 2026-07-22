@@ -59,3 +59,10 @@ Writing guidelines (tone, terminology, DS inventory) are mirrored under `knowled
 - React 19 + TypeScript + Vite
 - Design system: `@market-data/brand` (file dependency or published)
 - Locale catalogs: JSON (`en` default); no i18n library yet
+- Tests: Vitest + Testing Library; see [`testing-policy.md`](testing-policy.md) (authoritative for Spec Writer / Implementer / Reviewer)
+
+## Related documents
+
+- [`knowledge/testing-policy.md`](testing-policy.md)
+- [`knowledge/conventions.md`](conventions.md)
+- [`knowledge/writing/`](writing/)

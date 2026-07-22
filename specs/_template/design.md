@@ -30,7 +30,9 @@
 
 ## Testing Strategy
 
-<!-- Testing approach, required test types, coverage expectations -->
+<!-- Follow knowledge/testing-policy.md. Prefer a table: Behavior | Layer | Oracle | Location.
+     "Coverage expectations" = which ACs have a strong automated oracle, not line %.
+     Default layers: labels/i18n, api mapper, api fetch, feature screen, layout. -->
 
 ## Copy / Wording
 

@@ -29,11 +29,13 @@ Install from `../harness/agents/` to `~/.cursor/agents/`.
 
 ```
 market-data-fe/
-    knowledge/       # project context (architecture, conventions, writing)
+    knowledge/       # project context (architecture, conventions, testing-policy, writing)
     work/            # backlog and progress
     specs/           # feature specifications
     src/             # React application
 ```
+
+Testing rules for specs and agents: `knowledge/testing-policy.md`.
 
 ## Starting a feature
 
