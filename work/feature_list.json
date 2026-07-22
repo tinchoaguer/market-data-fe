@@ -107,7 +107,7 @@
         "Feature mappers and screens do not yet need to resolve messages; this Feature only establishes the contract and module skeleton.",
         "Brand chrome wording via @market-data/brand remains out of scope for this module."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 8,
