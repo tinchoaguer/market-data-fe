@@ -1,6 +1,6 @@
 /**
  * Content module public barrel.
- * Contracts and registry skeleton only — no resolve API, catalogs, or brand wording.
+ * Contracts, v1 catalogs, and in-process resolve — no brand wording.
  */
 
 export type {
@@ -20,3 +20,13 @@ export type {
 } from './registry'
 
 export { emptyCodeRegistry } from './registry'
+
+export { v1CodeRegistry } from './catalogs'
+
+export {
+  resolve,
+  interpolateTemplate,
+  formatParamNumber,
+  DEFAULT_LOCALE,
+} from './resolve'
+export type { ResolveFallbackReason } from './resolve'

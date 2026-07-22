@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 7
-  slug: content-message-contract
+  id: 8
+  slug: content-catalogs-v1
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-22
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-22T14:57:00
-  notes: User command — Approve specification
+  recorded_at: 2026-07-22T16:35:00
+  notes: User command — Approve Specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for content-message-contract
+  - Produce requirements.md, design.md, and tasks.md for content-catalogs-v1
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,25 +28,11 @@ plan:
 
 # Current progress
 
-**Feature:** Content Message Contract (`content-message-contract`)
+**Feature:** Content Catalogs v1 (`content-catalogs-v1`)
 
 **Stage:** Completed
 
 **Status:** Done
-
-## Git Preflight result
-
-```yaml
-stage: Git Preflight
-status: COMPLETED
-```
-
-## Specification result
-
-```yaml
-stage: Specification
-status: COMPLETED
-```
 
 ## Specification approval
 
@@ -54,8 +40,8 @@ status: COMPLETED
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-22T14:57:00
-  notes: User command — Approve specification
+  recorded_at: 2026-07-22T16:35:00
+  notes: User command — Approve Specification
 ```
 
 ## Implementation result
@@ -64,17 +50,9 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Added bounded Content module at src/content/ with MessageRef, ResolvedMessage,
-  closed MessageSeverity/MessageChannel/CodeParamKind unions, CodeRegistryEntry
-  shape, and immutable emptyCodeRegistry. Public barrel re-exports all mandatory
-  symbols; no brand imports; no mapper/screen wiring. Colocated structural tests
-  pass (8/8); tsc -b clean. All tasks.md checkboxes marked complete.
-artifacts:
-  - src/content/types.ts
-  - src/content/registry.ts
-  - src/content/index.ts
-  - src/content/content.test.ts
-  - specs/content-message-contract/tasks.md
+  Implemented v1 Content catalogs (23 codes), en/ui templates, and in-process
+  resolve({ locale, channel, messages }) with param interpolation, number
+  formatting, and per-message safe fallback. 26 Content unit tests passed.
 ```
 
 ## Code Review result
@@ -84,13 +62,9 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Implementation satisfies the full approved specification for
-  content-message-contract. Bounded Content module at src/content/ with public
-  barrel; MessageRef / ResolvedMessage / CodeRegistryEntry / emptyCodeRegistry
-  match design.md; closed severity/channel/param-kind unions present; no
-  mapper/screen wiring; no @market-data/brand ownership; no resolve/catalogs.
-  Colocated content.test.ts (8 tests) passed with strong structural oracles.
-  Zero required fixes.
+  content-catalogs-v1 satisfies requirements, design, tasks, and acceptance.
+  23-code registry, en/ui templates, in-process resolve with interpolation and
+  safe fallbacks. Zero required fixes.
 ```
 
-Workflow terminated successfully. History archived to `work/history/content-message-contract.md`.
+Workflow terminated successfully. History archived to `work/history/content-catalogs-v1.md`.
