@@ -82,31 +82,5 @@
       "range_economics": "Range economics",
       "cost_drag": "Cost drag"
     }
-  },
-  "classificationLabels": {
-    "regimeReason": {
-      "trend_up": "Trend up",
-      "trend_down": "Trend down",
-      "range": "Range",
-      "chaotic": "Chaotic",
-      "news_spike": "News spike"
-    },
-    "riskReason": {
-      "low_risk": "Low risk",
-      "moderate_risk": "Moderate risk",
-      "elevated_risk": "Elevated risk",
-      "high_risk": "High risk"
-    },
-    "economicReason": {
-      "strong_edge": "Strong edge",
-      "moderate_edge": "Moderate edge",
-      "neutral_edge": "Neutral edge",
-      "negative_edge": "Negative edge"
-    },
-    "exposureReason": {
-      "ample_capacity": "Ample capacity",
-      "limited_capacity": "Limited capacity",
-      "constrained_capacity": "Constrained capacity"
-    }
   }
 }

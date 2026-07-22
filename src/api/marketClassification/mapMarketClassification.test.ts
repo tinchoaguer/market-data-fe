@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { getMessage } from '../../i18n/messages'
+import { resolveUiMessages } from '../../content'
 import {
   mapMarketClassificationPayload,
   MarketClassificationMappingError,
 } from './mapMarketClassification'
+
+function contentText(code: string): string {
+  return resolveUiMessages([{ code }])[0]!.text
+}
 
 const validPayload = {
   symbol: 'BTC/USDT',
@@ -40,7 +44,7 @@ const validPayload = {
 }
 
 describe('mapMarketClassificationPayload', () => {
-  it('maps a valid payload with humanized signal reasons', () => {
+  it('maps a valid payload with Content-resolved signal reasons', () => {
     const result = mapMarketClassificationPayload(validPayload, 'BTC/USDT')
 
     expect(result).toEqual({
@@ -49,30 +53,28 @@ describe('mapMarketClassificationPayload', () => {
         {
           source: 'regime',
           score: 0.92,
-          reason: getMessage('classificationLabels.regimeReason.trend_up'),
+          reason: contentText('trend_up'),
         },
       ],
       risk: [
         {
           source: 'risk',
           score: 0.31,
-          reason: getMessage('classificationLabels.riskReason.moderate_risk'),
+          reason: contentText('moderate_risk'),
         },
       ],
       economic: [
         {
           source: 'economic',
           score: 0.64,
-          reason: getMessage('classificationLabels.economicReason.strong_edge'),
+          reason: contentText('strong_edge'),
         },
       ],
       exposure: [
         {
           source: 'exposure',
           score: 0.4,
-          reason: getMessage(
-            'classificationLabels.exposureReason.ample_capacity',
-          ),
+          reason: contentText('ample_capacity'),
         },
       ],
     })
@@ -80,6 +82,48 @@ describe('mapMarketClassificationPayload', () => {
     expect(result.risk[0].reason).not.toBe('moderate_risk')
     expect(result.economic[0].reason).not.toBe('strong_edge')
     expect(result.exposure[0].reason).not.toBe('ample_capacity')
+  })
+
+  it('resolves MessageRef-shaped reasons via the Content boundary adapter', () => {
+    const result = mapMarketClassificationPayload(
+      {
+        symbol: 'BTC/USDT',
+        regime: [
+          {
+            source: 'regime',
+            score: 0.9,
+            reason: { code: 'trend_up', params: {} },
+          },
+        ],
+        risk: [
+          {
+            source: 'risk',
+            score: 0.2,
+            reason: { code: 'low_risk' },
+          },
+        ],
+        economic: [
+          {
+            source: 'economic',
+            score: 0.3,
+            reason: { code: 'neutral_edge', params: {} },
+          },
+        ],
+        exposure: [
+          {
+            source: 'exposure',
+            score: 0.1,
+            reason: { code: 'limited_capacity', params: {} },
+          },
+        ],
+      },
+      'BTC/USDT',
+    )
+
+    expect(result.regime[0].reason).toBe(contentText('trend_up'))
+    expect(result.risk[0].reason).toBe(contentText('low_risk'))
+    expect(result.economic[0].reason).toBe(contentText('neutral_edge'))
+    expect(result.exposure[0].reason).toBe(contentText('limited_capacity'))
   })
 
   it('maps empty signal arrays as success', () => {
@@ -133,13 +177,9 @@ describe('mapMarketClassificationPayload', () => {
     )
 
     expect(result.regime[0].reason).toBe('totally_unknown')
-    expect(result.risk[0].reason).toBe(
-      getMessage('classificationLabels.riskReason.low_risk'),
-    )
+    expect(result.risk[0].reason).toBe(contentText('low_risk'))
     expect(result.economic[0].reason).toBe('mystery_edge')
-    expect(result.exposure[0].reason).toBe(
-      getMessage('classificationLabels.exposureReason.limited_capacity'),
-    )
+    expect(result.exposure[0].reason).toBe(contentText('limited_capacity'))
   })
 
   it('fails closed when a required group is missing', () => {
@@ -225,5 +265,7 @@ describe('mapMarketClassificationPayload', () => {
         `"${phrase}"`,
       )
     }
+    expect(source).not.toContain('classificationLabels')
+    expect(source).not.toContain('getClassification')
   })
 })

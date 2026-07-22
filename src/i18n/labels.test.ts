@@ -3,10 +3,6 @@ import { getMessage } from './messages'
 import {
   getAnalysisRegimeLabel,
   getAnalysisRegimeReasonLabel,
-  getClassificationEconomicReasonLabel,
-  getClassificationExposureReasonLabel,
-  getClassificationRegimeReasonLabel,
-  getClassificationRiskReasonLabel,
   getEconomicComponentLabel,
   getExposureFactorLabel,
   getRiskComponentLabel,
@@ -44,38 +40,6 @@ const ANALYSIS_REGIME_REASON_CODES = [
   'below_sma_falling',
   'taker_buy_flow',
   'taker_sell_flow',
-] as const
-
-/** OpenAPI RegimeReasonCode closed set. */
-const CLASSIFICATION_REGIME_REASONS = [
-  'trend_up',
-  'trend_down',
-  'range',
-  'chaotic',
-  'news_spike',
-] as const
-
-/** OpenAPI RiskReasonCode closed set. */
-const CLASSIFICATION_RISK_REASONS = [
-  'low_risk',
-  'moderate_risk',
-  'elevated_risk',
-  'high_risk',
-] as const
-
-/** OpenAPI EconomicReasonCode closed set. */
-const CLASSIFICATION_ECONOMIC_REASONS = [
-  'strong_edge',
-  'moderate_edge',
-  'neutral_edge',
-  'negative_edge',
-] as const
-
-/** OpenAPI ExposureReasonCode closed set. */
-const CLASSIFICATION_EXPOSURE_REASONS = [
-  'ample_capacity',
-  'limited_capacity',
-  'constrained_capacity',
 ] as const
 
 /** Backend StrategyType closed set. */
@@ -151,78 +115,6 @@ describe('getAnalysisRegimeReasonLabel', () => {
     expect(getAnalysisRegimeReasonLabel('not_a_documented_reason')).toBe(
       'not_a_documented_reason',
     )
-  })
-})
-
-describe('getClassificationRegimeReasonLabel', () => {
-  it.each(CLASSIFICATION_REGIME_REASONS)(
-    'resolves OpenAPI RegimeReasonCode %s via the locale catalog',
-    (code) => {
-      expect(getClassificationRegimeReasonLabel(code)).toBe(
-        getMessage(`classificationLabels.regimeReason.${code}`),
-      )
-      expect(getClassificationRegimeReasonLabel(code)).not.toBe(code)
-    },
-  )
-
-  it('falls back to the raw code for an unknown regime reason', () => {
-    expect(getClassificationRegimeReasonLabel('unknown_regime_reason')).toBe(
-      'unknown_regime_reason',
-    )
-  })
-})
-
-describe('getClassificationRiskReasonLabel', () => {
-  it.each(CLASSIFICATION_RISK_REASONS)(
-    'resolves OpenAPI RiskReasonCode %s via the locale catalog',
-    (code) => {
-      expect(getClassificationRiskReasonLabel(code)).toBe(
-        getMessage(`classificationLabels.riskReason.${code}`),
-      )
-      expect(getClassificationRiskReasonLabel(code)).not.toBe(code)
-    },
-  )
-
-  it('falls back to the raw code for an unknown risk reason', () => {
-    expect(getClassificationRiskReasonLabel('unknown_risk_reason')).toBe(
-      'unknown_risk_reason',
-    )
-  })
-})
-
-describe('getClassificationEconomicReasonLabel', () => {
-  it.each(CLASSIFICATION_ECONOMIC_REASONS)(
-    'resolves OpenAPI EconomicReasonCode %s via the locale catalog',
-    (code) => {
-      expect(getClassificationEconomicReasonLabel(code)).toBe(
-        getMessage(`classificationLabels.economicReason.${code}`),
-      )
-      expect(getClassificationEconomicReasonLabel(code)).not.toBe(code)
-    },
-  )
-
-  it('falls back to the raw code for an unknown economic reason', () => {
-    expect(
-      getClassificationEconomicReasonLabel('unknown_economic_reason'),
-    ).toBe('unknown_economic_reason')
-  })
-})
-
-describe('getClassificationExposureReasonLabel', () => {
-  it.each(CLASSIFICATION_EXPOSURE_REASONS)(
-    'resolves OpenAPI ExposureReasonCode %s via the locale catalog',
-    (code) => {
-      expect(getClassificationExposureReasonLabel(code)).toBe(
-        getMessage(`classificationLabels.exposureReason.${code}`),
-      )
-      expect(getClassificationExposureReasonLabel(code)).not.toBe(code)
-    },
-  )
-
-  it('falls back to the raw code for an unknown exposure reason', () => {
-    expect(
-      getClassificationExposureReasonLabel('unknown_exposure_reason'),
-    ).toBe('unknown_exposure_reason')
   })
 })
 
@@ -344,36 +236,13 @@ describe('analysisLabels locale catalog completeness', () => {
   })
 })
 
-describe('classificationLabels locale catalog completeness', () => {
-  it('includes every OpenAPI RegimeReasonCode member', () => {
-    for (const code of CLASSIFICATION_REGIME_REASONS) {
-      expect(
-        getMessage(`classificationLabels.regimeReason.${code}`).length,
-      ).toBeGreaterThan(0)
-    }
-  })
-
-  it('includes every OpenAPI RiskReasonCode member', () => {
-    for (const code of CLASSIFICATION_RISK_REASONS) {
-      expect(
-        getMessage(`classificationLabels.riskReason.${code}`).length,
-      ).toBeGreaterThan(0)
-    }
-  })
-
-  it('includes every OpenAPI EconomicReasonCode member', () => {
-    for (const code of CLASSIFICATION_ECONOMIC_REASONS) {
-      expect(
-        getMessage(`classificationLabels.economicReason.${code}`).length,
-      ).toBeGreaterThan(0)
-    }
-  })
-
-  it('includes every OpenAPI ExposureReasonCode member', () => {
-    for (const code of CLASSIFICATION_EXPOSURE_REASONS) {
-      expect(
-        getMessage(`classificationLabels.exposureReason.${code}`).length,
-      ).toBeGreaterThan(0)
-    }
+describe('retired classificationLabels SoT', () => {
+  it('no longer exposes classificationLabels keys in the locale catalog', () => {
+    expect(() =>
+      getMessage('classificationLabels.regimeReason.trend_up'),
+    ).toThrow(/Missing message key/)
+    expect(() =>
+      getMessage('classificationLabels.riskReason.low_risk'),
+    ).toThrow(/Missing message key/)
   })
 })

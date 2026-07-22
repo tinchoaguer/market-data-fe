@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 8
-  slug: content-catalogs-v1
+  id: 9
+  slug: content-resolve-boundary
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-22
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-22T16:35:00
-  notes: User command — Approve Specification
+  recorded_at: 2026-07-22T17:28:00
+  notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for content-catalogs-v1
+  - Produce requirements.md, design.md, and tasks.md for content-resolve-boundary
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Content Catalogs v1 (`content-catalogs-v1`)
+**Feature:** Content Resolve Boundary (`content-resolve-boundary`)
 
 **Stage:** Completed
 
@@ -40,8 +40,8 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-22T16:35:00
-  notes: User command — Approve Specification
+  recorded_at: 2026-07-22T17:28:00
+  notes: User command — Approve specification
 ```
 
 ## Implementation result
@@ -50,9 +50,9 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Implemented v1 Content catalogs (23 codes), en/ui templates, and in-process
-  resolve({ locale, channel, messages }) with param interpolation, number
-  formatting, and per-message safe fallback. 26 Content unit tests passed.
+  resolveUiMessages adapter; analysis/classification mappers resolve Content v1
+  narrative MessageRefs onto existing VM fields; retired classificationLabels.*;
+  screens VM-only. Related unit tests pass (115).
 ```
 
 ## Code Review result
@@ -62,9 +62,9 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  content-catalogs-v1 satisfies requirements, design, tasks, and acceptance.
-  23-code registry, en/ui templates, in-process resolve with interpolation and
-  safe fallbacks. Zero required fixes.
+  Implementation satisfies content-resolve-boundary. Zero required fixes.
+  Recommendation: explicit note when analysis-classification-copy lands for
+  deferred hard_gate_reason VM wiring.
 ```
 
-Workflow terminated successfully. History archived to `work/history/content-catalogs-v1.md`.
+Workflow terminated successfully. History archived to `work/history/content-resolve-boundary.md`.

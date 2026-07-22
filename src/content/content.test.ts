@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import {
   emptyCodeRegistry,
   resolve,
+  resolveUiMessages,
   v1CodeRegistry,
   type CodeRegistryEntry,
   type MessageChannel,
@@ -48,9 +49,10 @@ describe('Content module public barrel', () => {
     expect(Object.isFrozen(emptyCodeRegistry)).toBe(true)
   })
 
-  it('exports v1CodeRegistry and resolve for later Features', () => {
+  it('exports v1CodeRegistry, resolve, and resolveUiMessages for later Features', () => {
     expect(Object.keys(v1CodeRegistry)).toHaveLength(23)
     expect(typeof resolve).toBe('function')
+    expect(typeof resolveUiMessages).toBe('function')
     expect(
       resolve({
         locale: 'en',
@@ -58,6 +60,9 @@ describe('Content module public barrel', () => {
         messages: [{ code: 'range' }],
       }),
     ).toEqual([{ code: 'range', locale: 'en', text: 'Range' }])
+    expect(resolveUiMessages([{ code: 'range' }])).toEqual([
+      { code: 'range', locale: 'en', text: 'Range' },
+    ])
   })
 
   it('does not import brand wording packages from Content sources', () => {

@@ -5,9 +5,14 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { wording } from '@market-data/brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
+import { resolveUiMessages } from '../../content'
 import { SUPPORTED_SYMBOLS } from '../../config/symbols'
 import type { MarketClassificationViewModel } from '../../api/marketClassification/types'
 import { MarketClassificationScreen } from './MarketClassificationScreen'
+
+function contentText(code: string): string {
+  return resolveUiMessages([{ code }])[0]!.text
+}
 
 const fixtureViewModel: MarketClassificationViewModel = {
   symbol: 'BTC/USDT',
@@ -15,30 +20,28 @@ const fixtureViewModel: MarketClassificationViewModel = {
     {
       source: 'regime',
       score: 0.92,
-      reason: getMessage('classificationLabels.regimeReason.trend_up'),
+      reason: contentText('trend_up'),
     },
   ],
   risk: [
     {
       source: 'risk',
       score: 0.31,
-      reason: getMessage('classificationLabels.riskReason.moderate_risk'),
+      reason: contentText('moderate_risk'),
     },
   ],
   economic: [
     {
       source: 'economic',
       score: 0.64,
-      reason: getMessage('classificationLabels.economicReason.strong_edge'),
+      reason: contentText('strong_edge'),
     },
   ],
   exposure: [
     {
       source: 'exposure',
       score: 0.4,
-      reason: getMessage(
-        'classificationLabels.exposureReason.ample_capacity',
-      ),
+      reason: contentText('ample_capacity'),
     },
   ],
 }
@@ -144,30 +147,16 @@ describe('MarketClassificationScreen', () => {
 
     expect(screen.getByText('regime')).toBeInTheDocument()
     expect(screen.getByText('0.92')).toBeInTheDocument()
-    expect(
-      screen.getByText(getMessage('classificationLabels.regimeReason.trend_up')),
-    ).toBeInTheDocument()
+    expect(screen.getByText(contentText('trend_up'))).toBeInTheDocument()
     expect(screen.getByText('risk')).toBeInTheDocument()
     expect(screen.getByText('0.31')).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        getMessage('classificationLabels.riskReason.moderate_risk'),
-      ),
-    ).toBeInTheDocument()
+    expect(screen.getByText(contentText('moderate_risk'))).toBeInTheDocument()
     expect(screen.getByText('economic')).toBeInTheDocument()
     expect(screen.getByText('0.64')).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        getMessage('classificationLabels.economicReason.strong_edge'),
-      ),
-    ).toBeInTheDocument()
+    expect(screen.getByText(contentText('strong_edge'))).toBeInTheDocument()
     expect(screen.getByText('exposure')).toBeInTheDocument()
     expect(screen.getByText('0.4')).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        getMessage('classificationLabels.exposureReason.ample_capacity'),
-      ),
-    ).toBeInTheDocument()
+    expect(screen.getByText(contentText('ample_capacity'))).toBeInTheDocument()
 
     expect(screen.queryByText('trend_up')).not.toBeInTheDocument()
     expect(screen.queryByText('moderate_risk')).not.toBeInTheDocument()
@@ -193,6 +182,8 @@ describe('MarketClassificationScreen', () => {
       expect(source).not.toContain('getClassificationEconomicReasonLabel')
       expect(source).not.toContain('getClassificationExposureReasonLabel')
       expect(source).not.toContain('classificationLabels.')
+      expect(source).not.toContain('resolveUiMessages')
+      expect(source).not.toContain('v1CodeRegistry')
       expect(source).not.toContain('trend_up')
     }
   })
