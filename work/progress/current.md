@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 6
-  slug: extend-human-readable-labels
+  id: 7
+  slug: content-message-contract
 
 workflow_stage: Completed
 
@@ -9,17 +9,17 @@ status: Done
 
 blocked_from_stage: null
 
-started: 2026-07-15
-updated: 2026-07-15
+started: 2026-07-22
+updated: 2026-07-22
 
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-15T12:01:00
+  recorded_at: 2026-07-22T14:57:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for extend-human-readable-labels
+  - Produce requirements.md, design.md, and tasks.md for content-message-contract
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,20 +28,17 @@ plan:
 
 # Current progress
 
-**Feature:** Extend Human-Readable Labels (`extend-human-readable-labels`)
+**Feature:** Content Message Contract (`content-message-contract`)
 
 **Stage:** Completed
 
 **Status:** Done
 
-## Specification approval
+## Git Preflight result
 
 ```yaml
-approval:
-  specification: approved
-  recorded_by: human
-  recorded_at: 2026-07-15T12:01:00
-  notes: User command — Approve specification
+stage: Git Preflight
+status: COMPLETED
 ```
 
 ## Specification result
@@ -51,28 +48,33 @@ stage: Specification
 status: COMPLETED
 ```
 
+## Specification approval
+
+```yaml
+approval:
+  specification: approved
+  recorded_by: human
+  recorded_at: 2026-07-22T14:57:00
+  notes: User command — Approve specification
+```
+
 ## Implementation result
 
 ```yaml
 stage: Implementation
 status: COMPLETED
 summary: >
-  Extended human-readable labels for classification reason codes, strategy tokens,
-  exposure factor keys, and analysis risk/economic component names. Locale catalogs
-  live in en.json; thin wrappers reuse resolveLabel; classification and analysis
-  mappers humanize view-model fields with raw-code fallback for unknowns. Screens
-  still bind view models only. All tasks checked; full suite 162/162 passing.
+  Added bounded Content module at src/content/ with MessageRef, ResolvedMessage,
+  closed MessageSeverity/MessageChannel/CodeParamKind unions, CodeRegistryEntry
+  shape, and immutable emptyCodeRegistry. Public barrel re-exports all mandatory
+  symbols; no brand imports; no mapper/screen wiring. Colocated structural tests
+  pass (8/8); tsc -b clean. All tasks.md checkboxes marked complete.
 artifacts:
-  - src/locales/en.json
-  - src/i18n/labels.ts
-  - src/i18n/labels.test.ts
-  - src/api/marketClassification/mapMarketClassification.ts
-  - src/api/marketClassification/mapMarketClassification.test.ts
-  - src/api/marketAnalysis/mapMarketAnalysis.ts
-  - src/api/marketAnalysis/mapMarketAnalysis.test.ts
-  - src/features/view-market-classification/MarketClassificationScreen.test.tsx
-  - src/features/view-market-analysis/MarketAnalysisScreen.test.tsx
-  - specs/extend-human-readable-labels/tasks.md
+  - src/content/types.ts
+  - src/content/registry.ts
+  - src/content/index.ts
+  - src/content/content.test.ts
+  - specs/content-message-contract/tasks.md
 ```
 
 ## Code Review result
@@ -82,11 +84,13 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Implementation satisfies all REQ-001–REQ-017, NFR-001–NFR-006, and every
-  acceptance criterion. Locale catalogs, thin resolveLabel wrappers, classification
-  and analysis mappers, and unit/component tests cover humanization, raw-code
-  fallback, view-model boundary, and unchanged screen flows. No required fixes.
+  Implementation satisfies the full approved specification for
+  content-message-contract. Bounded Content module at src/content/ with public
+  barrel; MessageRef / ResolvedMessage / CodeRegistryEntry / emptyCodeRegistry
+  match design.md; closed severity/channel/param-kind unions present; no
+  mapper/screen wiring; no @market-data/brand ownership; no resolve/catalogs.
+  Colocated content.test.ts (8 tests) passed with strong structural oracles.
+  Zero required fixes.
 ```
 
-Workflow terminated successfully. History archived to `work/history/extend-human-readable-labels.md`.
-Review report: `work/progress/reviews/extend-human-readable-labels.md`.
+Workflow terminated successfully. History archived to `work/history/content-message-contract.md`.
