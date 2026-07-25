@@ -7,6 +7,16 @@
     "analysisPlaceholder": "Analysis is not available yet.",
     "classificationPlaceholder": "Classification is not available yet."
   },
+  "readingLayout": {
+    "regionContext": "Context",
+    "regionAnalysis": "Analysis",
+    "regionClassification": "Classification",
+    "regionEvidence": "Evidence",
+    "regionMarketData": "Market Data",
+    "regionDiagnostics": "Diagnostics",
+    "selectSymbolPrompt": "Select a Symbol to open a Reading.",
+    "regionPlaceholder": "Content for this Region will appear here."
+  },
   "viewMarketData": {
     "title": "Market data",
     "empty": "Select a symbol to view market data.",

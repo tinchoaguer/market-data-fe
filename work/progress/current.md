@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 10
-  slug: analysis-classification-copy
+  id: 11
+  slug: reading-layout-shell
 
 workflow_stage: Completed
 
@@ -9,17 +9,17 @@ status: Done
 
 blocked_from_stage: null
 
-started: 2026-07-22
-updated: 2026-07-22
+started: 2026-07-25
+updated: 2026-07-25
 
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-22T17:51:00
-  notes: User command — Approve Specification
+  recorded_at: 2026-07-25T17:58:00
+  notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for analysis-classification-copy
+  - Produce requirements.md, design.md, and tasks.md for reading-layout-shell
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Analysis & Classification Copy Wiring (`analysis-classification-copy`)
+**Feature:** Reading Layout Shell (`reading-layout-shell`)
 
 **Stage:** Completed
 
@@ -40,8 +40,8 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-22T17:51:00
-  notes: User command — Approve Specification
+  recorded_at: 2026-07-25T17:58:00
+  notes: User command — Approve specification
 ```
 
 ## Implementation result
@@ -50,9 +50,10 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Analysis VM exposes recommendation.hardGateReason; RecommendationSection binds
-  rationale and optional hard-gate; classification reasons remain Content-resolved
-  VM strings. Related unit tests passed.
+  Implemented the Reading Layout Shell as a Symbol Reading workspace with six
+  labeled Regions, primary-band hierarchy, gray-box placeholders, and
+  ReadingScreen on the Analysis destination with selection/loading/error/retry.
+  All tasks marked done; 189 tests pass.
 ```
 
 ## Code Review result
@@ -62,7 +63,9 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Implementation satisfies analysis-classification-copy. Zero required fixes.
+  reading-layout-shell satisfies the approved specification. No required fixes;
+  two non-blocking recommendations noted.
 ```
 
-Workflow terminated successfully. History archived to `work/history/analysis-classification-copy.md`.
+Workflow terminated successfully. History archived to `work/history/reading-layout-shell.md`.
+Review report: `work/progress/reviews/reading-layout-shell.md`.
