@@ -7,7 +7,8 @@
 ```
 market-data-fe/
 ├── knowledge/
-│   └── writing/          # mirrored brand writing guidelines
+│   ├── writing/          # mirrored brand writing guidelines
+│   └── ux/               # adopted UX contracts
 ├── src/
 │   ├── locales/          # feature / app locale catalogs
 │   ├── i18n/             # default-locale message helpers
@@ -44,7 +45,11 @@ Product screens compose feature layout and call the API. Shared interactive and 
 | Design-system / shared | `@market-data/brand` (`src/locales/en.json` → `@market-data/brand/wording`) | `import { wording } from '@market-data/brand/wording'` |
 | Feature / screen-specific | `src/locales/en.json` in this app | `getMessage(...)` from `src/i18n/messages.ts` |
 
-Writing guidelines (tone, terminology, DS inventory) are mirrored under `knowledge/writing/` from the brand SoT. When brand guidelines change, update the mirror in this repo.
+Writing guidelines (tone, terminology, DS inventory) live under `knowledge/writing/`.
+
+## UX contracts (`knowledge/ux/`)
+
+Adopted UX contracts (`<topic>-contract.md`) that Features may reference. Payload/API field maps belong in that Feature's `specs/<slug>/design.md`, not here.
 
 ## Writable paths (Implementer)
 
@@ -66,3 +71,4 @@ Writing guidelines (tone, terminology, DS inventory) are mirrored under `knowled
 - [`knowledge/testing-policy.md`](testing-policy.md)
 - [`knowledge/conventions.md`](conventions.md)
 - [`knowledge/writing/`](writing/)
+- [`knowledge/ux/`](ux/) (adopted contracts when present)
