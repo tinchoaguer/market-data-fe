@@ -165,7 +165,7 @@
         "Layout follows knowledge/ux/reading-contract.md hierarchy and anti-patterns (no equal-weight Region wall; no Market-Data-first Reading).",
         "Existing symbol selection, loading, and error flows remain usable for the Reading surface."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 12,

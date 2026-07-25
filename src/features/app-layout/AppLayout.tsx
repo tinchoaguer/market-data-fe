@@ -14,7 +14,7 @@ import {
 } from '@market-data/brand/ui'
 import { wording } from '@market-data/brand/wording'
 import { getMessage } from '../../i18n/messages'
-import { MarketAnalysisScreen } from '../view-market-analysis/MarketAnalysisScreen'
+import { ReadingScreen } from '../reading-layout-shell/ReadingScreen'
 import { MarketClassificationScreen } from '../view-market-classification/MarketClassificationScreen'
 import { MarketDataScreen } from '../view-market-data/MarketDataScreen'
 import {
@@ -28,7 +28,7 @@ export type AppLayoutProps = {
   initialDestination?: DestinationId
   /** Optional Market Data screen override for tests. */
   marketDataScreen?: ReactNode
-  /** Optional Analysis screen override for tests. */
+  /** Optional Analysis / Reading screen override for tests. */
   analysisScreen?: ReactNode
   /** Optional Classification screen override for tests. */
   classificationScreen?: ReactNode
@@ -98,7 +98,7 @@ export function AppLayout({
           ? (marketDataScreen ?? <MarketDataScreen />)
           : null}
         {activeDestination === 'analysis'
-          ? (analysisScreen ?? <MarketAnalysisScreen />)
+          ? (analysisScreen ?? <ReadingScreen />)
           : null}
         {activeDestination === 'classification'
           ? (classificationScreen ?? <MarketClassificationScreen />)

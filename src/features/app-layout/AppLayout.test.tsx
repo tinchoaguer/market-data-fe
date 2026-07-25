@@ -172,7 +172,7 @@ describe('AppLayout', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('mounts MarketAnalysisScreen by default on the Analysis destination', async () => {
+  it('mounts ReadingScreen by default on the Analysis destination', async () => {
     const user = userEvent.setup()
     render(
       <AppLayout
@@ -186,10 +186,10 @@ describe('AppLayout', () => {
     )
 
     expect(
-      screen.getByRole('heading', { name: getMessage('viewMarketAnalysis.title') }),
+      screen.getByText(getMessage('readingLayout.selectSymbolPrompt')),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(getMessage('viewMarketAnalysis.empty')),
+      screen.getByRole('combobox', { name: wording.labels.symbol }),
     ).toBeInTheDocument()
     expect(
       screen.queryByText(messages.appLayout.analysisPlaceholder),
