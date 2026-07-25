@@ -151,6 +151,36 @@
         "Existing analysis and classification success, loading, and error flows remain intact."
       ],
       "status": "Done"
+    },
+    {
+      "id": 11,
+      "slug": "reading-layout-shell",
+      "title": "Reading Layout Shell",
+      "description": "Present a Symbol Reading as a gray-box Region workspace (Context, Analysis, Classification, Evidence, Market Data, Diagnostics) per knowledge/ux/reading-contract.md, using brand tokens/components for region chrome. Structural fidelity only — not hi-fi polish.",
+      "acceptance": [
+        "A Symbol Reading surface exposes distinct Context, Analysis, Classification, Evidence, Market Data, and Diagnostics Regions (gray-box structure acceptable).",
+        "Context + Analysis are available in the initial viewport so the Symbol and primary interpretation can be grasped without scrolling for the primary message.",
+        "Analysis is the most prominent Region; Classification is compact and subordinate; Market Data and Evidence do not dominate the workspace.",
+        "Region chrome and spacing use brand tokens/components already available to the FE (no ad-hoc design system).",
+        "Layout follows knowledge/ux/reading-contract.md hierarchy and anti-patterns (no equal-weight Region wall; no Market-Data-first Reading).",
+        "Existing symbol selection, loading, and error flows remain usable for the Reading surface."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 12,
+      "slug": "reading-analysis-composition",
+      "title": "Reading Analysis Composition",
+      "description": "Inside the Analysis Region, present gray-box Assessment peers (Regime, Risk, Economic, Exposure), Recommendation, and claim-bound Narrative per knowledge/ux/analysis-contract.md, using brand tokens/components. Depends on reading-layout-shell for the hosting Analysis Region.",
+      "acceptance": [
+        "The Analysis Region contains one Assessments workspace with peer units for Regime, Risk, Economic, and Exposure (gray-box structure acceptable).",
+        "Recommendation is composed with Assessments (not a standalone primary Region) and is visible in the initial Analysis viewport without scrolling for the stance.",
+        "Narrative appears bound to Assessment/Recommendation claims — not as a detached essay Region.",
+        "No Overall Assessment / Overall Score / Synthesis Region or rollup that replaces the four Assessment dimensions.",
+        "Composition follows knowledge/ux/analysis-contract.md hierarchy and anti-patterns (interpretation before Evidence; Classification not nested as an Analysis-owned Region).",
+        "Assessment/Recommendation chrome uses brand tokens/components already available to the FE."
+      ],
+      "status": "Pending"
     }
 
 ]
