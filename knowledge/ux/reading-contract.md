@@ -5,6 +5,8 @@ Adopted contract for Symbol **Reading** structure in this frontend. Spec Writer 
 **Topic:** Reading  
 **Fidelity for this epic:** gray-box / structural (wireframe-aligned). Visual surface uses brand tokens and components already consumed by the app. Hi-fi Figma polish is out of scope.
 
+**Adopted:** 2026-07-27 · epic `reading-workspace-fidelity` (refresh; originally epic `reading-layout`)
+
 ---
 
 ## Purpose
@@ -51,6 +53,7 @@ Every score or label must be explainable through Evidence (or qualified by Diagn
 - Drivers → Features → Contributions attached to a claim (Analysis, optionally Classification).
 - Secondary; expandable by depth (Drivers first).
 - Never free-floating metrics unrelated to a claim.
+- Detail contract: `knowledge/ux/evidence-contract.md`. Assessment `components` / exposure `factors` belong here, not as Analysis-owned metric dumps.
 
 ### Market Data Region
 - Price, order book, candles by timeframe — raw observation.
@@ -61,6 +64,7 @@ Every score or label must be explainable through Evidence (or qualified by Diagn
 - Insufficient / partial / stale (and similar) trust qualification.
 - Quiet when healthy; elevated when blocking — without becoming the hero message.
 - Confidence is never an Assessment dimension.
+- Detail contract: `knowledge/ux/diagnostics-contract.md`.
 
 ---
 
@@ -124,4 +128,4 @@ Desktop spatial target: Context strip → Analysis (dominant) + Classification (
 
 ## Provenance
 
-Brand `visual-definitions` (Reading model, composition, layout blueprint/specification, plus shared domain language and UI philosophy) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-layout` (or refresh) when the SoT changes.
+Brand `visual-definitions` (Reading model, composition, layout blueprint/specification, plus shared domain language and UI philosophy) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.

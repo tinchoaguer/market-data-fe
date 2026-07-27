@@ -181,6 +181,95 @@
         "Assessment/Recommendation chrome uses brand tokens/components already available to the FE."
       ],
       "status": "Done"
+    },
+    {
+      "id": 13,
+      "slug": "reading-app-navigation",
+      "title": "Reading App Navigation",
+      "description": "Make Symbol Reading the primary product surface per knowledge/ux/reading-contract.md; resolve dual IA so legacy Market Data / Analysis / Classification destinations do not compete as equal peers with the Reading workspace (subordinate or retire competing screens as specified).",
+      "acceptance": [
+        "Symbol Reading is reachable as the primary way to inspect a Symbol from app chrome.",
+        "Legacy Market Data, Analysis, and Classification destinations no longer present a competing equal product IA alongside Reading (demoted, merged, or removed per specification).",
+        "Reading Regions hierarchy from knowledge/ux/reading-contract.md remains intact (Analysis primary; no Market-Data-first Reading).",
+        "Active destination / surface is visually indicated in navigation chrome.",
+        "Existing Symbol selection, loading, and error flows remain usable on the Reading surface.",
+        "User-facing nav labels use locale / brand wording — no hardcoded English in components."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 14,
+      "slug": "reading-context-identity",
+      "title": "Reading Context Identity",
+      "description": "Present full Identity in the Context Region of the Symbol Reading per knowledge/ux/reading-contract.md (display name / pair form — not ticker string alone), without competing with Analysis for message prominence.",
+      "acceptance": [
+        "Context Region shows Identity beyond a bare ticker string (display name and/or base-quote / pair form as available).",
+        "Context does not show price, scores, signals, or recommendations.",
+        "Context remains a small frame and does not outrank Analysis for message prominence.",
+        "Identity chrome uses brand tokens/components already available to the FE.",
+        "User-facing Identity labels come from locale catalogs / brand wording."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 15,
+      "slug": "reading-evidence-composition",
+      "title": "Reading Evidence Composition",
+      "description": "Compose the Evidence Region per knowledge/ux/evidence-contract.md: Drivers → Features → Contributions attached to claims; stop nesting assessment components/factors as Analysis-owned body. Depends on reading-layout-shell Analysis/Evidence Regions.",
+      "acceptance": [
+        "Evidence Region presents claim-attached explainability using Drivers → Features → Contributions (gray-box structure acceptable).",
+        "Assessment components / exposure factors are not the primary body owned inside Assessment peers; explainability lives in Evidence (or claim-attached Evidence depth).",
+        "Users can understand Analysis outcomes without opening Evidence depth (interpretation before Evidence).",
+        "Evidence is never a free-floating metrics dashboard unrelated to a claim.",
+        "Composition follows knowledge/ux/evidence-contract.md anti-patterns (no Metrics/Observations kind labels; Market Data not labeled as Evidence until cited).",
+        "Evidence chrome uses brand tokens/components already available to the FE."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 16,
+      "slug": "reading-diagnostics",
+      "title": "Reading Diagnostics",
+      "description": "Wire the Diagnostics Region per knowledge/ux/diagnostics-contract.md: quiet when healthy, elevated when blocking; trust qualification without becoming the hero message. Depends on reading-layout-shell Diagnostics Region.",
+      "acceptance": [
+        "Diagnostics Region is distinct and present on a successful Reading (gray-box acceptable when no active diagnostics).",
+        "When healthy, Diagnostics stay quiet / minimal and do not compete with Analysis for primary attention.",
+        "When blocking or strongly qualifying trust, Diagnostics elevate near the affected Reading and are unmistakable without replacing Analysis as the hero message.",
+        "Confidence / data-quality is not presented as an Assessment dimension inside Analysis.",
+        "Composition follows knowledge/ux/diagnostics-contract.md anti-patterns (no burying blocking Diagnostics only at page end or only inside Evidence tables).",
+        "Diagnostics chrome uses brand tokens/components already available to the FE."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 17,
+      "slug": "reading-classification-body",
+      "title": "Reading Classification Body",
+      "description": "Fill the Classification Region with compact signal packaging (source, score, reason) per dimension per knowledge/ux/reading-contract.md — not count-only summary; remains subordinate and adjacent to Analysis.",
+      "acceptance": [
+        "Classification Region shows regime, risk, economic, and exposure signal groups (empty groups allowed).",
+        "Each displayed signal shows source, score, and reason (reason as human-readable narrative when available).",
+        "Classification remains compact and visually subordinate / adjacent to Analysis — not equal prominence.",
+        "Classification is not nested as an Analysis-owned Region inside Assessments.",
+        "Region body uses brand tokens/components already available to the FE.",
+        "User-facing labels and reasons come from locale / Content-resolved copy — no hardcoded designed English in components."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 18,
+      "slug": "reading-market-data-body",
+      "title": "Reading Market Data Body",
+      "description": "Fill the Market Data Region with Price, Order book, and Candles as supporting observation per knowledge/ux/reading-contract.md — never the primary interpretive Region of the Symbol Reading.",
+      "acceptance": [
+        "Market Data Region displays current Price for the selected Symbol.",
+        "Market Data Region displays Order book Bids and Asks.",
+        "Market Data Region displays Candles grouped by timeframe.",
+        "Market Data remains a supporting Region — not marked primary and not the first Region in the primary interpretive band.",
+        "Market Data is visually distinct from Evidence (observation ≠ explainability).",
+        "Region body uses brand tokens/components already available to the FE."
+      ],
+      "status": "Pending"
     }
 
 ]

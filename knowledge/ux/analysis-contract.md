@@ -5,7 +5,9 @@ Adopted contract for the **Analysis Region** internals in this frontend. Spec Wr
 **Topic:** Analysis (nested under Reading’s Analysis Region)  
 **Fidelity for this epic:** gray-box / structural. Visual surface uses brand tokens and components. Hi-fi Figma polish is out of scope.
 
-Companion: `knowledge/ux/reading-contract.md` owns Reading-wide Regions. This contract owns structure **inside** the Analysis Region.
+Companion: `knowledge/ux/reading-contract.md` owns Reading-wide Regions. This contract owns structure **inside** the Analysis Region. Evidence depth: `knowledge/ux/evidence-contract.md`. Trust: `knowledge/ux/diagnostics-contract.md`.
+
+**Adopted:** 2026-07-27 · epic `reading-workspace-fidelity` (refresh; originally epic `reading-layout`)
 
 ---
 
@@ -147,4 +149,4 @@ Assessments communicate label / score / level + short meaning — not raw observ
 
 ## Provenance
 
-Brand `visual-definitions/analysis/` (information architecture, presentation model, composition model, layout blueprint/specification) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-layout` (or refresh) when the SoT changes.
+Brand `visual-definitions/analysis/` (information architecture, presentation model, composition model, layout blueprint/specification) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.
