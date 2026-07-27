@@ -162,23 +162,26 @@ describe('ReadingScreen', () => {
     await selectSymbol('BTC/USDT')
 
     expect(await screen.findByTestId('reading-workspace')).toBeInTheDocument()
+    expect(screen.getByTestId('reading-region-context')).toBeInTheDocument()
+    expect(screen.getByTestId('reading-region-analysis')).toBeInTheDocument()
     expect(
-      screen.getByText(messages.readingLayout.regionContext),
+      screen.getByTestId('reading-region-classification'),
+    ).toBeInTheDocument()
+    expect(screen.getByTestId('reading-region-evidence')).toBeInTheDocument()
+    expect(screen.getByTestId('reading-region-market-data')).toBeInTheDocument()
+    expect(screen.getByTestId('reading-region-diagnostics')).toBeInTheDocument()
+    expect(
+      screen.getByRole('region', { name: messages.readingLayout.regionEvidence }),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(messages.readingLayout.regionAnalysis),
+      screen.getByRole('region', {
+        name: messages.readingLayout.regionMarketData,
+      }),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(messages.readingLayout.regionClassification),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(messages.readingLayout.regionEvidence),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(messages.readingLayout.regionMarketData),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(messages.readingLayout.regionDiagnostics),
+      screen.getByRole('region', {
+        name: messages.readingLayout.regionDiagnostics,
+      }),
     ).toBeInTheDocument()
 
     expect(
@@ -260,13 +263,16 @@ describe('ReadingScreen', () => {
       within(assessments).getByText(wording.labels.recommendation),
     ).toBeInTheDocument()
     expect(
-      within(assessments).queryByText(messages.readingLayout.regionEvidence),
-    ).not.toBeInTheDocument()
-    expect(
       within(assessments).queryByText(
         messages.readingLayout.regionClassification,
       ),
     ).not.toBeInTheDocument()
+    expect(
+      within(assessments).queryByTestId('evidence-composition'),
+    ).not.toBeInTheDocument()
+    expect(
+      assessments.querySelector('[data-region-id="evidence"]'),
+    ).toBeNull()
 
     const workspace = screen.getByTestId('reading-workspace')
     const regionIds = Array.from(
@@ -279,6 +285,62 @@ describe('ReadingScreen', () => {
     expect(
       screen.getByTestId('reading-region-evidence').contains(assessments),
     ).toBe(false)
+  })
+
+  it('hosts Evidence composition with components/factors under Evidence, not Assessment body', async () => {
+    const loadReading = vi.fn().mockResolvedValue(fixtureViewModel)
+    render(
+      <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />,
+    )
+    await selectSymbol('BTC/USDT')
+
+    const analysisRegion = await screen.findByTestId('reading-region-analysis')
+    const evidenceRegion = screen.getByTestId('reading-region-evidence')
+    const evidence = within(evidenceRegion).getByTestId('evidence-composition')
+
+    expect(evidence).toBeInTheDocument()
+    const riskAttachment = within(evidence).getByTestId('claim-attachment-risk')
+    expect(
+      riskAttachment.querySelector('[data-evidence-kind="drivers"]'),
+    ).not.toBeNull()
+    expect(
+      within(riskAttachment).getByText(
+        getMessage('analysisLabels.riskComponent.volatility'),
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(evidence).getByText(
+        getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
+      ),
+    ).toBeInTheDocument()
+
+    expect(
+      analysisRegion.querySelector('[data-assessment-components]'),
+    ).toBeNull()
+    expect(
+      within(analysisRegion).queryByText(
+        getMessage('analysisLabels.riskComponent.volatility'),
+      ),
+    ).not.toBeInTheDocument()
+
+    // Interpretation before Evidence: Analysis outcomes visible without Features open.
+    expect(
+      within(analysisRegion).getByText(fixtureViewModel.risk.level),
+    ).toBeInTheDocument()
+    expect(
+      within(analysisRegion).getByText(fixtureViewModel.recommendation.name),
+    ).toBeInTheDocument()
+    expect(
+      riskAttachment.querySelector('[data-evidence-kind="features"]'),
+    ).toHaveAttribute('data-disclosure', 'collapsed')
+
+    // Market Data remains a distinct Region, not labeled as Evidence body.
+    expect(
+      evidence.querySelector('[data-region-id="market-data"]'),
+    ).toBeNull()
+    expect(
+      screen.getByTestId('reading-region-market-data'),
+    ).toBeInTheDocument()
   })
 
   it('wires claim Narrative and supporting Classification/Market Data summaries when loaders succeed', async () => {

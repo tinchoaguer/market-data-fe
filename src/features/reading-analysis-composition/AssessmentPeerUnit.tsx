@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   Inline,
   Label,
   Stack,
@@ -40,32 +41,26 @@ function ClaimNarrative({
   )
 }
 
-function ComponentRows({
-  components,
-}: {
-  components: NonNullable<Assessment['components']>
-}) {
+function EvidenceReference({ claimId }: { claimId: AssessmentPeerId }) {
   return (
-    <Stack gap="xs" data-assessment-components>
-      <Label>{getMessage('viewMarketAnalysis.factors')}</Label>
-      {components.map((component) => (
-        <Inline key={component.name} gap="sm">
-          <Text as="span" tone="muted">
-            {component.name}
-          </Text>
-          <Text as="span" mono tabular>
-            {component.displayValue}
-          </Text>
-        </Inline>
-      ))}
-    </Stack>
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      data-evidence-reference={claimId}
+      onClick={() => {
+        document
+          .getElementById('reading-region-evidence-anchor')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }}
+    >
+      {getMessage('readingLayout.regionEvidence')}
+    </Button>
   )
 }
 
 function AssessmentOutcomeBody({ assessment }: { assessment: Assessment }) {
   const hasSummary = assessment.summary.trim().length > 0
-  const hasComponents =
-    assessment.components != null && assessment.components.length > 0
 
   return (
     <Stack gap="sm">
@@ -81,7 +76,6 @@ function AssessmentOutcomeBody({ assessment }: { assessment: Assessment }) {
           </Text>
         </Stack>
       ) : null}
-      {hasComponents ? <ComponentRows components={assessment.components!} /> : null}
     </Stack>
   )
 }
@@ -93,28 +87,25 @@ function ExposureOutcomeBody({ exposure }: { exposure: ExposureProfile }) {
         <Label>{getMessage('viewMarketAnalysis.level')}</Label>
         <Badge variant="secondary">{exposure.summary}</Badge>
       </Inline>
-      {exposure.factors.length > 0 ? (
-        <Stack gap="xs" data-assessment-components>
-          <Label>{getMessage('viewMarketAnalysis.factors')}</Label>
-          {exposure.factors.map((factor, index) => (
-            <Inline key={`${factor.name}-${index}`} gap="sm">
-              <Text as="span" tone="muted">
-                {factor.name}
-              </Text>
-              <Text as="span" mono tabular>
-                {factor.displayWeight}
-              </Text>
-            </Inline>
-          ))}
-        </Stack>
-      ) : null}
     </Stack>
   )
 }
 
+function hasExplainability(
+  id: AssessmentPeerId,
+  assessment?: Assessment | null,
+  exposure?: ExposureProfile | null,
+): boolean {
+  if (id === 'exposure') {
+    return (exposure?.factors.length ?? 0) > 0
+  }
+  return (assessment?.components?.length ?? 0) > 0
+}
+
 /**
  * Independent Assessment peer unit (Regime | Risk | Economic | Exposure).
- * Light peer chrome (not a competing hero Card wall). Gray-box when empty.
+ * Outcome + claim-bound Narrative + Evidence reference only — no primary
+ * components/factors tables (those live in Evidence).
  */
 export function AssessmentPeerUnit({
   id,
@@ -127,6 +118,7 @@ export function AssessmentPeerUnit({
   const hasAssessment = assessment != null
   const hasExposure = id === 'exposure' && exposure != null
   const hasOutcome = id === 'exposure' ? hasExposure : hasAssessment
+  const showEvidenceReference = hasExplainability(id, assessment, exposure)
 
   return (
     <section
@@ -148,6 +140,7 @@ export function AssessmentPeerUnit({
           </Text>
         )}
         <ClaimNarrative unitId={id} narrative={narrative} />
+        {showEvidenceReference ? <EvidenceReference claimId={id} /> : null}
       </Stack>
     </section>
   )

@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 14
-  slug: reading-context-identity
+  id: 15
+  slug: reading-evidence-composition
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-27
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T15:28:00
+  recorded_at: 2026-07-27T15:44:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for reading-context-identity
+  - Produce requirements.md, design.md, and tasks.md for reading-evidence-composition
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Reading Context Identity (`reading-context-identity`)
+**Feature:** Reading Evidence Composition (`reading-evidence-composition`)
 
 **Stage:** Completed
 
@@ -40,7 +40,7 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T15:28:00
+  recorded_at: 2026-07-27T15:44:00
   notes: User command — Approve specification
 ```
 
@@ -50,12 +50,10 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Implemented Reading Context Identity: locale catalog keys and display-name
-  entries; FE Identity composer (pair/base/quote + optional venue, no Identity
-  API); ContextIdentity UI with brand Stack/Inline/Label/Text; mounted as
-  Context Region body in ReadingWorkspace (Analysis remains primary; idle host
-  still owns empty state). Unit and component tests cover mapper fixtures and
-  Context Identity/layout oracles (25 passed).
+  Implemented reading-evidence-composition: Evidence Region now presents
+  claim-attached Drivers → Features → Contributions with progressive disclosure;
+  assessment components/exposure factors moved from Assessment peers into Evidence;
+  Analysis outcomes remain visible without opening Evidence depth. All 217 unit tests pass.
 ```
 
 ## Code Review result
@@ -65,12 +63,12 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Implementation satisfies reading-context-identity. Context Region mounts
-  FE-composed Identity (display name, pair, base, quote, optional venue)
-  via brand Stack/Inline/Label/Text and locale/brand wording; Context remains
-  Identity-only and non-primary vs Analysis; no new Identity API. All REQ/AC
-  pass with strong oracles. Related Vitest suites: 25/25 passed.
+  Reading Evidence Composition meets the approved requirements, design, and tasks.
+  Evidence is claim-attached Drivers → Features → Contributions inside the shell
+  Evidence Region; Assessment peers no longer own components/factors as primary body;
+  progressive disclosure, anti-patterns, brand chrome, and catalog copy are covered
+  with strong oracles. No required fixes.
 ```
 
-Workflow terminated successfully. History archived to `work/history/reading-context-identity.md`.
-Review report: `work/progress/reviews/reading-context-identity.md`.
+Workflow terminated successfully. History archived to `work/history/reading-evidence-composition.md`.
+Review report: `work/progress/reviews/reading-evidence-composition.md`.

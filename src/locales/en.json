@@ -25,6 +25,17 @@
     "recommendationPlaceholder": "Recommendation stance will appear here.",
     "narrativePlaceholder": "Narrative for this claim will appear here."
   },
+  "readingEvidence": {
+    "drivers": "Drivers",
+    "features": "Features",
+    "contributions": "Contributions",
+    "claimAttachment": "Evidence for {claim}",
+    "kindPlaceholder": "Content for this Evidence depth will appear here.",
+    "emptyForClaim": "No Evidence rows for this claim yet.",
+    "showFeatures": "Show Features",
+    "showContributions": "Show Contributions",
+    "hideDepth": "Hide"
+  },
   "readingContext": {
     "displayName": "Display name",
     "pair": "Pair",

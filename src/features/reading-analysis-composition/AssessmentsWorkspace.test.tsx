@@ -183,16 +183,48 @@ describe('AssessmentsWorkspace', () => {
       within(unitEl('risk')).getByText(fixture.risk.level),
     ).toBeInTheDocument()
     expect(
-      within(unitEl('risk')).getByText(
-        getMessage('analysisLabels.riskComponent.volatility'),
-      ),
+      within(unitEl('exposure')).getByText(fixture.exposure.summary),
     ).toBeInTheDocument()
-    expect(within(unitEl('risk')).getByText('10%')).toBeInTheDocument()
     expect(
       within(unitEl('recommendation')).getByText(fixture.recommendation.name),
     ).toBeInTheDocument()
     expect(
       unitEl('recommendation').querySelector('[data-recommendation-stance]'),
+    ).not.toBeNull()
+  })
+
+  it('does not own assessment components or exposure factors as Assessment primary body', () => {
+    render(
+      <AssessmentsWorkspace
+        regime={fixture.regime}
+        risk={fixture.risk}
+        economic={fixture.economic}
+        exposure={fixture.exposure}
+        recommendation={fixture.recommendation}
+      />,
+    )
+
+    expect(
+      unitEl('risk').querySelector('[data-assessment-components]'),
+    ).toBeNull()
+    expect(
+      unitEl('economic').querySelector('[data-assessment-components]'),
+    ).toBeNull()
+    expect(
+      unitEl('exposure').querySelector('[data-assessment-components]'),
+    ).toBeNull()
+    expect(
+      within(unitEl('risk')).queryByText(
+        getMessage('analysisLabels.riskComponent.volatility'),
+      ),
+    ).not.toBeInTheDocument()
+    expect(
+      within(unitEl('exposure')).queryByText(
+        getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
+      ),
+    ).not.toBeInTheDocument()
+    expect(
+      unitEl('risk').querySelector('[data-evidence-reference="risk"]'),
     ).not.toBeNull()
   })
 
