@@ -1,13 +1,24 @@
 /** View-model types for the market analysis screen (design.md). */
 
+/** Structured Assessment factor row (not a raw CSV dump). */
+export type AssessmentComponent = {
+  name: string
+  value: number
+  /** Pre-formatted display for UI (2 decimals or %). */
+  displayValue: string
+}
+
 export type Assessment = {
+  /** Short interpretive blurb; may be empty when only structured components exist. */
   summary: string
   level: string
+  components?: AssessmentComponent[]
 }
 
 export type ExposureFactor = {
   name: string
   weight: number
+  displayWeight: string
 }
 
 export type ExposureProfile = {

@@ -80,18 +80,23 @@ Native HTML stand-ins for those roles are forbidden. Do **not** introduce Tailwi
     │  Symbol selector (existing)
     │  idle | loading | error | success
     v
-[Reading workspace shell]
-    ├── Primary band
-    │     ├── Context Region (identity)
-    │     └── Analysis Region (primary / largest)
-    ├── Associated
-    │     └── Classification Region (compact, adjacent)
-    ├── Supporting
+[Reading workspace shell]  (wireframe: Figma Reading-Layout-Wireframe)
+    ├── Context Region (compact identity strip)
+    ├── Primary workspace row (desktop)
+    │     ├── Analysis Region (dominant / grow)
+    │     └── Classification Region (compact adjacent)
+    ├── Supporting row (desktop)
     │     ├── Evidence Region
     │     └── Market Data Region
     └── Cross-cutting
-          └── Diagnostics Region
+          └── Diagnostics Region (quiet)
 ```
+
+### Post-ship wireframe alignment
+
+Structural SoT: https://www.figma.com/design/opTJ1E7ZHIgpLPQTw1YtKP/Reading-Layout-Wireframe?node-id=0-1
+
+Desktop: Context strip → Analysis + Classification side-by-side → Evidence | Market Data supporting row → Diagnostics quiet. Mobile: stack Analysis then Classification; supporting Regions remain below.
 
 ## Interfaces
 

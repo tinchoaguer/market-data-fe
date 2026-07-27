@@ -114,7 +114,11 @@ Every score or label must be explainable through Evidence (or qualified by Diagn
 
 ## Figma
 
-Optional structural reference: paste a node-specific Figma **wireframe** URL when available. Gray-box fidelity only — no hi-fi prototype required for this contract.
+Structural wireframe reference (gray-box fidelity only — no hi-fi prototype required):
+
+https://www.figma.com/design/opTJ1E7ZHIgpLPQTw1YtKP/Reading-Layout-Wireframe?node-id=0-1
+
+Desktop spatial target: Context strip → Analysis (dominant) + Classification (compact adjacent) → Evidence | Market Data supporting row → Diagnostics quiet.
 
 ---
 

@@ -123,12 +123,14 @@ describe('mapMarketAnalysisPayload', () => {
           {
             name: getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
             weight: 0.35,
+            displayWeight: '35%',
           },
           {
             name: getMessage(
               'analysisLabels.exposureFactor.liquidity_cap_value',
             ),
             weight: 186197.09,
+            displayWeight: '186197.09',
           },
         ],
       },
@@ -156,30 +158,50 @@ describe('mapMarketAnalysisPayload', () => {
     expect(result.regime.summary).not.toContain('adx_strong')
     expect(result.risk).toEqual({
       level: '0.17',
-      summary: [
-        `${getMessage('analysisLabels.riskComponent.atr_expansion')}=0`,
-        `${getMessage('analysisLabels.riskComponent.liquidity_stress')}=0.12`,
-      ].join(', '),
+      summary: '',
+      components: [
+        {
+          name: getMessage('analysisLabels.riskComponent.atr_expansion'),
+          value: 0.0,
+          displayValue: '0%',
+        },
+        {
+          name: getMessage('analysisLabels.riskComponent.liquidity_stress'),
+          value: 0.12,
+          displayValue: '12%',
+        },
+      ],
     })
     expect(result.economic).toEqual({
       level: '0.42',
-      summary: [
-        `${getMessage('analysisLabels.economicComponent.activity')}=0.88`,
-        `${getMessage('analysisLabels.economicComponent.cost_drag')}=0.1`,
-      ].join(', '),
+      summary: '',
+      components: [
+        {
+          name: getMessage('analysisLabels.economicComponent.activity'),
+          value: 0.88,
+          displayValue: '88%',
+        },
+        {
+          name: getMessage('analysisLabels.economicComponent.cost_drag'),
+          value: 0.1,
+          displayValue: '10%',
+        },
+      ],
     })
     expect(result.exposure).toEqual({
-      summary: '0.35',
+      summary: '35%',
       factors: [
         {
           name: getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
           weight: 0.35,
+          displayWeight: '35%',
         },
         {
           name: getMessage(
             'analysisLabels.exposureFactor.liquidity_cap_value',
           ),
           weight: 1000.5,
+          displayWeight: '1000.50',
         },
       ],
     })
@@ -197,6 +219,8 @@ describe('mapMarketAnalysisPayload', () => {
     expect(result.recommendation.catalogId).not.toBe('TREND_FOLLOWING')
     expect(result.exposure.factors[0].name).not.toBe('vol_budget_pct')
     expect(result.risk.summary).not.toContain('atr_expansion=')
+    expect(result.risk.level).toBe('0.17')
+    expect(result.risk.components?.[0]?.displayValue).toBe('0%')
   })
 
   it('resolves catalog MessageRef narrative via Content boundary adapter', () => {
@@ -355,19 +379,34 @@ describe('mapMarketAnalysisPayload', () => {
 
     expect(result.recommendation.catalogId).toBe('MYSTERY_STRATEGY')
     expect(result.recommendation.name).toBe('MYSTERY_STRATEGY')
-    expect(result.risk.summary).toBe(
-      [
-        `${getMessage('analysisLabels.riskComponent.atr_expansion')}=0.1`,
-        'mystery_risk_component=0.5',
-      ].join(', '),
-    )
-    expect(result.economic.summary).toBe('unknown_econ=0.9')
+    expect(result.risk.summary).toBe('')
+    expect(result.risk.components).toEqual([
+      {
+        name: getMessage('analysisLabels.riskComponent.atr_expansion'),
+        value: 0.1,
+        displayValue: '10%',
+      },
+      {
+        name: 'mystery_risk_component',
+        value: 0.5,
+        displayValue: '50%',
+      },
+    ])
+    expect(result.economic.summary).toBe('')
+    expect(result.economic.components).toEqual([
+      {
+        name: 'unknown_econ',
+        value: 0.9,
+        displayValue: '90%',
+      },
+    ])
     expect(result.exposure.factors).toEqual([
       {
         name: getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
         weight: 0.2,
+        displayWeight: '20%',
       },
-      { name: 'weird_factor', weight: 1.5 },
+      { name: 'weird_factor', weight: 1.5, displayWeight: '1.50' },
     ])
   })
 

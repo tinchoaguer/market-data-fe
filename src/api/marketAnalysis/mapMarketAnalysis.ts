@@ -10,6 +10,7 @@ import { resolveUiMessages } from '../../content'
 import type { MessageParams, MessageRef } from '../../content'
 import type {
   Assessment,
+  AssessmentComponent,
   ExposureFactor,
   MarketAnalysisApiPayload,
   MarketAnalysisBackendPayload,
@@ -45,6 +46,21 @@ function parseNumber(value: unknown, field: string): number {
     }
   }
   throw new MarketAnalysisMappingError(`Invalid number for ${field}`)
+}
+
+/** Format a score/level number for Assessment display (2 decimal places). */
+export function formatScoreDisplay(value: number): string {
+  return value.toFixed(2)
+}
+
+/**
+ * Format a factor/weight: ratios in [0, 1] as percent; otherwise fixed 2 decimals (locale-stable).
+ */
+export function formatFactorDisplay(value: number): string {
+  if (value >= 0 && value <= 1) {
+    return `${(value * 100).toFixed(0)}%`
+  }
+  return value.toFixed(2)
 }
 
 function parseMessageParams(
@@ -126,9 +142,11 @@ function parseFactor(value: unknown, field: string): ExposureFactor {
   if (!isRecord(value)) {
     throw new MarketAnalysisMappingError(`Invalid exposure factor at ${field}`)
   }
+  const weight = parseNumber(value.weight, `${field}.weight`)
   return {
     name: getExposureFactorLabel(parseString(value.name, `${field}.name`)),
-    weight: parseNumber(value.weight, `${field}.weight`),
+    weight,
+    displayWeight: formatFactorDisplay(weight),
   }
 }
 
@@ -139,37 +157,43 @@ function parseFactors(value: unknown, field: string): ExposureFactor[] {
   return value.map((factor, index) => parseFactor(factor, `${field}[${index}]`))
 }
 
-function formatComponentPair(
+function parseComponentPair(
   value: unknown,
   field: string,
   resolveName: (name: string) => string,
-): string {
+): AssessmentComponent {
   if (Array.isArray(value) && value.length >= 2) {
-    const name = resolveName(parseString(value[0], `${field}[0]`))
+    const rawName = parseString(value[0], `${field}[0]`)
     const weight = parseNumber(value[1], `${field}[1]`)
-    return `${name}=${weight}`
+    return {
+      name: resolveName(rawName),
+      value: weight,
+      displayValue: formatFactorDisplay(weight),
+    }
   }
   if (isRecord(value) && '0' in value && '1' in value) {
-    const name = resolveName(parseString(value[0], `${field}.0`))
+    const rawName = parseString(value[0], `${field}.0`)
     const weight = parseNumber(value[1], `${field}.1`)
-    return `${name}=${weight}`
+    return {
+      name: resolveName(rawName),
+      value: weight,
+      displayValue: formatFactorDisplay(weight),
+    }
   }
   throw new MarketAnalysisMappingError(`Invalid component pair at ${field}`)
 }
 
-function formatComponentsSummary(
+function parseComponents(
   value: unknown,
   field: string,
   resolveName: (name: string) => string,
-): string {
+): AssessmentComponent[] {
   if (!Array.isArray(value)) {
     throw new MarketAnalysisMappingError(`Expected array at ${field}`)
   }
-  return value
-    .map((entry, index) =>
-      formatComponentPair(entry, `${field}[${index}]`, resolveName),
-    )
-    .join(', ')
+  return value.map((entry, index) =>
+    parseComponentPair(entry, `${field}[${index}]`, resolveName),
+  )
 }
 
 function isBackendPayload(
@@ -237,10 +261,14 @@ function mapBackendExposure(
   }
 
   const factors: ExposureFactor[] = Object.entries(value.components).map(
-    ([name, weight]) => ({
-      name: getExposureFactorLabel(name),
-      weight: parseNumber(weight, `exposure.components.${name}`),
-    }),
+    ([name, weight]) => {
+      const parsed = parseNumber(weight, `exposure.components.${name}`)
+      return {
+        name: getExposureFactorLabel(name),
+        weight: parsed,
+        displayWeight: formatFactorDisplay(parsed),
+      }
+    },
   )
 
   const allocation = parseNumber(
@@ -249,7 +277,7 @@ function mapBackendExposure(
   )
 
   return {
-    summary: String(allocation),
+    summary: formatFactorDisplay(allocation),
     factors,
   }
 }
@@ -294,6 +322,19 @@ function mapBackendPayload(
     'catalog.hard_gate_reason',
   )
 
+  const riskScore = parseNumber(payload.risk.score, 'risk.score')
+  const economicEdge = parseNumber(payload.economic.edge, 'economic.edge')
+  const riskComponents = parseComponents(
+    payload.risk.components,
+    'risk.components',
+    getRiskComponentLabel,
+  )
+  const economicComponents = parseComponents(
+    payload.economic.components,
+    'economic.components',
+    getEconomicComponentLabel,
+  )
+
   return {
     symbol:
       typeof payload.symbol === 'string' && payload.symbol.length > 0
@@ -306,20 +347,14 @@ function mapBackendPayload(
       summary: humanizedReasons.join(', '),
     },
     risk: {
-      level: String(parseNumber(payload.risk.score, 'risk.score')),
-      summary: formatComponentsSummary(
-        payload.risk.components,
-        'risk.components',
-        getRiskComponentLabel,
-      ),
+      level: formatScoreDisplay(riskScore),
+      summary: '',
+      components: riskComponents,
     },
     economic: {
-      level: String(parseNumber(payload.economic.edge, 'economic.edge')),
-      summary: formatComponentsSummary(
-        payload.economic.components,
-        'economic.components',
-        getEconomicComponentLabel,
-      ),
+      level: formatScoreDisplay(economicEdge),
+      summary: '',
+      components: economicComponents,
     },
     exposure: mapBackendExposure(payload.exposure),
     recommendation: {

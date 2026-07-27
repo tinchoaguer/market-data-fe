@@ -38,7 +38,7 @@ describe('ReadingWorkspace', () => {
     )
   })
 
-  it('places Context and Analysis in the primary band before Evidence and Market Data', () => {
+  it('places Context before the Analysis–Classification workspace and supporting Regions', () => {
     render(<ReadingWorkspace symbol="BTC/USDT" />)
 
     const context = regionEl('context')
@@ -105,7 +105,7 @@ describe('ReadingWorkspace', () => {
     expect(primaryRegions[0]).toHaveAttribute('data-region-id', 'analysis')
   })
 
-  it('keeps Classification associated with Analysis (adjacent in the primary cluster)', () => {
+  it('keeps Classification adjacent to Analysis in the primary workspace row', () => {
     render(<ReadingWorkspace symbol="BTC/USDT" />)
 
     const primaryBand = screen.getByTestId('reading-band-primary')
@@ -115,14 +115,26 @@ describe('ReadingWorkspace', () => {
     expect(
       within(primaryBand).getByText(messages.readingLayout.regionClassification),
     ).toBeInTheDocument()
+    expect(
+      within(primaryBand).queryByText(messages.readingLayout.regionContext),
+    ).not.toBeInTheDocument()
 
     const bandRegions = Array.from(
       primaryBand.querySelectorAll('[data-region-id]'),
     ).map((node) => node.getAttribute('data-region-id'))
 
-    expect(bandRegions.indexOf('analysis')).toBe(
-      bandRegions.indexOf('classification') - 1,
-    )
+    expect(bandRegions).toEqual(['analysis', 'classification'])
+  })
+
+  it('places Evidence and Market Data side-by-side in the supporting row', () => {
+    render(<ReadingWorkspace symbol="BTC/USDT" />)
+
+    const supporting = screen.getByTestId('reading-band-supporting')
+    const bandRegions = Array.from(
+      supporting.querySelectorAll('[data-region-id]'),
+    ).map((node) => node.getAttribute('data-region-id'))
+
+    expect(bandRegions).toEqual(['evidence', 'market-data'])
   })
 
   it('does not expose Narrative or Overall Score Regions', () => {
@@ -156,12 +168,12 @@ describe('ReadingWorkspace', () => {
     )
   })
 
-  it('does not place Market Data first in the primary band', () => {
+  it('does not place Market Data in the primary Analysis workspace', () => {
     render(<ReadingWorkspace symbol="BTC/USDT" />)
 
     const primaryBand = screen.getByTestId('reading-band-primary')
     const firstRegion = primaryBand.querySelector('[data-region-id]')
-    expect(firstRegion).toHaveAttribute('data-region-id', 'context')
+    expect(firstRegion).toHaveAttribute('data-region-id', 'analysis')
     expect(
       within(primaryBand).queryByText(messages.readingLayout.regionMarketData),
     ).not.toBeInTheDocument()

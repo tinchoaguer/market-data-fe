@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, afterEach } from 'vitest'
-import { cleanup, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { wording } from '@market-data/brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
@@ -14,19 +14,34 @@ const fixtureViewModel: MarketAnalysisViewModel = {
     level: getMessage('analysisLabels.regime.TREND_UP'),
   },
   risk: {
-    summary: `${getMessage('analysisLabels.riskComponent.volatility')}=0.1`,
+    summary: '',
     level: '0.17',
+    components: [
+      {
+        name: getMessage('analysisLabels.riskComponent.volatility'),
+        value: 0.1,
+        displayValue: '10%',
+      },
+    ],
   },
   economic: {
-    summary: `${getMessage('analysisLabels.economicComponent.activity')}=0.88`,
+    summary: '',
     level: '0.42',
+    components: [
+      {
+        name: getMessage('analysisLabels.economicComponent.activity'),
+        value: 0.88,
+        displayValue: '88%',
+      },
+    ],
   },
   exposure: {
-    summary: '0.35',
+    summary: '35%',
     factors: [
       {
         name: getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
         weight: 0.35,
+        displayWeight: '35%',
       },
     ],
   },
@@ -44,6 +59,11 @@ async function selectSymbol(symbol: string) {
   await user.click(await screen.findByRole('option', { name: symbol }))
 }
 
+const idleSupportingLoaders = {
+  loadClassification: vi.fn().mockResolvedValue(null),
+  loadMarketData: vi.fn().mockResolvedValue(null),
+} as const
+
 describe('ReadingScreen', () => {
   afterEach(() => {
     cleanup()
@@ -52,7 +72,9 @@ describe('ReadingScreen', () => {
 
   it('shows idle Symbol prompt and does not fetch until a Symbol is selected', () => {
     const loadReading = vi.fn()
-    render(<ReadingScreen loadReading={loadReading} />)
+    render(
+      <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />,
+    )
 
     expect(
       screen.getByText(getMessage('readingLayout.selectSymbolPrompt')),
@@ -66,6 +88,7 @@ describe('ReadingScreen', () => {
     render(
       <ReadingScreen
         loadReading={vi.fn(() => new Promise<MarketAnalysisViewModel>(() => {}))}
+        {...idleSupportingLoaders}
       />,
     )
 
@@ -86,7 +109,9 @@ describe('ReadingScreen', () => {
         }),
     )
 
-    render(<ReadingScreen loadReading={loadReading} />)
+    render(
+      <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />,
+    )
     await selectSymbol('BTC/USDT')
 
     expect(await screen.findByText(wording.common.loading)).toBeInTheDocument()
@@ -111,7 +136,9 @@ describe('ReadingScreen', () => {
       .mockRejectedValueOnce(new Error('network'))
       .mockResolvedValueOnce(fixtureViewModel)
 
-    render(<ReadingScreen loadReading={loadReading} />)
+    render(
+      <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />,
+    )
     await selectSymbol('BTC/USDT')
 
     expect(await screen.findByText(wording.common.error)).toBeInTheDocument()
@@ -128,7 +155,9 @@ describe('ReadingScreen', () => {
 
   it('renders the Reading workspace with six Regions on success', async () => {
     const loadReading = vi.fn().mockResolvedValue(fixtureViewModel)
-    render(<ReadingScreen loadReading={loadReading} />)
+    render(
+      <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />,
+    )
     await selectSymbol('BTC/USDT')
 
     expect(await screen.findByTestId('reading-workspace')).toBeInTheDocument()
@@ -157,7 +186,9 @@ describe('ReadingScreen', () => {
   })
 
   it('resolves Reading chrome copy from feature locale and brand wording', () => {
-    render(<ReadingScreen loadReading={vi.fn()} />)
+    render(
+      <ReadingScreen loadReading={vi.fn()} {...idleSupportingLoaders} />,
+    )
 
     expect(
       screen.getByText(messages.readingLayout.selectSymbolPrompt),
@@ -174,6 +205,89 @@ describe('ReadingScreen', () => {
       regionDiagnostics: 'Diagnostics',
       selectSymbolPrompt: 'Select a Symbol to open a Reading.',
       regionPlaceholder: 'Content for this Region will appear here.',
+      classificationSummaryLabel: 'Signal counts',
     })
+  })
+
+  it('mounts Assessments composition inside Analysis with Evidence outside in document order', async () => {
+    const loadReading = vi.fn().mockResolvedValue(fixtureViewModel)
+    render(
+      <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />,
+    )
+    await selectSymbol('BTC/USDT')
+
+    const analysisRegion = await screen.findByTestId('reading-region-analysis')
+    const assessments = within(analysisRegion).getByTestId(
+      'assessments-workspace',
+    )
+    expect(assessments).toBeInTheDocument()
+    expect(
+      within(assessments).getByText(wording.labels.regime),
+    ).toBeInTheDocument()
+    expect(
+      within(assessments).getByText(wording.labels.recommendation),
+    ).toBeInTheDocument()
+    expect(
+      within(assessments).queryByText(messages.readingLayout.regionEvidence),
+    ).not.toBeInTheDocument()
+    expect(
+      within(assessments).queryByText(
+        messages.readingLayout.regionClassification,
+      ),
+    ).not.toBeInTheDocument()
+
+    const workspace = screen.getByTestId('reading-workspace')
+    const regionIds = Array.from(
+      workspace.querySelectorAll('[data-region-id]'),
+    ).map((node) => node.getAttribute('data-region-id'))
+
+    expect(regionIds.indexOf('analysis')).toBeLessThan(
+      regionIds.indexOf('evidence'),
+    )
+    expect(
+      screen.getByTestId('reading-region-evidence').contains(assessments),
+    ).toBe(false)
+  })
+
+  it('wires claim Narrative and supporting Classification/Market Data summaries when loaders succeed', async () => {
+    const loadReading = vi.fn().mockResolvedValue(fixtureViewModel)
+    const loadClassification = vi.fn().mockResolvedValue({
+      symbol: 'BTC/USDT',
+      regime: [{ source: 'a', score: 1, reason: 'r' }],
+      risk: [],
+      economic: [],
+      exposure: [],
+    })
+    const loadMarketData = vi.fn().mockResolvedValue({
+      symbol: 'BTC/USDT',
+      price: 42000,
+      orderBook: { bids: [], asks: [] },
+      candlesByTimeframe: [],
+    })
+
+    render(
+      <ReadingScreen
+        loadReading={loadReading}
+        loadClassification={loadClassification}
+        loadMarketData={loadMarketData}
+      />,
+    )
+    await selectSymbol('BTC/USDT')
+
+    const analysisRegion = await screen.findByTestId('reading-region-analysis')
+    expect(
+      within(analysisRegion).getByText(fixtureViewModel.regime.summary),
+    ).toBeInTheDocument()
+    expect(
+      analysisRegion.querySelector('[data-claim-narrative="regime"]'),
+    ).not.toBeNull()
+
+    expect(
+      await screen.findByTestId('classification-region-summary'),
+    ).toBeInTheDocument()
+    expect(
+      await screen.findByTestId('market-data-region-summary'),
+    ).toBeInTheDocument()
+    expect(screen.getByText('42000')).toBeInTheDocument()
   })
 })

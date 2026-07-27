@@ -137,7 +137,11 @@ Confidence / data quality stays in Diagnostics — never an Assessment dimension
 
 ## Figma
 
-Optional structural reference: paste a node-specific Figma **wireframe** URL when available. Gray-box fidelity only — no hi-fi prototype required for this contract.
+Structural wireframe reference (Reading shell hosts Analysis; gray-box fidelity only):
+
+https://www.figma.com/design/opTJ1E7ZHIgpLPQTw1YtKP/Reading-Layout-Wireframe?node-id=0-1
+
+Assessments communicate label / score / level + short meaning — not raw observation dumps.
 
 ---
 

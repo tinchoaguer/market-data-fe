@@ -50,7 +50,7 @@ export function ExposureSection({ exposure }: ExposureSectionProps) {
                 {exposure.factors.map((factor, index) => (
                   <TableRow key={`${factor.name}-${index}`}>
                     <TableCell>{factor.name}</TableCell>
-                    <TableCell variant="mono">{factor.weight}</TableCell>
+                    <TableCell variant="mono">{factor.displayWeight}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

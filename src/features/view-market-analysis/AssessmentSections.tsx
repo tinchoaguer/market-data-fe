@@ -19,6 +19,10 @@ export type AssessmentSectionProps = {
 }
 
 export function AssessmentSection({ title, assessment }: AssessmentSectionProps) {
+  const hasSummary = assessment.summary.trim().length > 0
+  const hasComponents =
+    assessment.components != null && assessment.components.length > 0
+
   return (
     <Card>
       <CardHeader>
@@ -31,10 +35,29 @@ export function AssessmentSection({ title, assessment }: AssessmentSectionProps)
       </CardHeader>
       <CardContent>
         <Stack gap="sm">
-          <Label>{getMessage('viewMarketAnalysis.summary')}</Label>
-          <Text as="p" tone="muted">
-            {assessment.summary}
-          </Text>
+          {hasSummary ? (
+            <Stack gap="xs">
+              <Label>{getMessage('viewMarketAnalysis.summary')}</Label>
+              <Text as="p" tone="muted">
+                {assessment.summary}
+              </Text>
+            </Stack>
+          ) : null}
+          {hasComponents ? (
+            <Stack gap="xs">
+              <Label>{getMessage('viewMarketAnalysis.factors')}</Label>
+              {assessment.components!.map((component) => (
+                <Inline key={component.name} gap="sm">
+                  <Text as="span" tone="muted">
+                    {component.name}
+                  </Text>
+                  <Text as="span" mono tabular>
+                    {component.displayValue}
+                  </Text>
+                </Inline>
+              ))}
+            </Stack>
+          ) : null}
         </Stack>
       </CardContent>
     </Card>

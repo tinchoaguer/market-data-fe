@@ -19,29 +19,49 @@ const fixtureViewModel: MarketAnalysisViewModel = {
     level: getMessage('analysisLabels.regime.TREND_UP'),
   },
   risk: {
-    summary: [
-      `${getMessage('analysisLabels.riskComponent.atr_expansion')}=0`,
-      `${getMessage('analysisLabels.riskComponent.liquidity_stress')}=0.12`,
-    ].join(', '),
+    summary: '',
     level: '0.17',
+    components: [
+      {
+        name: getMessage('analysisLabels.riskComponent.atr_expansion'),
+        value: 0,
+        displayValue: '0%',
+      },
+      {
+        name: getMessage('analysisLabels.riskComponent.liquidity_stress'),
+        value: 0.12,
+        displayValue: '12%',
+      },
+    ],
   },
   economic: {
-    summary: [
-      `${getMessage('analysisLabels.economicComponent.activity')}=0.88`,
-      `${getMessage('analysisLabels.economicComponent.cost_drag')}=0.1`,
-    ].join(', '),
+    summary: '',
     level: '0.42',
+    components: [
+      {
+        name: getMessage('analysisLabels.economicComponent.activity'),
+        value: 0.88,
+        displayValue: '88%',
+      },
+      {
+        name: getMessage('analysisLabels.economicComponent.cost_drag'),
+        value: 0.1,
+        displayValue: '10%',
+      },
+    ],
   },
   exposure: {
-    summary: '0.35',
+    summary: '35%',
     factors: [
       {
         name: getMessage('analysisLabels.exposureFactor.vol_budget_pct'),
         weight: 0.35,
+        displayWeight: '35%',
       },
       {
         name: getMessage('analysisLabels.exposureFactor.liquidity_cap_value'),
         weight: 186197.09,
+        displayWeight: '186197.09',
       },
     ],
   },
@@ -152,27 +172,29 @@ describe('MarketAnalysisScreen', () => {
     expect(screen.queryByText('adx_strong')).not.toBeInTheDocument()
     expect(screen.getByText('0.17')).toBeInTheDocument()
     expect(
-      screen.getByText(
-        [
-          `${getMessage('analysisLabels.riskComponent.atr_expansion')}=0`,
-          `${getMessage('analysisLabels.riskComponent.liquidity_stress')}=0.12`,
-        ].join(', '),
-      ),
+      screen.getByText(getMessage('analysisLabels.riskComponent.atr_expansion')),
     ).toBeInTheDocument()
-    expect(screen.getByText('0.42')).toBeInTheDocument()
+    expect(screen.getByText('0%')).toBeInTheDocument()
     expect(
       screen.getByText(
-        [
-          `${getMessage('analysisLabels.economicComponent.activity')}=0.88`,
-          `${getMessage('analysisLabels.economicComponent.cost_drag')}=0.1`,
-        ].join(', '),
+        getMessage('analysisLabels.riskComponent.liquidity_stress'),
       ),
     ).toBeInTheDocument()
+    expect(screen.getByText('12%')).toBeInTheDocument()
+    expect(screen.getByText('0.42')).toBeInTheDocument()
+    expect(
+      screen.getByText(getMessage('analysisLabels.economicComponent.activity')),
+    ).toBeInTheDocument()
+    expect(screen.getByText('88%')).toBeInTheDocument()
+    expect(
+      screen.getByText(getMessage('analysisLabels.economicComponent.cost_drag')),
+    ).toBeInTheDocument()
+    expect(screen.getByText('10%')).toBeInTheDocument()
     expect(
       screen.getByText(getMessage('analysisLabels.exposureFactor.vol_budget_pct')),
     ).toBeInTheDocument()
     expect(screen.queryByText('vol_budget_pct')).not.toBeInTheDocument()
-    expect(screen.getAllByText('0.35').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('35%').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('186197.09')).toBeInTheDocument()
     expect(
       screen.getAllByText(getMessage('analysisLabels.strategy.TREND_FOLLOWING'))

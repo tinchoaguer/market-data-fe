@@ -14,37 +14,57 @@ import {
 import { wording } from '@market-data/brand/wording'
 import { fetchMarketAnalysis } from '../../api/marketAnalysis/fetchMarketAnalysis'
 import type { MarketAnalysisViewModel } from '../../api/marketAnalysis/types'
+import { fetchMarketClassification } from '../../api/marketClassification/fetchMarketClassification'
+import type { MarketClassificationViewModel } from '../../api/marketClassification/types'
+import { fetchMarketData } from '../../api/marketData/fetchMarketData'
+import type { MarketDataViewModel } from '../../api/marketData/types'
 import { getMessage } from '../../i18n/messages'
+import { AssessmentsWorkspace } from '../reading-analysis-composition'
 import { SymbolSelector } from '../view-market-data/SymbolSelector'
-import {
-  EconomicSection,
-  RegimeSection,
-  RiskSection,
-} from '../view-market-analysis/AssessmentSections'
-import { ExposureSection } from '../view-market-analysis/ExposureSection'
-import { RecommendationSection } from '../view-market-analysis/RecommendationSection'
+import { ClassificationRegionSummary } from './ClassificationRegionSummary'
+import { MarketDataRegionSummary } from './MarketDataRegionSummary'
 import { ReadingWorkspace } from './ReadingWorkspace'
 
 type ScreenState =
   | { status: 'idle' }
   | { status: 'loading'; symbol: string }
-  | { status: 'success'; symbol: string; data: MarketAnalysisViewModel }
+  | {
+      status: 'success'
+      symbol: string
+      analysis: MarketAnalysisViewModel
+      classification: MarketClassificationViewModel | null
+      marketData: MarketDataViewModel | null
+    }
   | { status: 'error'; symbol: string }
 
 export type ReadingScreenProps = {
   /** Optional override for tests. Defaults to fetchMarketAnalysis. */
   loadReading?: typeof fetchMarketAnalysis
+  /** Optional override for Classification Region body. */
+  loadClassification?: typeof fetchMarketClassification
+  /** Optional override for Market Data Region body. */
+  loadMarketData?: typeof fetchMarketData
 }
 
 function AnalysisRegionBody({ data }: { data: MarketAnalysisViewModel }): ReactNode {
+  const regimeNarrative = data.regime.summary.trim()
+  const regimeForPeers =
+    regimeNarrative.length > 0
+      ? { ...data.regime, summary: '' }
+      : data.regime
+
   return (
-    <Stack gap="lg">
-      <RegimeSection assessment={data.regime} />
-      <RiskSection assessment={data.risk} />
-      <EconomicSection assessment={data.economic} />
-      <ExposureSection exposure={data.exposure} />
-      <RecommendationSection recommendation={data.recommendation} />
-    </Stack>
+    <AssessmentsWorkspace
+      regime={regimeForPeers}
+      risk={data.risk}
+      economic={data.economic}
+      exposure={data.exposure}
+      recommendation={data.recommendation}
+      narratives={{
+        ...(regimeNarrative.length > 0 ? { regime: regimeNarrative } : {}),
+        recommendation: data.recommendation.rationale,
+      }}
+    />
   )
 }
 
@@ -53,6 +73,8 @@ function AnalysisRegionBody({ data }: { data: MarketAnalysisViewModel }): ReactN
  */
 export function ReadingScreen({
   loadReading = fetchMarketAnalysis,
+  loadClassification = fetchMarketClassification,
+  loadMarketData = fetchMarketData,
 }: ReadingScreenProps) {
   const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null)
   const [retryNonce, setRetryNonce] = useState(0)
@@ -71,12 +93,22 @@ export function ReadingScreen({
 
     setState({ status: 'loading', symbol })
 
-    void loadReading(symbol, { signal: controller.signal })
-      .then((data) => {
+    void Promise.all([
+      loadReading(symbol, { signal: controller.signal }),
+      loadClassification(symbol, { signal: controller.signal }).catch(() => null),
+      loadMarketData(symbol, { signal: controller.signal }).catch(() => null),
+    ])
+      .then(([analysis, classification, marketData]) => {
         if (requestId !== requestIdRef.current) {
           return
         }
-        setState({ status: 'success', symbol, data })
+        setState({
+          status: 'success',
+          symbol,
+          analysis,
+          classification,
+          marketData,
+        })
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted || requestId !== requestIdRef.current) {
@@ -91,7 +123,7 @@ export function ReadingScreen({
     return () => {
       controller.abort()
     }
-  }, [selectedSymbol, retryNonce, loadReading])
+  }, [selectedSymbol, retryNonce, loadReading, loadClassification, loadMarketData])
 
   function handleRetry() {
     setRetryNonce((value) => value + 1)
@@ -135,7 +167,15 @@ export function ReadingScreen({
         <ReadingWorkspace
           symbol={state.symbol}
           regionBodies={{
-            analysis: <AnalysisRegionBody data={state.data} />,
+            analysis: <AnalysisRegionBody data={state.analysis} />,
+            classification:
+              state.classification != null ? (
+                <ClassificationRegionSummary data={state.classification} />
+              ) : undefined,
+            'market-data':
+              state.marketData != null ? (
+                <MarketDataRegionSummary data={state.marketData} />
+              ) : undefined,
           }}
         />
       ) : null}
