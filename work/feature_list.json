@@ -254,7 +254,7 @@
         "Region body uses brand tokens/components already available to the FE.",
         "User-facing labels and reasons come from locale / Content-resolved copy — no hardcoded designed English in components."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 18,

@@ -127,6 +127,15 @@ describe('ReadingWorkspace', () => {
     ).map((node) => node.getAttribute('data-region-id'))
 
     expect(bandRegions).toEqual(['analysis', 'classification'])
+    expect(regionEl('classification')).toHaveAttribute(
+      'data-prominence',
+      'associated',
+    )
+    expect(regionEl('classification')).not.toHaveAttribute(
+      'data-prominence',
+      'primary',
+    )
+    expect(regionEl('analysis')).toHaveAttribute('data-prominence', 'primary')
   })
 
   it('places Evidence and Market Data side-by-side in the supporting row', () => {

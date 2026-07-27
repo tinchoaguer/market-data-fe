@@ -20,10 +20,10 @@ import { fetchMarketData } from '../../api/marketData/fetchMarketData'
 import type { MarketDataViewModel } from '../../api/marketData/types'
 import { getMessage } from '../../i18n/messages'
 import { AssessmentsWorkspace } from '../reading-analysis-composition'
+import { ClassificationBody } from '../reading-classification-body'
 import { DiagnosticsComposition } from '../reading-diagnostics'
 import { EvidenceComposition } from '../reading-evidence-composition'
 import { SymbolSelector } from '../view-market-data/SymbolSelector'
-import { ClassificationRegionSummary } from './ClassificationRegionSummary'
 import { MarketDataRegionSummary } from './MarketDataRegionSummary'
 import { ReadingWorkspace } from './ReadingWorkspace'
 
@@ -202,7 +202,7 @@ export function ReadingScreen({
             diagnostics: <DiagnosticsRegionBody data={state.analysis} />,
             classification:
               state.classification != null ? (
-                <ClassificationRegionSummary data={state.classification} />
+                <ClassificationBody data={state.classification} />
               ) : undefined,
             'market-data':
               state.marketData != null ? (

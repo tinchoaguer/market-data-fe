@@ -326,6 +326,18 @@ describe('AssessmentsWorkspace', () => {
       within(workspace).queryByText(messages.readingLayout.regionClassification),
     ).not.toBeInTheDocument()
     expect(
+      workspace.querySelector('[data-unit-id="classification-body"]'),
+    ).toBeNull()
+    expect(
+      workspace.querySelector('[data-unit-id="overall-classification"]'),
+    ).toBeNull()
+    expect(
+      workspace.querySelector('[data-unit-id="primary-classification"]'),
+    ).toBeNull()
+    expect(
+      workspace.querySelector('[data-unit-id="secondary-classification"]'),
+    ).toBeNull()
+    expect(
       workspace.querySelector('[data-region-id="evidence"]'),
     ).toBeNull()
     expect(

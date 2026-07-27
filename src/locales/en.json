@@ -16,8 +16,11 @@
     "regionMarketData": "Market Data",
     "regionDiagnostics": "Diagnostics",
     "selectSymbolPrompt": "Select a Symbol to open a Reading.",
-    "regionPlaceholder": "Content for this Region will appear here.",
-    "classificationSummaryLabel": "Signal counts"
+    "regionPlaceholder": "Content for this Region will appear here."
+  },
+  "readingClassification": {
+    "bodyLabel": "Classification signals",
+    "emptyGroup": "No signals for this dimension."
   },
   "readingAnalysis": {
     "assessmentsLabel": "Assessments",

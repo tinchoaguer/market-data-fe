@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 16
-  slug: reading-diagnostics
+  id: 17
+  slug: reading-classification-body
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-27
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T16:07:00
+  recorded_at: 2026-07-27T16:35:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for reading-diagnostics
+  - Produce requirements.md, design.md, and tasks.md for reading-classification-body
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Reading Diagnostics (`reading-diagnostics`)
+**Feature:** Reading Classification Body (`reading-classification-body`)
 
 **Stage:** Completed
 
@@ -40,7 +40,7 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T16:07:00
+  recorded_at: 2026-07-27T16:35:00
   notes: User command — Approve specification
 ```
 
@@ -50,10 +50,14 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Wired the Diagnostics Region: quiet/minimal when healthy; elevated Alert when
-  qualifying/blocking with insufficient / partial / stale / equivalent mapped
-  from Analysis VM; mounted in ReadingScreen; no Confidence Assessment peer.
-  239 tests passed.
+  Filled the Classification Region with compact per-dimension signal packaging
+  (Regime / Risk / Economic / Exposure; source, score, reason). Reused
+  MarketClassificationViewModel and viewMarketClassification column labels;
+  added readingClassification body/empty-group locale keys; replaced the
+  count-only ClassificationRegionSummary with ClassificationBody in the Reading
+  host. Ownership/anti-pattern tests assert sibling placement (not under
+  Assessments), associated prominence, and no Overall/Primary/Secondary units.
+  Full suite: 244 tests passed.
 ```
 
 ## Code Review result
@@ -63,11 +67,11 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Reading Diagnostics meets the approved requirements, design, and tasks.
-  Quiet/elevated Diagnostics composition mounted in shell Region; trust signals
-  mapped; no Confidence Assessment peer; brand chrome and strong catalog-linked
-  tests. No required fixes.
+  Reading Classification Body meets the approved requirements, design, and tasks.
+  Four dimension groups with source/score/reason packaging; compact adjacent to
+  Analysis; not nested under Assessments; brand chrome and locale/Content copy;
+  strong AC oracles. No required fixes.
 ```
 
-Workflow terminated successfully. History archived to `work/history/reading-diagnostics.md`.
-Review report: `work/progress/reviews/reading-diagnostics.md`.
+Workflow terminated successfully. History archived to `work/history/reading-classification-body.md`.
+Review report: `work/progress/reviews/reading-classification-body.md`.

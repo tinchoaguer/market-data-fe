@@ -240,7 +240,6 @@ describe('ReadingScreen', () => {
       regionDiagnostics: 'Diagnostics',
       selectSymbolPrompt: 'Select a Symbol to open a Reading.',
       regionPlaceholder: 'Content for this Region will appear here.',
-      classificationSummaryLabel: 'Signal counts',
     })
   })
 
@@ -377,12 +376,49 @@ describe('ReadingScreen', () => {
     ).not.toBeNull()
 
     expect(
-      await screen.findByTestId('classification-region-summary'),
+      await screen.findByTestId('classification-body'),
     ).toBeInTheDocument()
     expect(
       await screen.findByTestId('market-data-region-summary'),
     ).toBeInTheDocument()
     expect(screen.getByText('42000')).toBeInTheDocument()
+
+    const classificationRegion = screen.getByTestId(
+      'reading-region-classification',
+    )
+    const classificationBody = within(classificationRegion).getByTestId(
+      'classification-body',
+    )
+    expect(classificationBody).toHaveAttribute('data-compact', 'true')
+    expect(classificationBody).toHaveAttribute('data-prominence', 'associated')
+    expect(
+      within(classificationBody).getByText(wording.labels.regime),
+    ).toBeInTheDocument()
+    expect(
+      within(classificationBody).getByText(
+        getMessage('viewMarketClassification.source'),
+      ),
+    ).toBeInTheDocument()
+    expect(within(classificationBody).getByText('a')).toBeInTheDocument()
+    expect(within(classificationBody).getByText('1')).toBeInTheDocument()
+    expect(within(classificationBody).getByText('r')).toBeInTheDocument()
+
+    const analysisRegionForNest = screen.getByTestId('reading-region-analysis')
+    expect(
+      within(analysisRegionForNest).queryByTestId('classification-body'),
+    ).not.toBeInTheDocument()
+    expect(
+      analysisRegionForNest.querySelector('[data-region-id="classification"]'),
+    ).toBeNull()
+    expect(
+      document.querySelector('[data-unit-id="overall-classification"]'),
+    ).toBeNull()
+    expect(
+      document.querySelector('[data-unit-id="primary-classification"]'),
+    ).toBeNull()
+    expect(
+      document.querySelector('[data-unit-id="secondary-classification"]'),
+    ).toBeNull()
   })
 
   it('hosts Diagnostics composition in the Diagnostics Region without competing with Analysis when healthy', async () => {
