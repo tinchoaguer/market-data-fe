@@ -239,7 +239,7 @@
         "Composition follows knowledge/ux/diagnostics-contract.md anti-patterns (no burying blocking Diagnostics only at page end or only inside Evidence tables).",
         "Diagnostics chrome uses brand tokens/components already available to the FE."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 17,

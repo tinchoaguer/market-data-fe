@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 15
-  slug: reading-evidence-composition
+  id: 16
+  slug: reading-diagnostics
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-27
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T15:44:00
+  recorded_at: 2026-07-27T16:07:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for reading-evidence-composition
+  - Produce requirements.md, design.md, and tasks.md for reading-diagnostics
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Reading Evidence Composition (`reading-evidence-composition`)
+**Feature:** Reading Diagnostics (`reading-diagnostics`)
 
 **Stage:** Completed
 
@@ -40,7 +40,7 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T15:44:00
+  recorded_at: 2026-07-27T16:07:00
   notes: User command — Approve specification
 ```
 
@@ -50,10 +50,10 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Implemented reading-evidence-composition: Evidence Region now presents
-  claim-attached Drivers → Features → Contributions with progressive disclosure;
-  assessment components/exposure factors moved from Assessment peers into Evidence;
-  Analysis outcomes remain visible without opening Evidence depth. All 217 unit tests pass.
+  Wired the Diagnostics Region: quiet/minimal when healthy; elevated Alert when
+  qualifying/blocking with insufficient / partial / stale / equivalent mapped
+  from Analysis VM; mounted in ReadingScreen; no Confidence Assessment peer.
+  239 tests passed.
 ```
 
 ## Code Review result
@@ -63,12 +63,11 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Reading Evidence Composition meets the approved requirements, design, and tasks.
-  Evidence is claim-attached Drivers → Features → Contributions inside the shell
-  Evidence Region; Assessment peers no longer own components/factors as primary body;
-  progressive disclosure, anti-patterns, brand chrome, and catalog copy are covered
-  with strong oracles. No required fixes.
+  Reading Diagnostics meets the approved requirements, design, and tasks.
+  Quiet/elevated Diagnostics composition mounted in shell Region; trust signals
+  mapped; no Confidence Assessment peer; brand chrome and strong catalog-linked
+  tests. No required fixes.
 ```
 
-Workflow terminated successfully. History archived to `work/history/reading-evidence-composition.md`.
-Review report: `work/progress/reviews/reading-evidence-composition.md`.
+Workflow terminated successfully. History archived to `work/history/reading-diagnostics.md`.
+Review report: `work/progress/reviews/reading-diagnostics.md`.

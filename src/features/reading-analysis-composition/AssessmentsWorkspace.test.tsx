@@ -336,6 +336,30 @@ describe('AssessmentsWorkspace', () => {
     ).toBeNull()
   })
 
+  it('does not present Confidence or data-quality as an Assessment peer dimension', () => {
+    render(
+      <AssessmentsWorkspace
+        regime={fixture.regime}
+        risk={fixture.risk}
+        economic={fixture.economic}
+        exposure={fixture.exposure}
+        recommendation={fixture.recommendation}
+      />,
+    )
+
+    const peers = document.querySelectorAll('[data-unit-role="assessment-peer"]')
+    expect(peers).toHaveLength(4)
+    const peerIds = Array.from(peers).map((node) =>
+      node.getAttribute('data-unit-id'),
+    )
+    expect(peerIds).toEqual(['regime', 'risk', 'economic', 'exposure'])
+    expect(peerIds).not.toContain('confidence')
+    expect(peerIds).not.toContain('data-quality')
+    expect(document.querySelector('[data-unit-id="confidence"]')).toBeNull()
+    expect(screen.queryByText('Confidence')).not.toBeInTheDocument()
+    expect(screen.queryByText('Data quality')).not.toBeInTheDocument()
+  })
+
   it('resolves feature locale keys for Assessments chrome', () => {
     expect(messages.readingAnalysis).toEqual({
       assessmentsLabel: 'Assessments',

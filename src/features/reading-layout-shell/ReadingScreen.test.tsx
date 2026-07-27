@@ -384,4 +384,108 @@ describe('ReadingScreen', () => {
     ).toBeInTheDocument()
     expect(screen.getByText('42000')).toBeInTheDocument()
   })
+
+  it('hosts Diagnostics composition in the Diagnostics Region without competing with Analysis when healthy', async () => {
+    const loadReading = vi.fn().mockResolvedValue(fixtureViewModel)
+    render(
+      <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />,
+    )
+    await selectSymbol('BTC/USDT')
+
+    const diagnosticsRegion = await screen.findByTestId(
+      'reading-region-diagnostics',
+    )
+    const diagnostics = within(diagnosticsRegion).getByTestId(
+      'diagnostics-composition',
+    )
+    expect(diagnostics).toHaveAttribute('data-presentation', 'quiet')
+    expect(diagnostics).toHaveAttribute('data-severity', 'healthy')
+    expect(diagnostics).toHaveAttribute('data-prominence', 'cross-cutting')
+    expect(
+      within(diagnostics).getByText(
+        getMessage('readingDiagnostics.statusHealthy'),
+      ),
+    ).toBeInTheDocument()
+
+    const analysisRegion = screen.getByTestId('reading-region-analysis')
+    expect(analysisRegion.closest('[data-region-id="analysis"]')).toHaveAttribute(
+      'data-prominence',
+      'primary',
+    )
+    expect(
+      within(analysisRegion).getByTestId('assessments-workspace'),
+    ).toBeInTheDocument()
+    expect(
+      within(analysisRegion).queryByTestId('diagnostics-composition'),
+    ).not.toBeInTheDocument()
+    expect(
+      document.querySelector('[data-unit-id="confidence"]'),
+    ).toBeNull()
+  })
+
+  it('elevates blocking Diagnostics in the Diagnostics Region without burying trust only in Evidence', async () => {
+    const blockedFixture: MarketAnalysisViewModel = {
+      ...fixtureViewModel,
+      regime: {
+        ...fixtureViewModel.regime,
+        summary: getMessage('analysisLabels.regimeReason.insufficient_candles'),
+      },
+      recommendation: {
+        ...fixtureViewModel.recommendation,
+        hardGateReason: 'Hard gate: risk score 0.91 is too high.',
+      },
+    }
+    const loadReading = vi.fn().mockResolvedValue(blockedFixture)
+    render(
+      <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />,
+    )
+    await selectSymbol('BTC/USDT')
+
+    const workspace = await screen.findByTestId('reading-workspace')
+    const diagnostics = within(
+      screen.getByTestId('reading-region-diagnostics'),
+    ).getByTestId('diagnostics-composition')
+
+    expect(diagnostics).toHaveAttribute('data-presentation', 'elevated')
+    expect(diagnostics).toHaveAttribute('data-severity', 'blocking')
+    expect(diagnostics).toHaveAttribute('data-diagnostics-expanded', 'true')
+    expect(
+      within(diagnostics).getByText(
+        getMessage('readingDiagnostics.statusBlocking'),
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(diagnostics).getByText(
+        getMessage('readingDiagnostics.kindInsufficient'),
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(diagnostics).getByText(
+        getMessage('readingDiagnostics.kindEquivalent'),
+      ),
+    ).toBeInTheDocument()
+
+    // Analysis remains the interpretive hero Region.
+    expect(
+      workspace.querySelector('[data-region-id="analysis"]'),
+    ).toHaveAttribute('data-prominence', 'primary')
+    expect(
+      within(screen.getByTestId('reading-region-analysis')).getByTestId(
+        'assessments-workspace',
+      ),
+    ).toBeInTheDocument()
+
+    // Elevated Diagnostics are present in the Reading workspace — not Evidence-only.
+    const evidence = within(
+      screen.getByTestId('reading-region-evidence'),
+    ).getByTestId('evidence-composition')
+    expect(
+      within(evidence).queryByText(
+        getMessage('readingDiagnostics.statusBlocking'),
+      ),
+    ).not.toBeInTheDocument()
+    expect(
+      within(evidence).queryByRole('alert'),
+    ).not.toBeInTheDocument()
+  })
 })

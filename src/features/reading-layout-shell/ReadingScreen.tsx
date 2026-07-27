@@ -20,6 +20,7 @@ import { fetchMarketData } from '../../api/marketData/fetchMarketData'
 import type { MarketDataViewModel } from '../../api/marketData/types'
 import { getMessage } from '../../i18n/messages'
 import { AssessmentsWorkspace } from '../reading-analysis-composition'
+import { DiagnosticsComposition } from '../reading-diagnostics'
 import { EvidenceComposition } from '../reading-evidence-composition'
 import { SymbolSelector } from '../view-market-data/SymbolSelector'
 import { ClassificationRegionSummary } from './ClassificationRegionSummary'
@@ -72,6 +73,22 @@ function AnalysisRegionBody({ data }: { data: MarketAnalysisViewModel }): ReactN
 function EvidenceRegionBody({ data }: { data: MarketAnalysisViewModel }): ReactNode {
   return (
     <EvidenceComposition
+      regime={data.regime}
+      risk={data.risk}
+      economic={data.economic}
+      exposure={data.exposure}
+      recommendation={data.recommendation}
+    />
+  )
+}
+
+function DiagnosticsRegionBody({
+  data,
+}: {
+  data: MarketAnalysisViewModel
+}): ReactNode {
+  return (
+    <DiagnosticsComposition
       regime={data.regime}
       risk={data.risk}
       economic={data.economic}
@@ -182,6 +199,7 @@ export function ReadingScreen({
           regionBodies={{
             analysis: <AnalysisRegionBody data={state.analysis} />,
             evidence: <EvidenceRegionBody data={state.analysis} />,
+            diagnostics: <DiagnosticsRegionBody data={state.analysis} />,
             classification:
               state.classification != null ? (
                 <ClassificationRegionSummary data={state.classification} />

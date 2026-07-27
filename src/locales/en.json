@@ -36,6 +36,18 @@
     "showContributions": "Show Contributions",
     "hideDepth": "Hide"
   },
+  "readingDiagnostics": {
+    "statusHealthy": "Trust status: healthy.",
+    "statusQualifying": "Trust status: qualified.",
+    "statusBlocking": "Trust status: blocked.",
+    "kindInsufficient": "Insufficient data",
+    "kindPartial": "Partial data",
+    "kindStale": "Stale data",
+    "kindEquivalent": "Data-quality constraint",
+    "signalPlaceholder": "Trust details for this Reading will appear here.",
+    "showDetails": "Show details",
+    "hideDetails": "Hide details"
+  },
   "readingContext": {
     "displayName": "Display name",
     "pair": "Pair",
