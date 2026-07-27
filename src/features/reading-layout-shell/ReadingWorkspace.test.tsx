@@ -1,5 +1,6 @@
 import { describe, expect, it, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
+import { wording } from '@market-data/brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import { ReadingWorkspace } from './ReadingWorkspace'
 
@@ -76,10 +77,12 @@ describe('ReadingWorkspace', () => {
     expect(analysisIndex).toBeLessThan(marketDataIndex)
   })
 
-  it('marks Analysis as the only primary Region; Classification and Market Data are not primary', () => {
+  it('marks Analysis as the only primary Region; Context is not primary', () => {
     render(<ReadingWorkspace symbol="BTC/USDT" />)
 
     expect(regionEl('analysis')).toHaveAttribute('data-prominence', 'primary')
+    expect(regionEl('context')).toHaveAttribute('data-prominence', 'supporting')
+    expect(regionEl('context')).not.toHaveAttribute('data-prominence', 'primary')
     expect(regionEl('classification')).toHaveAttribute(
       'data-prominence',
       'associated',
@@ -177,5 +180,34 @@ describe('ReadingWorkspace', () => {
     expect(
       within(primaryBand).queryByText(messages.readingLayout.regionMarketData),
     ).not.toBeInTheDocument()
+  })
+
+  it('mounts Context Identity beyond a bare ticker and keeps Analysis primary', () => {
+    render(<ReadingWorkspace symbol="BTC/USDT" />)
+
+    const context = within(screen.getByTestId('reading-region-context'))
+    expect(context.getByTestId('context-identity')).toBeInTheDocument()
+    expect(
+      context.getByText(getMessage('readingContext.displayName')),
+    ).toBeInTheDocument()
+    expect(
+      context.getByText(
+        getMessage('readingContext.symbols.BTC_USDT.displayName'),
+      ),
+    ).toBeInTheDocument()
+    expect(context.getByText(getMessage('readingContext.pair'))).toBeInTheDocument()
+    expect(context.getByText(getMessage('readingContext.base'))).toBeInTheDocument()
+    expect(context.getByText(getMessage('readingContext.quote'))).toBeInTheDocument()
+
+    expect(context.queryByText(wording.labels.price)).not.toBeInTheDocument()
+    expect(
+      context.queryByText(wording.labels.recommendation),
+    ).not.toBeInTheDocument()
+    expect(
+      context.queryByText(getMessage('viewMarketData.timeframe')),
+    ).not.toBeInTheDocument()
+
+    expect(regionEl('analysis')).toHaveAttribute('data-prominence', 'primary')
+    expect(regionEl('context')).not.toHaveAttribute('data-prominence', 'primary')
   })
 })

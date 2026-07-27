@@ -209,7 +209,7 @@
         "Identity chrome uses brand tokens/components already available to the FE.",
         "User-facing Identity labels come from locale catalogs / brand wording."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 15,

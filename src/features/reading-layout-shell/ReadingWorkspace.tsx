@@ -1,13 +1,18 @@
 import type { ReactNode } from 'react'
-import { Cluster, ClusterItem, Stack, Text, Label } from '@market-data/brand/ui'
-import { wording } from '@market-data/brand/wording'
+import { Cluster, ClusterItem, Stack } from '@market-data/brand/ui'
 import { getMessage } from '../../i18n/messages'
+import {
+  composeSymbolIdentity,
+  ContextIdentity,
+} from '../reading-context-identity'
 import { ReadingRegion } from './ReadingRegion'
 import { READING_REGIONS, type RegionId } from './regions'
 
 export type ReadingWorkspaceProps = {
   /** Selected Symbol identity for the Context Region. */
   symbol: string
+  /** Optional venue for Identity when available on the source model. */
+  venue?: string | null
   /** Optional composed bodies keyed by Region id. Unset Regions render gray-box placeholders. */
   regionBodies?: Partial<Record<RegionId, ReactNode>>
 }
@@ -24,15 +29,16 @@ function regionDef(id: RegionId) {
  * Symbol Reading workspace shell: six Regions aligned to the wireframe bands
  * (Context strip → Analysis + Classification → Evidence | Market Data → Diagnostics).
  */
-export function ReadingWorkspace({ symbol, regionBodies = {} }: ReadingWorkspaceProps) {
+export function ReadingWorkspace({
+  symbol,
+  venue = null,
+  regionBodies = {},
+}: ReadingWorkspaceProps) {
   const bodies: Partial<Record<RegionId, ReactNode>> = {
     context: (
-      <Stack gap="sm">
-        <Label>{wording.labels.symbol}</Label>
-        <Text as="p" size="lg" weight="medium">
-          {symbol}
-        </Text>
-      </Stack>
+      <ContextIdentity
+        identity={composeSymbolIdentity(symbol, { venue })}
+      />
     ),
     ...regionBodies,
   }

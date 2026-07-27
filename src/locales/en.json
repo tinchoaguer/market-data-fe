@@ -25,6 +25,21 @@
     "recommendationPlaceholder": "Recommendation stance will appear here.",
     "narrativePlaceholder": "Narrative for this claim will appear here."
   },
+  "readingContext": {
+    "displayName": "Display name",
+    "pair": "Pair",
+    "base": "Base",
+    "quote": "Quote",
+    "venue": "Venue",
+    "symbols": {
+      "BTC_USDT": {
+        "displayName": "Bitcoin / Tether"
+      },
+      "ETH_USDT": {
+        "displayName": "Ethereum / Tether"
+      }
+    }
+  },
   "viewMarketData": {
     "title": "Market data",
     "empty": "Select a symbol to view market data.",

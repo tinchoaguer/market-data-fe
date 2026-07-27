@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 13
-  slug: reading-app-navigation
+  id: 14
+  slug: reading-context-identity
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-27
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T15:06:00
+  recorded_at: 2026-07-27T15:28:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for reading-app-navigation
+  - Produce requirements.md, design.md, and tasks.md for reading-context-identity
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Reading App Navigation (`reading-app-navigation`)
+**Feature:** Reading Context Identity (`reading-context-identity`)
 
 **Stage:** Completed
 
@@ -40,7 +40,7 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T15:06:00
+  recorded_at: 2026-07-27T15:28:00
   notes: User command — Approve specification
 ```
 
@@ -50,12 +50,12 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Symbol Reading is the sole primary product destination. Primary nav exposes
-  only Reading (locale key appLayout.navReading); legacy market-data / analysis /
-  classification destination ids redirect into Reading; brand product.name remains
-  chrome identity only. ReadingScreen is the default outlet host with Region
-  hierarchy and idle/loading/error flows preserved. App-layout and reading-layout-shell
-  unit tests pass (28/28).
+  Implemented Reading Context Identity: locale catalog keys and display-name
+  entries; FE Identity composer (pair/base/quote + optional venue, no Identity
+  API); ContextIdentity UI with brand Stack/Inline/Label/Text; mounted as
+  Context Region body in ReadingWorkspace (Analysis remains primary; idle host
+  still owns empty state). Unit and component tests cover mapper fixtures and
+  Context Identity/layout oracles (25 passed).
 ```
 
 ## Code Review result
@@ -65,12 +65,12 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Implementation satisfies the approved reading-app-navigation specification.
-  Primary nav exposes only Symbol Reading; legacy destination ids resolve into
-  Reading; brand AppShell chrome preserved; Region hierarchy and selection/
-  loading/error flows covered by strong tests. Zero required fixes; three
-  recommendations.
+  Implementation satisfies reading-context-identity. Context Region mounts
+  FE-composed Identity (display name, pair, base, quote, optional venue)
+  via brand Stack/Inline/Label/Text and locale/brand wording; Context remains
+  Identity-only and non-primary vs Analysis; no new Identity API. All REQ/AC
+  pass with strong oracles. Related Vitest suites: 25/25 passed.
 ```
 
-Workflow terminated successfully. History archived to `work/history/reading-app-navigation.md`.
-Review report: `work/progress/reviews/reading-app-navigation.md`.
+Workflow terminated successfully. History archived to `work/history/reading-context-identity.md`.
+Review report: `work/progress/reviews/reading-context-identity.md`.

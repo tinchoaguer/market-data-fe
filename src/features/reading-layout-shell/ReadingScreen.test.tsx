@@ -80,6 +80,7 @@ describe('ReadingScreen', () => {
       screen.getByText(getMessage('readingLayout.selectSymbolPrompt')),
     ).toBeInTheDocument()
     expect(screen.queryByTestId('reading-workspace')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('context-identity')).not.toBeInTheDocument()
     expect(loadReading).not.toHaveBeenCalled()
   })
 
@@ -202,6 +203,18 @@ describe('ReadingScreen', () => {
     expect(regionIds.indexOf('analysis')).toBeLessThan(
       regionIds.indexOf('market-data'),
     )
+
+    const contextRegion = within(screen.getByTestId('reading-region-context'))
+    expect(contextRegion.getByTestId('context-identity')).toBeInTheDocument()
+    expect(
+      contextRegion.getByText(
+        getMessage('readingContext.symbols.BTC_USDT.displayName'),
+      ),
+    ).toBeInTheDocument()
+    expect(contextRegion.queryByText(wording.labels.price)).not.toBeInTheDocument()
+    expect(
+      contextRegion.queryByText(wording.labels.recommendation),
+    ).not.toBeInTheDocument()
   })
 
   it('resolves Reading chrome copy from feature locale and brand wording', () => {
