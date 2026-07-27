@@ -10,6 +10,7 @@ const featureSourceFiles = [
 ]
 
 const forbiddenHardcoded = [
+  'Reading',
   'Market Data',
   'Analysis',
   'Classification',
@@ -18,28 +19,16 @@ const forbiddenHardcoded = [
 ]
 
 describe('app-layout copy sourcing', () => {
-  it('exposes required feature locale keys', () => {
-    expect(getMessage('appLayout.navMarketData')).toBe(
-      messages.appLayout.navMarketData,
+  it('exposes Reading nav locale key for primary destination', () => {
+    expect(getMessage('appLayout.navReading')).toBe(
+      messages.appLayout.navReading,
     )
-    expect(getMessage('appLayout.navAnalysis')).toBe(
-      messages.appLayout.navAnalysis,
-    )
-    expect(getMessage('appLayout.navClassification')).toBe(
-      messages.appLayout.navClassification,
-    )
-    expect(getMessage('appLayout.analysisPlaceholder')).toBe(
-      messages.appLayout.analysisPlaceholder,
-    )
-    expect(getMessage('appLayout.classificationPlaceholder')).toBe(
-      messages.appLayout.classificationPlaceholder,
-    )
+    expect(messages.appLayout.navReading).toBe('Reading')
   })
 
   it('reuses brand wording for product identity', () => {
     expect(wording.product.name).toBe('Market Data')
     expect(wording.product.nameShort).toBeTruthy()
-    expect(wording.cta.viewAnalysis).toBeTruthy()
   })
 
   it('does not hardcode designed English strings in feature components', () => {

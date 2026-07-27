@@ -1,6 +1,7 @@
 {
   "app": {},
   "appLayout": {
+    "navReading": "Reading",
     "navMarketData": "Market Data",
     "navAnalysis": "Analysis",
     "navClassification": "Classification",

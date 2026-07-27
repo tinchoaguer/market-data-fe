@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 12
-  slug: reading-analysis-composition
+  id: 13
+  slug: reading-app-navigation
 
 workflow_stage: Completed
 
@@ -9,17 +9,17 @@ status: Done
 
 blocked_from_stage: null
 
-started: 2026-07-25
-updated: 2026-07-25
+started: 2026-07-27
+updated: 2026-07-27
 
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-25T18:28:00
+  recorded_at: 2026-07-27T15:06:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for reading-analysis-composition
+  - Produce requirements.md, design.md, and tasks.md for reading-app-navigation
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Reading Analysis Composition (`reading-analysis-composition`)
+**Feature:** Reading App Navigation (`reading-app-navigation`)
 
 **Stage:** Completed
 
@@ -40,7 +40,7 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-25T18:28:00
+  recorded_at: 2026-07-27T15:06:00
   notes: User command — Approve specification
 ```
 
@@ -49,12 +49,13 @@ approval:
 ```yaml
 stage: Implementation
 status: COMPLETED
-summary: >-
-  Implemented reading-analysis-composition as one Assessments workspace inside
-  the Analysis Region: four peer Assessment units (Regime, Risk, Economic,
-  Exposure), compact Recommendation after peers, claim-bound Narrative only,
-  brand chrome/locale copy, and host wiring via ReadingScreen. Composition and
-  shell tests pass (22 tests).
+summary: >
+  Symbol Reading is the sole primary product destination. Primary nav exposes
+  only Reading (locale key appLayout.navReading); legacy market-data / analysis /
+  classification destination ids redirect into Reading; brand product.name remains
+  chrome identity only. ReadingScreen is the default outlet host with Region
+  hierarchy and idle/loading/error flows preserved. App-layout and reading-layout-shell
+  unit tests pass (28/28).
 ```
 
 ## Code Review result
@@ -63,12 +64,13 @@ summary: >-
 stage: Code Review
 status: COMPLETED
 decision: APPROVED
-summary: >-
-  Implementation satisfies the approved reading-analysis-composition
-  specification. One Assessments workspace hosts four peer Assessment units
-  plus compact Recommendation; Narrative is claim-bound only; no Overall/Synthesis
-  Regions; chrome uses brand primitives. No required fixes; two recommendations.
+summary: >
+  Implementation satisfies the approved reading-app-navigation specification.
+  Primary nav exposes only Symbol Reading; legacy destination ids resolve into
+  Reading; brand AppShell chrome preserved; Region hierarchy and selection/
+  loading/error flows covered by strong tests. Zero required fixes; three
+  recommendations.
 ```
 
-Workflow terminated successfully. History archived to `work/history/reading-analysis-composition.md`.
-Review report: `work/progress/reviews/reading-analysis-composition.md`.
+Workflow terminated successfully. History archived to `work/history/reading-app-navigation.md`.
+Review report: `work/progress/reviews/reading-app-navigation.md`.

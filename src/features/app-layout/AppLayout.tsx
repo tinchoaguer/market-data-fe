@@ -15,49 +15,36 @@ import {
 import { wording } from '@market-data/brand/wording'
 import { getMessage } from '../../i18n/messages'
 import { ReadingScreen } from '../reading-layout-shell/ReadingScreen'
-import { MarketClassificationScreen } from '../view-market-classification/MarketClassificationScreen'
-import { MarketDataScreen } from '../view-market-data/MarketDataScreen'
 import {
   DEFAULT_DESTINATION,
+  PRIMARY_DESTINATION,
   type DestinationId,
-  isDestinationId,
+  type PrimaryDestinationId,
+  resolveActiveDestination,
 } from './destinations'
 
 export type AppLayoutProps = {
-  /** Optional initial destination (defaults to market-data). */
+  /**
+   * Optional initial destination. Legacy peer ids (`market-data`, `analysis`,
+   * `classification`) redirect into Symbol Reading.
+   */
   initialDestination?: DestinationId
-  /** Optional Market Data screen override for tests. */
-  marketDataScreen?: ReactNode
-  /** Optional Analysis / Reading screen override for tests. */
-  analysisScreen?: ReactNode
-  /** Optional Classification screen override for tests. */
-  classificationScreen?: ReactNode
+  /** Optional Reading screen override for tests. */
+  readingScreen?: ReactNode
 }
 
-const NAV_ITEMS: { id: DestinationId; labelKey: string }[] = [
-  { id: 'market-data', labelKey: 'appLayout.navMarketData' },
-  { id: 'analysis', labelKey: 'appLayout.navAnalysis' },
-  { id: 'classification', labelKey: 'appLayout.navClassification' },
+const NAV_ITEMS: { id: PrimaryDestinationId; labelKey: string }[] = [
+  { id: PRIMARY_DESTINATION, labelKey: 'appLayout.navReading' },
 ]
-
-function resolveInitialDestination(
-  initialDestination: DestinationId | undefined,
-): DestinationId {
-  if (initialDestination && isDestinationId(initialDestination)) {
-    return initialDestination
-  }
-  return DEFAULT_DESTINATION
-}
 
 export function AppLayout({
   initialDestination,
-  marketDataScreen,
-  analysisScreen,
-  classificationScreen,
+  readingScreen,
 }: AppLayoutProps) {
-  const [activeDestination, setActiveDestination] = useState<DestinationId>(
-    () => resolveInitialDestination(initialDestination),
-  )
+  const [activeDestination, setActiveDestination] =
+    useState<PrimaryDestinationId>(() =>
+      resolveActiveDestination(initialDestination ?? DEFAULT_DESTINATION),
+    )
 
   return (
     <AppShell>
@@ -94,14 +81,8 @@ export function AppLayout({
       </AppHeader>
 
       <AppMain data-testid="app-layout-outlet">
-        {activeDestination === 'market-data'
-          ? (marketDataScreen ?? <MarketDataScreen />)
-          : null}
-        {activeDestination === 'analysis'
-          ? (analysisScreen ?? <ReadingScreen />)
-          : null}
-        {activeDestination === 'classification'
-          ? (classificationScreen ?? <MarketClassificationScreen />)
+        {activeDestination === PRIMARY_DESTINATION
+          ? (readingScreen ?? <ReadingScreen />)
           : null}
       </AppMain>
     </AppShell>

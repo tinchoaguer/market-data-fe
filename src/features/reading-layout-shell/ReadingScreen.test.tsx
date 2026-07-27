@@ -183,6 +183,25 @@ describe('ReadingScreen', () => {
     expect(
       screen.queryByText(getMessage('readingLayout.selectSymbolPrompt')),
     ).not.toBeInTheDocument()
+
+    // Hierarchy smoke (reading-app-navigation default host): Analysis primary;
+    // Market Data not primary; Context + Analysis before Market Data.
+    const workspace = screen.getByTestId('reading-workspace')
+    expect(
+      workspace.querySelector('[data-region-id="analysis"]'),
+    ).toHaveAttribute('data-prominence', 'primary')
+    expect(
+      workspace.querySelector('[data-region-id="market-data"]'),
+    ).not.toHaveAttribute('data-prominence', 'primary')
+    const regionIds = Array.from(
+      workspace.querySelectorAll('[data-region-id]'),
+    ).map((node) => node.getAttribute('data-region-id'))
+    expect(regionIds.indexOf('context')).toBeLessThan(
+      regionIds.indexOf('market-data'),
+    )
+    expect(regionIds.indexOf('analysis')).toBeLessThan(
+      regionIds.indexOf('market-data'),
+    )
   })
 
   it('resolves Reading chrome copy from feature locale and brand wording', () => {

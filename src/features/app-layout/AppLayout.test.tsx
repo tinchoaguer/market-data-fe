@@ -3,7 +3,9 @@ import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { wording } from '@market-data/brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
+import { ReadingWorkspace } from '../reading-layout-shell/ReadingWorkspace'
 import { AppLayout } from './AppLayout'
+import { LEGACY_DESTINATIONS } from './destinations'
 
 describe('AppLayout', () => {
   afterEach(() => {
@@ -11,113 +13,100 @@ describe('AppLayout', () => {
   })
 
   it('presents brand name and logo region in chrome', () => {
-    render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+    render(<AppLayout readingScreen={<div>Reading content</div>} />)
 
     const brand = screen.getByTestId('app-layout-brand')
     expect(within(brand).getByText(wording.product.name)).toBeInTheDocument()
     expect(brand.querySelector('svg')).not.toBeNull()
   })
 
-  it('exposes navigation for Market Data, Analysis, and Classification', () => {
-    render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+  it('exposes Reading as the sole primary Symbol-inspection nav destination', () => {
+    render(<AppLayout readingScreen={<div>Reading content</div>} />)
 
+    const nav = screen.getByTestId('app-layout-nav')
     expect(
-      screen.getByRole('button', { name: getMessage('appLayout.navMarketData') }),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', {
-        name: getMessage('appLayout.navClassification'),
+      within(nav).getByRole('button', {
+        name: getMessage('appLayout.navReading'),
       }),
     ).toBeInTheDocument()
+    expect(
+      within(nav).queryByRole('button', {
+        name: getMessage('appLayout.navMarketData'),
+      }),
+    ).not.toBeInTheDocument()
+    expect(
+      within(nav).queryByRole('button', {
+        name: getMessage('appLayout.navAnalysis'),
+      }),
+    ).not.toBeInTheDocument()
+    expect(
+      within(nav).queryByRole('button', {
+        name: getMessage('appLayout.navClassification'),
+      }),
+    ).not.toBeInTheDocument()
+    expect(within(nav).getAllByRole('button')).toHaveLength(1)
   })
 
-  it('defaults to Market Data and marks it active', () => {
-    render(<AppLayout marketDataScreen={<div>Market data content</div>} />)
+  it('defaults to Symbol Reading and marks Reading active', () => {
+    render(<AppLayout readingScreen={<div>Reading content</div>} />)
 
-    expect(screen.getByText('Market data content')).toBeInTheDocument()
+    expect(screen.getByText('Reading content')).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: getMessage('appLayout.navMarketData') }),
+      screen.getByRole('button', { name: getMessage('appLayout.navReading') }),
     ).toHaveAttribute('aria-current', 'page')
-    expect(
-      screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
-    ).not.toHaveAttribute('aria-current')
   })
 
-  it('updates outlet content when navigating between destinations', async () => {
+  it('shows the Reading workspace when the Reading nav control is activated', async () => {
     const user = userEvent.setup()
-    render(
-      <AppLayout
-        marketDataScreen={<div>Market data content</div>}
-        analysisScreen={<div>Analysis content</div>}
-        classificationScreen={<div>Classification content</div>}
-      />,
-    )
+    render(<AppLayout readingScreen={<div>Reading content</div>} />)
 
     await user.click(
-      screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
+      screen.getByRole('button', { name: getMessage('appLayout.navReading') }),
     )
-    expect(screen.getByText('Analysis content')).toBeInTheDocument()
-    expect(screen.queryByText('Market data content')).not.toBeInTheDocument()
-
-    await user.click(
-      screen.getByRole('button', {
-        name: getMessage('appLayout.navClassification'),
-      }),
-    )
-    expect(screen.getByText('Classification content')).toBeInTheDocument()
-    expect(screen.queryByText('Analysis content')).not.toBeInTheDocument()
-
-    await user.click(
-      screen.getByRole('button', { name: getMessage('appLayout.navMarketData') }),
-    )
-    expect(screen.getByText('Market data content')).toBeInTheDocument()
+    expect(screen.getByText('Reading content')).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: getMessage('appLayout.navReading') }),
+    ).toHaveAttribute('aria-current', 'page')
   })
 
-  it('visually indicates the active destination via aria-current', async () => {
-    const user = userEvent.setup()
-    render(
-      <AppLayout
-        marketDataScreen={<div>Market data content</div>}
-        analysisScreen={<div>Analysis content</div>}
-        classificationScreen={<div>Classification content</div>}
-      />,
-    )
+  it('redirects legacy peer destination ids into Symbol Reading', () => {
+    for (const legacyId of LEGACY_DESTINATIONS) {
+      cleanup()
+      render(
+        <AppLayout
+          initialDestination={legacyId}
+          readingScreen={<div data-testid="reading-surface">Reading content</div>}
+        />,
+      )
 
-    const analysis = screen.getByRole('button', {
-      name: getMessage('appLayout.navAnalysis'),
-    })
-    await user.click(analysis)
-
-    expect(analysis).toHaveAttribute('aria-current', 'page')
-    expect(
-      screen.getByRole('button', { name: getMessage('appLayout.navMarketData') }),
-    ).not.toHaveAttribute('aria-current')
-    expect(
-      screen.getByRole('button', {
-        name: getMessage('appLayout.navClassification'),
-      }),
-    ).not.toHaveAttribute('aria-current')
+      expect(screen.getByTestId('reading-surface')).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: getMessage('appLayout.navReading') }),
+      ).toHaveAttribute('aria-current', 'page')
+      expect(
+        screen.queryByRole('button', {
+          name: getMessage('appLayout.navMarketData'),
+        }),
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', {
+          name: getMessage('appLayout.navAnalysis'),
+        }),
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', {
+          name: getMessage('appLayout.navClassification'),
+        }),
+      ).not.toBeInTheDocument()
+    }
   })
 
-  it('keeps chrome structure mounted when switching destinations', async () => {
-    const user = userEvent.setup()
-    render(
-      <AppLayout
-        marketDataScreen={<div>Market data content</div>}
-        analysisScreen={<div>Analysis content</div>}
-        classificationScreen={<div>Classification content</div>}
-      />,
-    )
+  it('keeps chrome structure mounted while Reading is shown', () => {
+    render(<AppLayout readingScreen={<div>Reading content</div>} />)
 
     const chrome = screen.getByTestId('app-layout-chrome')
     const nav = screen.getByTestId('app-layout-nav')
 
-    await user.click(
-      screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
-    )
     expect(screen.getByTestId('app-layout-chrome')).toBe(chrome)
     expect(screen.getByTestId('app-layout-nav')).toBe(nav)
     expect(within(chrome).getByTestId('app-layout-brand')).toBeInTheDocument()
@@ -126,64 +115,10 @@ describe('AppLayout', () => {
         wording.product.name,
       ),
     ).toBeInTheDocument()
-
-    await user.click(
-      screen.getByRole('button', {
-        name: getMessage('appLayout.navClassification'),
-      }),
-    )
-    expect(screen.getByTestId('app-layout-chrome')).toBe(chrome)
-    expect(screen.getByTestId('app-layout-nav')).toBe(nav)
-    expect(
-      within(screen.getByTestId('app-layout-brand')).getByText(
-        wording.product.name,
-      ),
-    ).toBeInTheDocument()
   })
 
-  it('renders the Analysis product view (not a stub) for the Analysis destination', async () => {
-    const user = userEvent.setup()
-    render(
-      <AppLayout
-        marketDataScreen={<div>Market data content</div>}
-        analysisScreen={<div data-testid="analysis-product-view">Analysis product</div>}
-        classificationScreen={
-          <div data-testid="classification-product-view">Classification product</div>
-        }
-      />,
-    )
-
-    await user.click(
-      screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
-    )
-    expect(screen.getByTestId('analysis-product-view')).toBeInTheDocument()
-    expect(
-      screen.queryByText(messages.appLayout.analysisPlaceholder),
-    ).not.toBeInTheDocument()
-
-    await user.click(
-      screen.getByRole('button', {
-        name: getMessage('appLayout.navClassification'),
-      }),
-    )
-    expect(screen.getByTestId('classification-product-view')).toBeInTheDocument()
-    expect(
-      screen.queryByText(messages.appLayout.classificationPlaceholder),
-    ).not.toBeInTheDocument()
-  })
-
-  it('mounts ReadingScreen by default on the Analysis destination', async () => {
-    const user = userEvent.setup()
-    render(
-      <AppLayout
-        marketDataScreen={<div>Market data content</div>}
-        classificationScreen={<div>Classification content</div>}
-      />,
-    )
-
-    await user.click(
-      screen.getByRole('button', { name: getMessage('appLayout.navAnalysis') }),
-    )
+  it('mounts ReadingScreen by default with Symbol selection idle prompt', () => {
+    render(<AppLayout />)
 
     expect(
       screen.getByText(getMessage('readingLayout.selectSymbolPrompt')),
@@ -196,43 +131,35 @@ describe('AppLayout', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('mounts MarketClassificationScreen by default on the Classification destination', async () => {
-    const user = userEvent.setup()
+  it('preserves Reading Region hierarchy when the Reading host is mounted', () => {
     render(
       <AppLayout
-        marketDataScreen={<div>Market data content</div>}
-        analysisScreen={<div>Analysis content</div>}
+        readingScreen={<ReadingWorkspace symbol="BTC/USDT" />}
       />,
     )
 
-    await user.click(
-      screen.getByRole('button', {
-        name: getMessage('appLayout.navClassification'),
-      }),
-    )
+    const workspace = screen.getByTestId('reading-workspace')
+    const analysis = workspace.querySelector('[data-region-id="analysis"]')
+    const marketData = workspace.querySelector('[data-region-id="market-data"]')
+    const context = workspace.querySelector('[data-region-id="context"]')
 
-    expect(
-      screen.getByRole('heading', {
-        name: getMessage('viewMarketClassification.title'),
-      }),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(getMessage('viewMarketClassification.empty')),
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByText(messages.appLayout.classificationPlaceholder),
-    ).not.toBeInTheDocument()
+    expect(analysis).toHaveAttribute('data-prominence', 'primary')
+    expect(marketData).not.toHaveAttribute('data-prominence', 'primary')
+
+    const regions = Array.from(
+      workspace.querySelectorAll('[data-region-id]'),
+    ).map((node) => node.getAttribute('data-region-id'))
+    expect(regions.indexOf('context')).toBeLessThan(
+      regions.indexOf('market-data'),
+    )
+    expect(regions.indexOf('analysis')).toBeLessThan(
+      regions.indexOf('market-data'),
+    )
+    expect(context).not.toBeNull()
   })
 
-  it('resolves nav and destination copy from brand wording and feature locale keys', async () => {
-    const user = userEvent.setup()
-    render(
-      <AppLayout
-        marketDataScreen={<div>Market data content</div>}
-        analysisScreen={<div>Analysis content</div>}
-        classificationScreen={<div>Classification content</div>}
-      />,
-    )
+  it('resolves Reading nav label and brand name from catalogs', () => {
+    render(<AppLayout readingScreen={<div>Reading content</div>} />)
 
     expect(
       within(screen.getByTestId('app-layout-brand')).getByText(
@@ -240,18 +167,11 @@ describe('AppLayout', () => {
       ),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: messages.appLayout.navMarketData }),
+      screen.getByRole('button', { name: messages.appLayout.navReading }),
     ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: messages.appLayout.navAnalysis }),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: messages.appLayout.navClassification }),
-    ).toBeInTheDocument()
-
-    await user.click(
-      screen.getByRole('button', { name: messages.appLayout.navAnalysis }),
+    expect(getMessage('appLayout.navReading')).toBe(
+      messages.appLayout.navReading,
     )
-    expect(screen.getByText('Analysis content')).toBeInTheDocument()
+    expect(messages.appLayout.navReading).toBe('Reading')
   })
 })
