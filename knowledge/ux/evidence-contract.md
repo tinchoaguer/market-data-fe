@@ -3,7 +3,7 @@
 Adopted contract for the **Evidence Region** and claim-attached explainability in this frontend. Spec Writer and Implementer use this file for Evidence structure, ownership, and anti-patterns — do not require sibling-repo brand paths.
 
 **Topic:** Evidence (Reading Region; referenced from Analysis / Classification claims)  
-**Fidelity:** gray-box / structural. Visual surface uses brand tokens and components. Hi-fi Figma polish is out of scope.
+**Fidelity:** gray-box / structural. Visual surface uses brand tokens and components. Hi-fi Figma polish is out of scope; **do not** require paid Figma, Dev Mode, or new frames.
 
 Companions: `knowledge/ux/reading-contract.md` (Reading Regions), `knowledge/ux/analysis-contract.md` (Analysis owns outcomes, not Evidence tables).
 
@@ -87,7 +87,7 @@ Analysis may expose a **path / reference** into Evidence. Analysis must not embe
 3. Use Drivers → Features → Contributions — not Metrics / Observations as kind labels.
 4. Market Data is not Evidence until cited as a Feature supporting a claim.
 5. Do not nest Evidence content as Analysis-owned Assessment body; move explainability into the Evidence Region (attachments allowed).
-6. Gray-box structure with brand tokens/components is sufficient; do not require hi-fi Figma.
+6. Gray-box structure with brand tokens/components is sufficient; do not require hi-fi Figma or Figma tooling.
 
 ---
 
@@ -105,16 +105,14 @@ Analysis may expose a **path / reference** into Evidence. Analysis must not embe
 
 ---
 
-## Figma
+## Structural reference
 
-Structural wireframe reference (Reading shell; Evidence is supporting Region):
+Evidence is a supporting Region (Reading Layout Implementation: supporting band; typically larger share than Market Data). Optional historical gray-box band diagram (view-only; not editable SoT):
 
 https://www.figma.com/design/opTJ1E7ZHIgpLPQTw1YtKP/Reading-Layout-Wireframe?node-id=0-1
-
-Gray-box fidelity only — no hi-fi prototype required.
 
 ---
 
 ## Provenance
 
-Brand `visual-definitions` (Evidence sections in reading-model, reading-composition-model, reading-layout-blueprint/specification; Evidence entity in domain-language; Analysis ownership boundaries in visual-definitions/analysis/) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.
+Brand `visual-definitions` (Evidence sections in reading-model, reading-composition-model, reading-layout-blueprint/specification/**implementation**; Evidence entity in domain-language; Analysis ownership boundaries in visual-definitions/analysis/) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.

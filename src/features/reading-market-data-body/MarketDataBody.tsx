@@ -1,12 +1,15 @@
+import { useState } from 'react'
 import { wording } from '@market-data/brand/wording'
 import {
   Badge,
+  Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   Cluster,
   ClusterItem,
+  Inline,
   SectionHeading,
   Stack,
   Table,
@@ -131,6 +134,7 @@ function OrderBookObservation({
 
 function CandlesObservation({ series }: { series: CandleSeries[] }) {
   const timeframeLabel = getMessage('viewMarketData.timeframe')
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({})
 
   return (
     <section
@@ -149,45 +153,78 @@ function CandlesObservation({ series }: { series: CandleSeries[] }) {
               {getMessage('readingMarketData.sectionPlaceholder')}
             </Text>
           ) : (
-            <Stack gap="xl">
-              {series.map((group) => (
-                <section
-                  key={group.timeframe}
-                  aria-label={`${timeframeLabel} ${group.timeframe}`}
-                  data-unit-id="candles-timeframe"
-                  data-unit-role="candles-timeframe"
-                  data-timeframe={group.timeframe}
-                >
-                  <SectionHeading spacing="md">
-                    <span>{timeframeLabel}</span>
-                    <span aria-hidden="true">: </span>
-                    <Badge>{group.timeframe}</Badge>
-                  </SectionHeading>
-                  {group.candles.length === 0 ? (
-                    <Text tone="muted">
-                      {getMessage('readingMarketData.emptyCandles')}
-                    </Text>
-                  ) : (
-                    <Table>
-                      <TableBody>
-                        {group.candles.map((candle, index) => (
-                          <TableRow
-                            key={`${group.timeframe}-${candle.timestamp}-${index}`}
+            <Stack gap="md">
+              {series.map((group) => {
+                const isOpen = expanded[group.timeframe] === true
+                const countLabel = getMessage(
+                  'readingMarketData.candleCount',
+                ).replace('{count}', String(group.candles.length))
+
+                return (
+                  <section
+                    key={group.timeframe}
+                    aria-label={`${timeframeLabel} ${group.timeframe}`}
+                    data-unit-id="candles-timeframe"
+                    data-unit-role="candles-timeframe"
+                    data-timeframe={group.timeframe}
+                    data-candles-expanded={isOpen ? 'true' : 'false'}
+                  >
+                    <Stack gap="sm">
+                      <Inline gap="sm" wrap>
+                        <SectionHeading spacing="md">
+                          <span>{timeframeLabel}</span>
+                          <span aria-hidden="true">: </span>
+                          <Badge>{group.timeframe}</Badge>
+                        </SectionHeading>
+                        <Text as="span" tone="muted">
+                          {countLabel}
+                        </Text>
+                        {group.candles.length > 0 ? (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            aria-expanded={isOpen}
+                            onClick={() => {
+                              setExpanded((prev) => ({
+                                ...prev,
+                                [group.timeframe]: !isOpen,
+                              }))
+                            }}
                           >
-                            <TableCell variant="mono-xs">
-                              {candle.timestamp}
-                            </TableCell>
-                            <TableCell variant="mono">{candle.open}</TableCell>
-                            <TableCell variant="mono">{candle.high}</TableCell>
-                            <TableCell variant="mono">{candle.low}</TableCell>
-                            <TableCell variant="mono">{candle.close}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  )}
-                </section>
-              ))}
+                            {isOpen
+                              ? getMessage('readingMarketData.hideCandles')
+                              : getMessage('readingMarketData.showCandles')}
+                          </Button>
+                        ) : null}
+                      </Inline>
+                      {group.candles.length === 0 ? (
+                        <Text tone="muted">
+                          {getMessage('readingMarketData.emptyCandles')}
+                        </Text>
+                      ) : isOpen ? (
+                        <Table>
+                          <TableBody>
+                            {group.candles.map((candle, index) => (
+                              <TableRow
+                                key={`${group.timeframe}-${candle.timestamp}-${index}`}
+                              >
+                                <TableCell variant="mono-xs">
+                                  {candle.timestamp}
+                                </TableCell>
+                                <TableCell variant="mono">{candle.open}</TableCell>
+                                <TableCell variant="mono">{candle.high}</TableCell>
+                                <TableCell variant="mono">{candle.low}</TableCell>
+                                <TableCell variant="mono">{candle.close}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      ) : null}
+                    </Stack>
+                  </section>
+                )
+              })}
             </Stack>
           )}
         </CardContent>

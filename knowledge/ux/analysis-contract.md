@@ -3,7 +3,7 @@
 Adopted contract for the **Analysis Region** internals in this frontend. Spec Writer and Implementer use this file for Assessment units, hierarchy, and anti-patterns inside Analysis — do not require sibling-repo brand paths.
 
 **Topic:** Analysis (nested under Reading’s Analysis Region)  
-**Fidelity for this epic:** gray-box / structural. Visual surface uses brand tokens and components. Hi-fi Figma polish is out of scope.
+**Fidelity for this epic:** gray-box / structural. Visual surface uses brand tokens and components. Hi-fi Figma polish is out of scope; **do not** require paid Figma, Dev Mode, or new frames.
 
 Companion: `knowledge/ux/reading-contract.md` owns Reading-wide Regions. This contract owns structure **inside** the Analysis Region. Evidence depth: `knowledge/ux/evidence-contract.md`. Trust: `knowledge/ux/diagnostics-contract.md`.
 
@@ -85,6 +85,8 @@ Dimensions are **independent peers**. No dimension owns another. Contradictory d
 
 **Sizing (allocated space):** Assessments Region extra large; Dimension collection large within it; Recommendation compact; Narrative compact with claims; Evidence large only when expanded (Reading Region); Diagnostics minimal when healthy.
 
+**Layout implementation (adopted — no Figma tooling):** Four peers share one skeleton (identity → outcome → Narrative → optional Evidence reference); no per-peer Region Cards inside the Analysis primary surface. Desktop peer collection: readable 2×2 or single row only when outcomes stay clear; stack in Regime → Risk → Economic → Exposure below `md`. Recommendation full-width compact band after peers. Prefer outcome + short Narrative over duplicated long summary. Full recipes SoT: brand `analysis-layout-implementation.md` (refresh this snapshot when that SoT changes).
+
 **Expansion:** Assessment outcomes always visible (detail may expand); Recommendation stays compact; Evidence expands Drivers → Features → Contributions; Diagnostics expand when blocking.
 
 ---
@@ -115,7 +117,7 @@ Confidence / data quality stays in Diagnostics — never an Assessment dimension
 4. Interpretation before explanation; Evidence attached to claims, on demand.
 5. Classification remains a Reading sibling — do not nest Classification essays under Analysis.
 6. Extensibility: new Assessment dimensions join the peer collection without a parent rollup node.
-7. Gray-box units styled with brand tokens/components are sufficient; do not require hi-fi Figma.
+7. Gray-box units styled with brand tokens/components are sufficient; do not require hi-fi Figma or Figma tooling.
 
 ---
 
@@ -137,16 +139,18 @@ Confidence / data quality stays in Diagnostics — never an Assessment dimension
 
 ---
 
-## Figma
+## Structural reference
 
-Structural wireframe reference (Reading shell hosts Analysis; gray-box fidelity only):
+Assessments communicate label / score / level + short meaning — not raw observation dumps. Peer collection and Recommendation density follow brand Analysis Layout Implementation (shared peer skeleton; Recommendation compact after peers).
+
+Optional historical gray-box band diagram (view-only; Reading shell hosts Analysis; not editable SoT):
 
 https://www.figma.com/design/opTJ1E7ZHIgpLPQTw1YtKP/Reading-Layout-Wireframe?node-id=0-1
 
-Assessments communicate label / score / level + short meaning — not raw observation dumps.
+Layout harmony SoT lives in brand markdown (`analysis-layout-implementation.md` + `reading-layout-implementation.md`), not in Figma.
 
 ---
 
 ## Provenance
 
-Brand `visual-definitions/analysis/` (information architecture, presentation model, composition model, layout blueprint/specification) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.
+Brand `visual-definitions/analysis/` (information architecture, presentation model, composition model, layout blueprint/specification/**implementation**) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.

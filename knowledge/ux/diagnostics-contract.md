@@ -3,7 +3,7 @@
 Adopted contract for the **Diagnostics Region** and trust qualification in this frontend. Spec Writer and Implementer use this file for Diagnostics role, elevation, and anti-patterns — do not require sibling-repo brand paths.
 
 **Topic:** Diagnostics (Reading Region; cross-cutting)  
-**Fidelity:** gray-box / structural. Visual surface uses brand tokens and components. Hi-fi Figma polish is out of scope.
+**Fidelity:** gray-box / structural. Visual surface uses brand tokens and components. Hi-fi Figma polish is out of scope; **do not** require paid Figma, Dev Mode, or new frames.
 
 Companions: `knowledge/ux/reading-contract.md` (Reading Regions), `knowledge/ux/analysis-contract.md` (confidence is never an Assessment dimension), `knowledge/ux/evidence-contract.md` (do not bury hard failures only inside Evidence tables).
 
@@ -86,7 +86,7 @@ Analysis may reference Diagnostics when inputs are weak. Diagnostics must not be
 3. Confidence / data quality stays in Diagnostics — never an Assessment dimension.
 4. Do not bury hard trust failures only inside Evidence tables.
 5. Do not hide blocking Diagnostics at the end of the Reading.
-6. Gray-box structure with brand tokens/components is sufficient; do not require hi-fi Figma.
+6. Gray-box structure with brand tokens/components is sufficient; do not require hi-fi Figma or Figma tooling.
 
 ---
 
@@ -103,16 +103,14 @@ Analysis may reference Diagnostics when inputs are weak. Diagnostics must not be
 
 ---
 
-## Figma
+## Structural reference
 
-Structural wireframe reference (Diagnostics quiet / cross-cutting band):
+Diagnostics is the quiet / cross-cutting band (Reading Layout Implementation). Optional historical gray-box band diagram (view-only; not editable SoT):
 
 https://www.figma.com/design/opTJ1E7ZHIgpLPQTw1YtKP/Reading-Layout-Wireframe?node-id=0-1
-
-Gray-box fidelity only — no hi-fi prototype required.
 
 ---
 
 ## Provenance
 
-Brand `visual-definitions` (Diagnostics sections in reading-model, reading-composition-model, reading-layout-blueprint/specification; Diagnostics entity in domain-language; Analysis ownership boundaries in visual-definitions/analysis/) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.
+Brand `visual-definitions` (Diagnostics sections in reading-model, reading-composition-model, reading-layout-blueprint/specification/**implementation**; Diagnostics entity in domain-language; Analysis ownership boundaries in visual-definitions/analysis/) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.

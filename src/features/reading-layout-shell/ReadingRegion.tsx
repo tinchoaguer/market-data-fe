@@ -50,6 +50,7 @@ function RegionHeading({
 /**
  * Labeled Region slot for the Symbol Reading workspace.
  * Gray-box body when children are omitted.
+ * Primary and associated (Classification) use a Card; associated fills sibling height with scroll.
  */
 export function ReadingRegion({
   id,
@@ -83,8 +84,21 @@ export function ReadingRegion({
             <Stack gap="lg">{body}</Stack>
           </CardContent>
         </Card>
+      ) : prominence === 'associated' ? (
+        <Card height="fill" data-testid={`reading-region-${id}`}>
+          <CardHeader>
+            <RegionHeading
+              label={label}
+              prominence={prominence}
+              headingId={headingId}
+            />
+          </CardHeader>
+          <CardContent scroll>
+            <Stack gap="sm">{body}</Stack>
+          </CardContent>
+        </Card>
       ) : (
-        <Stack gap={prominence === 'associated' ? 'sm' : 'md'} data-testid={`reading-region-${id}`}>
+        <Stack gap="md" data-testid={`reading-region-${id}`}>
           <RegionHeading
             label={label}
             prominence={prominence}

@@ -149,6 +149,28 @@ describe('ReadingWorkspace', () => {
     expect(bandRegions).toEqual(['evidence', 'market-data'])
   })
 
+  it('applies Reading layout shares: Analysis majority + Classification aside; Evidence majority + Market Data minority', () => {
+    render(<ReadingWorkspace symbol="BTC/USDT" />)
+
+    const analysisSlot = document.querySelector(
+      '[data-reading-slot="analysis"]',
+    )
+    const classificationSlot = screen.getByTestId('reading-slot-classification')
+    const evidenceSlot = document.querySelector(
+      '[data-reading-slot="evidence"]',
+    )
+    const marketDataSlot = document.querySelector(
+      '[data-reading-slot="market-data"]',
+    )
+
+    expect(analysisSlot).toHaveAttribute('data-cluster-share', 'majority')
+    expect(classificationSlot).toHaveAttribute('data-cluster-share', 'aside')
+    expect(classificationSlot).toHaveAttribute('data-cluster-bound', 'true')
+    expect(evidenceSlot).toHaveAttribute('data-cluster-share', 'majority')
+    expect(marketDataSlot).toHaveAttribute('data-cluster-share', 'minority')
+    expect(marketDataSlot).toHaveAttribute('data-cluster-bound', 'true')
+  })
+
   it('does not expose Narrative or Overall Score Regions', () => {
     render(<ReadingWorkspace symbol="BTC/USDT" />)
 

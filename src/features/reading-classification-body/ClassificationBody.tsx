@@ -1,8 +1,5 @@
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  SectionHeading,
+  Label,
   Stack,
   Table,
   TableBody,
@@ -30,45 +27,41 @@ function DimensionSignalGroup({ group }: { group: ClassificationSignalGroup }) {
       data-dimension={group.dimensionId}
       data-testid={group.id}
     >
-      <Card>
-        <CardHeader>
-          <SectionHeading id={headingId}>{group.identityLabel}</SectionHeading>
-        </CardHeader>
-        <CardContent>
-          {group.signals.length === 0 ? (
-            <Text tone="muted">{getMessage('readingClassification.emptyGroup')}</Text>
-          ) : (
-            <Table data-unit-role="classification-signal-table">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>
-                    {getMessage('viewMarketClassification.source')}
-                  </TableHead>
-                  <TableHead>
-                    {getMessage('viewMarketClassification.score')}
-                  </TableHead>
-                  <TableHead>
-                    {getMessage('viewMarketClassification.reason')}
-                  </TableHead>
+      <Stack gap="xs">
+        <Label id={headingId}>{group.identityLabel}</Label>
+        {group.signals.length === 0 ? (
+          <Text tone="muted">{getMessage('readingClassification.emptyGroup')}</Text>
+        ) : (
+          <Table data-unit-role="classification-signal-table">
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {getMessage('viewMarketClassification.source')}
+                </TableHead>
+                <TableHead>
+                  {getMessage('viewMarketClassification.score')}
+                </TableHead>
+                <TableHead>
+                  {getMessage('viewMarketClassification.reason')}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {group.signals.map((signal, index) => (
+                <TableRow
+                  key={`${signal.source}-${index}`}
+                  data-unit-id="classification-signal"
+                  data-unit-role="classification-signal"
+                >
+                  <TableCell>{signal.source}</TableCell>
+                  <TableCell variant="mono">{signal.score}</TableCell>
+                  <TableCell>{signal.reason}</TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {group.signals.map((signal, index) => (
-                  <TableRow
-                    key={`${signal.source}-${index}`}
-                    data-unit-id="classification-signal"
-                    data-unit-role="classification-signal"
-                  >
-                    <TableCell>{signal.source}</TableCell>
-                    <TableCell variant="mono">{signal.score}</TableCell>
-                    <TableCell>{signal.reason}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </Stack>
     </section>
   )
 }
@@ -76,6 +69,7 @@ function DimensionSignalGroup({ group }: { group: ClassificationSignalGroup }) {
 /**
  * Classification Region body: compact per-dimension signal packaging
  * (source / score / reason). Subordinate and adjacent to Analysis — not a count-only summary.
+ * Dense chrome (no per-dimension Cards) so the aside stays small vs Analysis.
  */
 export function ClassificationBody({ data }: ClassificationBodyProps) {
   const model = mapClassificationBody(data)

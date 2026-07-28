@@ -92,8 +92,12 @@ describe('MarketDataBody', () => {
     expect(
       candles.getByLabelText(`${getMessage('viewMarketData.timeframe')} 1h`),
     ).toBeInTheDocument()
-    expect(candles.getByText('41900')).toBeInTheDocument()
-    expect(candles.getByText('41000')).toBeInTheDocument()
+    // Candles tables stay collapsed by default so Market Data does not outgrow Evidence.
+    expect(candles.queryByText('41900')).not.toBeInTheDocument()
+    expect(candles.queryByText('41000')).not.toBeInTheDocument()
+    expect(
+      candles.getByLabelText(`${getMessage('viewMarketData.timeframe')} 1m`),
+    ).toHaveAttribute('data-candles-expanded', 'false')
 
     const timeframeGroups = body.querySelectorAll(
       '[data-unit-id="candles-timeframe"]',
@@ -101,6 +105,23 @@ describe('MarketDataBody', () => {
     expect(timeframeGroups).toHaveLength(2)
     expect(timeframeGroups[0]).toHaveAttribute('data-timeframe', '1m')
     expect(timeframeGroups[1]).toHaveAttribute('data-timeframe', '1h')
+  })
+
+  it('expands a Candles timeframe table on demand', async () => {
+    const { default: userEvent } = await import('@testing-library/user-event')
+    const user = userEvent.setup()
+    render(<MarketDataBody data={successFixture} />)
+
+    const candles = within(unitEl('candles'))
+    await user.click(
+      candles.getAllByRole('button', {
+        name: getMessage('readingMarketData.showCandles'),
+      })[0]!,
+    )
+    expect(candles.getByText('41900')).toBeInTheDocument()
+    expect(
+      candles.getByLabelText(`${getMessage('viewMarketData.timeframe')} 1m`),
+    ).toHaveAttribute('data-candles-expanded', 'true')
   })
 
   it('keeps labeled Price / Order book / Candles structure when book and candles are empty', () => {
@@ -147,6 +168,9 @@ describe('MarketDataBody', () => {
       emptyAsks: 'No Asks levels.',
       emptyCandles: 'No Candles for this timeframe.',
       sectionPlaceholder: 'Market observation for this section will appear here.',
+      showCandles: 'Show Candles',
+      hideCandles: 'Hide Candles',
+      candleCount: '{count} Candles',
     })
     expect(getMessage('readingMarketData.emptyBids')).toBe(
       messages.readingMarketData.emptyBids,

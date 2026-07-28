@@ -26,8 +26,9 @@ function regionDef(id: RegionId) {
 }
 
 /**
- * Symbol Reading workspace shell: six Regions aligned to the wireframe bands
- * (Context strip → Analysis + Classification → Evidence | Market Data → Diagnostics).
+ * Symbol Reading workspace shell: six Regions with implementation ratios
+ * (Context strip → Analysis majority + Classification aside → Evidence majority |
+ * Market Data minority → Diagnostics).
  */
 export function ReadingWorkspace({
   symbol,
@@ -68,7 +69,7 @@ export function ReadingWorkspace({
         data-testid="reading-band-primary"
         data-reading-row="analysis-classification"
       >
-        <ClusterItem data-reading-slot="analysis">
+        <ClusterItem share="majority" data-reading-slot="analysis">
           <ReadingRegion
             id={analysis.id}
             label={getMessage(analysis.labelKey)}
@@ -78,8 +79,11 @@ export function ReadingWorkspace({
             {bodies.analysis}
           </ReadingRegion>
         </ClusterItem>
-        {/* Content-sized aside: Analysis grows via ClusterItem flex-1 */}
-        <Stack gap="sm" data-reading-slot="classification" data-testid="reading-slot-classification">
+        <ClusterItem
+          share="aside"
+          data-reading-slot="classification"
+          data-testid="reading-slot-classification"
+        >
           <ReadingRegion
             id={classification.id}
             label={getMessage(classification.labelKey)}
@@ -88,7 +92,7 @@ export function ReadingWorkspace({
           >
             {bodies.classification}
           </ReadingRegion>
-        </Stack>
+        </ClusterItem>
       </Cluster>
 
       <Cluster
@@ -96,7 +100,7 @@ export function ReadingWorkspace({
         data-testid="reading-band-supporting"
         data-reading-row="evidence-market-data"
       >
-        <ClusterItem data-reading-slot="evidence">
+        <ClusterItem share="majority" data-reading-slot="evidence">
           <ReadingRegion
             id={evidence.id}
             label={getMessage(evidence.labelKey)}
@@ -106,7 +110,7 @@ export function ReadingWorkspace({
             {bodies.evidence}
           </ReadingRegion>
         </ClusterItem>
-        <ClusterItem data-reading-slot="market-data">
+        <ClusterItem share="minority" data-reading-slot="market-data">
           <ReadingRegion
             id={marketData.id}
             label={getMessage(marketData.labelKey)}

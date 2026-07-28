@@ -55,7 +55,10 @@
     "emptyBids": "No Bids levels.",
     "emptyAsks": "No Asks levels.",
     "emptyCandles": "No Candles for this timeframe.",
-    "sectionPlaceholder": "Market observation for this section will appear here."
+    "sectionPlaceholder": "Market observation for this section will appear here.",
+    "showCandles": "Show Candles",
+    "hideCandles": "Hide Candles",
+    "candleCount": "{count} Candles"
   },
   "readingContext": {
     "displayName": "Display name",

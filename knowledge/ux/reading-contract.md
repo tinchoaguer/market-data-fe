@@ -3,7 +3,7 @@
 Adopted contract for Symbol **Reading** structure in this frontend. Spec Writer and Implementer use this file only for Reading Regions, hierarchy, and anti-patterns — do not require sibling-repo brand paths.
 
 **Topic:** Reading  
-**Fidelity for this epic:** gray-box / structural (wireframe-aligned). Visual surface uses brand tokens and components already consumed by the app. Hi-fi Figma polish is out of scope.
+**Fidelity for this epic:** gray-box / structural (wireframe-aligned). Visual surface uses brand tokens and components already consumed by the app. Hi-fi Figma polish is out of scope; **do not** require paid Figma, Dev Mode, or new frames.
 
 **Adopted:** 2026-07-27 · epic `reading-workspace-fidelity` (refresh; originally epic `reading-layout`)
 
@@ -82,6 +82,8 @@ Every score or label must be explainable through Evidence (or qualified by Diagn
 
 **Relative space (allocated, not semantic rank):** Analysis extra large; Evidence large when expanded; Market Data medium; Classification small; Context small; Diagnostics minimal when healthy.
 
+**Layout implementation (adopted — no Figma tooling):** Desktop Context strip → Analysis:~Classification **~3:1** (Classification content-sized/capped, never equal flex with Analysis) → Evidence:~Market Data **~3:2** (avoid default 50/50 equal `flex-1` walls) → Diagnostics quiet. Band gap `xl`; associated/supporting density denser than Analysis. One primary `Card` for Analysis Region; do not wrap every Region in equal Cards. Mobile (`< md`): single column in Region flow order. Full recipes SoT: brand `reading-layout-implementation.md` (refresh this snapshot when that SoT changes).
+
 **Scroll:** Initial viewport must include enough Context + Analysis for the user to identify the Symbol and grasp the analytical conclusion **without scrolling**. Scrolling reveals depth, not the primary interpretation.
 
 **Flow:** Context → Analysis (incl. Narrative + Recommendation) → Classification → Evidence → Market Data. Diagnostics may interrupt when trust is compromised.
@@ -96,7 +98,7 @@ Every score or label must be explainable through Evidence (or qualified by Diagn
 4. No Overall State / Overall Score as a rollup that replaces Regime / Risk / Economic / Exposure (+ Recommendation).
 5. Narrative lives with claims inside Analysis (and in Classification reasons) — never a standalone Narrative Region.
 6. Market Data never becomes the primary interpretation; timeframe belongs under Candles (Market Data), not Identity.
-7. Gray-box structure is sufficient: labeled region placeholders styled with brand tokens/components are acceptable; do not block on hi-fi Figma.
+7. Gray-box structure is sufficient: labeled region placeholders styled with brand tokens/components are acceptable; do not block on hi-fi Figma or Figma tooling.
 
 ---
 
@@ -116,16 +118,18 @@ Every score or label must be explainable through Evidence (or qualified by Diagn
 
 ---
 
-## Figma
+## Structural reference
 
-Structural wireframe reference (gray-box fidelity only — no hi-fi prototype required):
+Desktop spatial target (from brand Reading Layout Implementation): Context strip → Analysis (dominant ~3:1) + Classification (compact adjacent) → Evidence | Market Data supporting row (~3:2) → Diagnostics quiet.
+
+Optional historical gray-box band diagram (view-only; not editable SoT; no paid Figma / Dev Mode / hi-fi required):
 
 https://www.figma.com/design/opTJ1E7ZHIgpLPQTw1YtKP/Reading-Layout-Wireframe?node-id=0-1
 
-Desktop spatial target: Context strip → Analysis (dominant) + Classification (compact adjacent) → Evidence | Market Data supporting row → Diagnostics quiet.
+Layout harmony SoT lives in brand markdown (`reading-layout-implementation.md`), not in Figma. Iteration loop (markdown → Brand primitives only when needed → FE Reading): brand `design-to-implementation.md`.
 
 ---
 
 ## Provenance
 
-Brand `visual-definitions` (Reading model, composition, layout blueprint/specification, plus shared domain language and UI philosophy) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.
+Brand `visual-definitions` (Reading model, composition, layout blueprint/specification/**implementation**, plus shared domain language and UI philosophy) remains the canonical source of truth. This file is an **adopted** snapshot for isolated PROJECT_ROOT work. Regenerate via `create ux features for epic reading-workspace-fidelity` (or refresh) when the SoT changes.
