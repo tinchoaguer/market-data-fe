@@ -23,8 +23,8 @@ import { AssessmentsWorkspace } from '../reading-analysis-composition'
 import { ClassificationBody } from '../reading-classification-body'
 import { DiagnosticsComposition } from '../reading-diagnostics'
 import { EvidenceComposition } from '../reading-evidence-composition'
+import { MarketDataBody } from '../reading-market-data-body'
 import { SymbolSelector } from '../view-market-data/SymbolSelector'
-import { MarketDataRegionSummary } from './MarketDataRegionSummary'
 import { ReadingWorkspace } from './ReadingWorkspace'
 
 type ScreenState =
@@ -206,7 +206,7 @@ export function ReadingScreen({
               ) : undefined,
             'market-data':
               state.marketData != null ? (
-                <MarketDataRegionSummary data={state.marketData} />
+                <MarketDataBody data={state.marketData} />
               ) : undefined,
           }}
         />

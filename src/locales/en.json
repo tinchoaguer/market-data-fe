@@ -51,6 +51,12 @@
     "showDetails": "Show details",
     "hideDetails": "Hide details"
   },
+  "readingMarketData": {
+    "emptyBids": "No Bids levels.",
+    "emptyAsks": "No Asks levels.",
+    "emptyCandles": "No Candles for this timeframe.",
+    "sectionPlaceholder": "Market observation for this section will appear here."
+  },
   "readingContext": {
     "displayName": "Display name",
     "pair": "Pair",

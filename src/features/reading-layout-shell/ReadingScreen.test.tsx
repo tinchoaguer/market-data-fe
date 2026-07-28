@@ -342,7 +342,7 @@ describe('ReadingScreen', () => {
     ).toBeInTheDocument()
   })
 
-  it('wires claim Narrative and supporting Classification/Market Data summaries when loaders succeed', async () => {
+  it('wires claim Narrative and supporting Classification/Market Data bodies when loaders succeed', async () => {
     const loadReading = vi.fn().mockResolvedValue(fixtureViewModel)
     const loadClassification = vi.fn().mockResolvedValue({
       symbol: 'BTC/USDT',
@@ -379,9 +379,46 @@ describe('ReadingScreen', () => {
       await screen.findByTestId('classification-body'),
     ).toBeInTheDocument()
     expect(
-      await screen.findByTestId('market-data-region-summary'),
+      await screen.findByTestId('market-data-composition'),
     ).toBeInTheDocument()
     expect(screen.getByText('42000')).toBeInTheDocument()
+
+    const marketDataRegion = screen.getByTestId('reading-region-market-data')
+    const marketDataBody = within(marketDataRegion).getByTestId(
+      'market-data-composition',
+    )
+    expect(marketDataBody).toHaveAttribute('data-prominence', 'supporting')
+    expect(marketDataBody).not.toHaveAttribute('data-prominence', 'primary')
+    expect(
+      within(marketDataBody).getByText(wording.labels.price),
+    ).toBeInTheDocument()
+    expect(
+      within(marketDataBody).getByText(wording.labels.orderBook),
+    ).toBeInTheDocument()
+    expect(
+      within(marketDataBody).getByText(wording.labels.candles),
+    ).toBeInTheDocument()
+    expect(
+      within(marketDataBody).getByText(
+        getMessage('readingMarketData.emptyBids'),
+      ),
+    ).toBeInTheDocument()
+    expect(
+      within(marketDataBody).queryByText(getMessage('readingEvidence.drivers')),
+    ).not.toBeInTheDocument()
+
+    const primaryBand = screen.getByTestId('reading-band-primary')
+    expect(
+      within(primaryBand).queryByTestId('market-data-composition'),
+    ).not.toBeInTheDocument()
+    expect(
+      primaryBand.querySelector('[data-region-id="market-data"]'),
+    ).toBeNull()
+
+    const contextRegion = screen.getByTestId('reading-region-context')
+    expect(
+      within(contextRegion).queryByText(getMessage('viewMarketData.timeframe')),
+    ).not.toBeInTheDocument()
 
     const classificationRegion = screen.getByTestId(
       'reading-region-classification',

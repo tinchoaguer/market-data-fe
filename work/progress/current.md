@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 17
-  slug: reading-classification-body
+  id: 18
+  slug: reading-market-data-body
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-07-27
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T16:35:00
+  recorded_at: 2026-07-27T17:04:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for reading-classification-body
+  - Produce requirements.md, design.md, and tasks.md for reading-market-data-body
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Reading Classification Body (`reading-classification-body`)
+**Feature:** Reading Market Data Body (`reading-market-data-body`)
 
 **Stage:** Completed
 
@@ -40,7 +40,7 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-07-27T16:35:00
+  recorded_at: 2026-07-27T17:04:00
   notes: User command — Approve specification
 ```
 
@@ -50,14 +50,12 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Filled the Classification Region with compact per-dimension signal packaging
-  (Regime / Risk / Economic / Exposure; source, score, reason). Reused
-  MarketClassificationViewModel and viewMarketClassification column labels;
-  added readingClassification body/empty-group locale keys; replaced the
-  count-only ClassificationRegionSummary with ClassificationBody in the Reading
-  host. Ownership/anti-pattern tests assert sibling placement (not under
-  Assessments), associated prominence, and no Overall/Primary/Secondary units.
-  Full suite: 244 tests passed.
+  Filled the Reading Market Data Region with Price, Order book (Bids/Asks), and
+  Candles grouped by timeframe as supporting observation. Reused existing
+  MarketDataViewModel binding, added readingMarketData locale chrome (reusing
+  viewMarketData.timeframe), mounted MarketDataBody in ReadingScreen (replacing
+  the price-only stub), and added composition plus shell/host tests for structure,
+  empty arrays, supporting prominence, and Evidence separation.
 ```
 
 ## Code Review result
@@ -67,11 +65,11 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Reading Classification Body meets the approved requirements, design, and tasks.
-  Four dimension groups with source/score/reason packaging; compact adjacent to
-  Analysis; not nested under Assessments; brand chrome and locale/Content copy;
-  strong AC oracles. No required fixes.
+  Reading Market Data Body meets the approved requirements, design, and tasks.
+  Price, Order book Bids/Asks, and Candles-by-timeframe as supporting observation;
+  distinct from Evidence; brand chrome and locale/wording; strong AC oracles.
+  No required fixes.
 ```
 
-Workflow terminated successfully. History archived to `work/history/reading-classification-body.md`.
-Review report: `work/progress/reviews/reading-classification-body.md`.
+Workflow terminated successfully. History archived to `work/history/reading-market-data-body.md`.
+Review report: `work/progress/reviews/reading-market-data-body.md`.

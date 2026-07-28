@@ -219,4 +219,58 @@ describe('ReadingWorkspace', () => {
     expect(regionEl('analysis')).toHaveAttribute('data-prominence', 'primary')
     expect(regionEl('context')).not.toHaveAttribute('data-prominence', 'primary')
   })
+
+  it('mounts Market Data body as supporting observation beside Evidence, not in the primary band', () => {
+    render(
+      <ReadingWorkspace
+        symbol="BTC/USDT"
+        regionBodies={{
+          'market-data': (
+            <section
+              data-testid="market-data-composition"
+              data-prominence="supporting"
+            />
+          ),
+          evidence: (
+            <section data-testid="evidence-composition" data-supporting="true" />
+          ),
+        }}
+      />,
+    )
+
+    const marketData = regionEl('market-data')
+    expect(marketData).toHaveAttribute('data-prominence', 'supporting')
+    expect(marketData).not.toHaveAttribute('data-prominence', 'primary')
+    expect(
+      within(marketData).getByTestId('market-data-composition'),
+    ).toBeInTheDocument()
+
+    const evidence = regionEl('evidence')
+    expect(
+      within(evidence).getByTestId('evidence-composition'),
+    ).toBeInTheDocument()
+    expect(
+      within(evidence).queryByTestId('market-data-composition'),
+    ).not.toBeInTheDocument()
+    expect(
+      within(marketData).queryByTestId('evidence-composition'),
+    ).not.toBeInTheDocument()
+
+    const primaryBand = screen.getByTestId('reading-band-primary')
+    expect(
+      within(primaryBand).queryByTestId('market-data-composition'),
+    ).not.toBeInTheDocument()
+    expect(primaryBand.querySelector('[data-region-id]')).toHaveAttribute(
+      'data-region-id',
+      'analysis',
+    )
+
+    const supporting = screen.getByTestId('reading-band-supporting')
+    expect(
+      within(supporting).getByTestId('market-data-composition'),
+    ).toBeInTheDocument()
+    expect(
+      within(supporting).getByTestId('evidence-composition'),
+    ).toBeInTheDocument()
+  })
 })
