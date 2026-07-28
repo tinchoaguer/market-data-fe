@@ -1,5 +1,5 @@
 import {
-  Label,
+  SectionHeading,
   Stack,
   Table,
   TableBody,
@@ -28,7 +28,7 @@ function DimensionSignalGroup({ group }: { group: ClassificationSignalGroup }) {
       data-testid={group.id}
     >
       <Stack gap="xs">
-        <Label id={headingId}>{group.identityLabel}</Label>
+        <SectionHeading id={headingId}>{group.identityLabel}</SectionHeading>
         {group.signals.length === 0 ? (
           <Text tone="muted">{getMessage('readingClassification.emptyGroup')}</Text>
         ) : (
@@ -69,7 +69,7 @@ function DimensionSignalGroup({ group }: { group: ClassificationSignalGroup }) {
 /**
  * Classification Region body: compact per-dimension signal packaging
  * (source / score / reason). Subordinate and adjacent to Analysis — not a count-only summary.
- * Dense chrome (no per-dimension Cards) so the aside stays small vs Analysis.
+ * Typography matches other Regions (SectionHeading + Text).
  */
 export function ClassificationBody({ data }: ClassificationBodyProps) {
   const model = mapClassificationBody(data)
@@ -85,9 +85,9 @@ export function ClassificationBody({ data }: ClassificationBodyProps) {
       data-prominence="associated"
     >
       <Stack gap="sm">
-        <Text as="p" weight="medium" id={headingId}>
+        <SectionHeading id={headingId}>
           {getMessage('readingClassification.bodyLabel')}
-        </Text>
+        </SectionHeading>
         {model.groups.map((group) => (
           <DimensionSignalGroup key={group.id} group={group} />
         ))}

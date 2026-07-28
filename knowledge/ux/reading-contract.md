@@ -82,7 +82,7 @@ Every score or label must be explainable through Evidence (or qualified by Diagn
 
 **Relative space (allocated, not semantic rank):** Analysis extra large; Evidence large when expanded; Market Data medium; Classification small; Context small; Diagnostics minimal when healthy.
 
-**Layout implementation (adopted — no Figma tooling):** Desktop Context strip → Analysis:~Classification **~3:1** (Classification content-sized/capped, never equal flex with Analysis) → Evidence:~Market Data **~3:2** (avoid default 50/50 equal `flex-1` walls) → Diagnostics quiet. Band gap `xl`; associated/supporting density denser than Analysis. One primary `Card` for Analysis Region; do not wrap every Region in equal Cards. Mobile (`< md`): single column in Region flow order. Full recipes SoT: brand `reading-layout-implementation.md` (refresh this snapshot when that SoT changes).
+**Layout implementation (adopted — no Figma tooling):** Desktop Context strip → Analysis:~Classification **~3:2** (same majority/minority shares as Evidence:~Market Data; Classification height-bound to Analysis) → Evidence:~Market Data **~3:2** → Diagnostics quiet. Band gap `xl`; associated/supporting density denser than Analysis. One primary `Card` for Analysis Region; Classification uses matching Region Card + SectionHeading typography. Mobile (`< md`): single column in Region flow order. Full recipes SoT: brand `reading-layout-implementation.md` (refresh this snapshot when that SoT changes).
 
 **Scroll:** Initial viewport must include enough Context + Analysis for the user to identify the Symbol and grasp the analytical conclusion **without scrolling**. Scrolling reveals depth, not the primary interpretation.
 
@@ -120,7 +120,7 @@ Every score or label must be explainable through Evidence (or qualified by Diagn
 
 ## Structural reference
 
-Desktop spatial target (from brand Reading Layout Implementation): Context strip → Analysis (dominant ~3:1) + Classification (compact adjacent) → Evidence | Market Data supporting row (~3:2) → Diagnostics quiet.
+Desktop spatial target (from brand Reading Layout Implementation): Context strip → Analysis + Classification (~3:2) → Evidence | Market Data (~3:2) → Diagnostics quiet.
 
 Optional historical gray-box band diagram (view-only; not editable SoT; no paid Figma / Dev Mode / hi-fi required):
 

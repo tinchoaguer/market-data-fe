@@ -227,7 +227,7 @@ describe('mapMarketAnalysisPayload', () => {
     const result = mapMarketAnalysisPayload(backendPayload, 'ETH/USDT')
 
     expect(result.recommendation.rationale).toBe(
-      'Strategy TREND_FOLLOWING is allowed for regime TREND_UP.',
+      'Strategy Trend following is allowed for regime Trend up.',
     )
     expect(result.recommendation.rationale).toBe(
       contentText('catalog.strategy_allowed', {

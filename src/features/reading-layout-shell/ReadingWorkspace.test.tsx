@@ -149,7 +149,7 @@ describe('ReadingWorkspace', () => {
     expect(bandRegions).toEqual(['evidence', 'market-data'])
   })
 
-  it('applies Reading layout shares: Analysis majority + Classification aside; Evidence majority + Market Data minority', () => {
+  it('applies Reading layout shares: Analysis/Evidence majority + Classification/Market Data minority', () => {
     render(<ReadingWorkspace symbol="BTC/USDT" />)
 
     const analysisSlot = document.querySelector(
@@ -164,7 +164,7 @@ describe('ReadingWorkspace', () => {
     )
 
     expect(analysisSlot).toHaveAttribute('data-cluster-share', 'majority')
-    expect(classificationSlot).toHaveAttribute('data-cluster-share', 'aside')
+    expect(classificationSlot).toHaveAttribute('data-cluster-share', 'minority')
     expect(classificationSlot).toHaveAttribute('data-cluster-bound', 'true')
     expect(evidenceSlot).toHaveAttribute('data-cluster-share', 'majority')
     expect(marketDataSlot).toHaveAttribute('data-cluster-share', 'minority')

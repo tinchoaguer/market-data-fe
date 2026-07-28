@@ -64,7 +64,6 @@ function AnalysisRegionBody({ data }: { data: MarketAnalysisViewModel }): ReactN
       recommendation={data.recommendation}
       narratives={{
         ...(regimeNarrative.length > 0 ? { regime: regimeNarrative } : {}),
-        recommendation: data.recommendation.rationale,
       }}
     />
   )
@@ -160,7 +159,7 @@ export function ReadingScreen({
   }
 
   return (
-    <Page>
+    <Page width="full">
       <PageHeader>
         <PageEyebrow>{wording.product.nameShort}</PageEyebrow>
       </PageHeader>

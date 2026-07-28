@@ -215,7 +215,7 @@ describe('MarketAnalysisScreen', () => {
       ...fixtureViewModel,
       recommendation: {
         ...fixtureViewModel.recommendation,
-        rationale: 'Strategy TREND_FOLLOWING is allowed for regime TREND_UP.',
+        rationale: 'Strategy Trend following is allowed for regime Trend up.',
         hardGateReason: hardGateText,
       },
     } satisfies MarketAnalysisViewModel)
@@ -225,7 +225,7 @@ describe('MarketAnalysisScreen', () => {
 
     expect(
       await screen.findByText(
-        'Strategy TREND_FOLLOWING is allowed for regime TREND_UP.',
+        'Strategy Trend following is allowed for regime Trend up.',
       ),
     ).toBeInTheDocument()
     expect(

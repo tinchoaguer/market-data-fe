@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Label,
   SectionHeading,
   Stack,
   Text,
@@ -28,19 +27,12 @@ function RegionHeading({
   prominence: RegionProminence
   headingId: string
 }) {
-  if (prominence === 'primary') {
+  // Card Regions in the primary band share the same title type scale.
+  if (prominence === 'primary' || prominence === 'associated') {
     return (
       <Text as="div" size="xl" weight="semibold" id={headingId}>
         {label}
       </Text>
-    )
-  }
-
-  if (prominence === 'associated' || prominence === 'cross-cutting') {
-    return (
-      <Label id={headingId}>
-        {label}
-      </Label>
     )
   }
 
@@ -50,7 +42,7 @@ function RegionHeading({
 /**
  * Labeled Region slot for the Symbol Reading workspace.
  * Gray-box body when children are omitted.
- * Primary and associated (Classification) use a Card; associated fills sibling height with scroll.
+ * Primary and associated (Classification) use a Card; Card titles share Analysis type scale.
  */
 export function ReadingRegion({
   id,
@@ -85,7 +77,7 @@ export function ReadingRegion({
           </CardContent>
         </Card>
       ) : prominence === 'associated' ? (
-        <Card height="fill" data-testid={`reading-region-${id}`}>
+        <Card data-testid={`reading-region-${id}`}>
           <CardHeader>
             <RegionHeading
               label={label}
@@ -93,7 +85,7 @@ export function ReadingRegion({
               headingId={headingId}
             />
           </CardHeader>
-          <CardContent scroll>
+          <CardContent>
             <Stack gap="sm">{body}</Stack>
           </CardContent>
         </Card>

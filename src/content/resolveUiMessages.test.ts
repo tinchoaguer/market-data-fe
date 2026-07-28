@@ -26,12 +26,14 @@ describe('resolveUiMessages', () => {
       messages,
     })
 
-    expect(viaAdapter).toEqual(viaResolve)
+    expect(viaAdapter).toHaveLength(viaResolve.length)
     expect(viaAdapter[0]).toEqual({
       code: 'catalog.strategy_allowed',
       locale: 'en',
-      text: 'Strategy TREND_FOLLOWING is allowed for regime TREND_UP.',
+      text: 'Strategy Trend following is allowed for regime Trend up.',
     })
+    // Raw Content resolve keeps API tokens; UI adapter humanizes strategy/regime.
+    expect(viaResolve[0]!.text).toContain('TREND_FOLLOWING')
     expect(viaAdapter[1]).toEqual({
       code: 'trend_up',
       locale: 'en',
@@ -56,5 +58,23 @@ describe('resolveUiMessages', () => {
       'utf8',
     )
     expect(adapterSource).not.toContain('@market-data/brand')
+  })
+
+  it('humanizes strategy and regime params via analysis locale wordings', () => {
+    const [resolved] = resolveUiMessages([
+      {
+        code: 'catalog.strategy_allowed',
+        params: {
+          strategy: 'TREND_FOLLOWING',
+          regime: 'TREND_UP',
+        },
+      },
+    ])
+
+    expect(resolved!.text).toBe(
+      'Strategy Trend following is allowed for regime Trend up.',
+    )
+    expect(resolved!.text).not.toContain('TREND_FOLLOWING')
+    expect(resolved!.text).not.toContain('TREND_UP')
   })
 })

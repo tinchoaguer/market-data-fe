@@ -27,7 +27,7 @@ function regionDef(id: RegionId) {
 
 /**
  * Symbol Reading workspace shell: six Regions with implementation ratios
- * (Context strip → Analysis majority + Classification aside → Evidence majority |
+ * (Context strip → Analysis majority + Classification minority → Evidence majority |
  * Market Data minority → Diagnostics).
  */
 export function ReadingWorkspace({
@@ -80,7 +80,7 @@ export function ReadingWorkspace({
           </ReadingRegion>
         </ClusterItem>
         <ClusterItem
-          share="aside"
+          share="minority"
           data-reading-slot="classification"
           data-testid="reading-slot-classification"
         >
