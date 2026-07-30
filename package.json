@@ -12,7 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@market-data/brand": "0.1.0",
+    "@maguer/market-data-brand": "^0.1.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
