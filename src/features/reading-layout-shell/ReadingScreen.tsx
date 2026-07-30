@@ -10,8 +10,8 @@ import {
   Skeleton,
   Stack,
   Text,
-} from '@market-data/brand/ui'
-import { wording } from '@market-data/brand/wording'
+} from '@maguer/market-data-brand/ui'
+import { wording } from '@maguer/market-data-brand/wording'
 import { fetchMarketAnalysis } from '../../api/marketAnalysis/fetchMarketAnalysis'
 import type { MarketAnalysisViewModel } from '../../api/marketAnalysis/types'
 import { fetchMarketClassification } from '../../api/marketClassification/fetchMarketClassification'

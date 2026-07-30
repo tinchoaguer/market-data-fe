@@ -6,7 +6,7 @@ import {
   SectionHeading,
   Stack,
   Text,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import type { RegionId, RegionProminence, RegionBand } from './regions'
 

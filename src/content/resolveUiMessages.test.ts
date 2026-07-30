@@ -57,7 +57,7 @@ describe('resolveUiMessages', () => {
       resolvePath(import.meta.dirname, 'resolveUiMessages.ts'),
       'utf8',
     )
-    expect(adapterSource).not.toContain('@market-data/brand')
+    expect(adapterSource).not.toContain('@maguer/market-data-brand')
   })
 
   it('humanizes strategy and regime params via analysis locale wordings', () => {

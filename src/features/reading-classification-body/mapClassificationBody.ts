@@ -1,4 +1,4 @@
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import type { MarketClassificationViewModel } from '../../api/marketClassification/types'
 import type {
   ClassificationBodyModel,

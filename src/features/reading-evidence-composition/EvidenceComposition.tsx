@@ -1,12 +1,12 @@
-import { Stack, Text } from '@market-data/brand/ui'
+import { Stack, Text } from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import { ClaimAttachmentBlock } from './ClaimAttachmentBlock'
 import { mapEvidenceFromAnalysis } from './mapEvidenceFromAnalysis'
 import type { EvidenceCompositionProps } from './types'
 
 /**
- * Evidence Region body: claim-attached Drivers → Features → Contributions.
- * Supporting explainability only — not the primary interpretive workspace.
+ * Evidence Region body: claim-attached Drivers â†’ Features â†’ Contributions.
+ * Supporting explainability only â€” not the primary interpretive workspace.
  */
 export function EvidenceComposition({
   regime = null,

@@ -1,7 +1,7 @@
 import { describe, expect, it, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import { ReadingWorkspace } from '../reading-layout-shell/ReadingWorkspace'
 import { AppLayout } from './AppLayout'

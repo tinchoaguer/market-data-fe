@@ -1,4 +1,4 @@
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import {
   Badge,
   Card,
@@ -9,7 +9,7 @@ import {
   Label,
   Stack,
   Text,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import type { Assessment } from '../../api/marketAnalysis/types'
 

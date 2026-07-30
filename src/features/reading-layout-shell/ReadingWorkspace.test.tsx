@@ -1,6 +1,6 @@
 import { describe, expect, it, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import { ReadingWorkspace } from './ReadingWorkspace'
 
@@ -39,7 +39,7 @@ describe('ReadingWorkspace', () => {
     )
   })
 
-  it('places Context before the Analysis–Classification workspace and supporting Regions', () => {
+  it('places Context before the Analysisâ€“Classification workspace and supporting Regions', () => {
     render(<ReadingWorkspace symbol="BTC/USDT" />)
 
     const context = regionEl('context')

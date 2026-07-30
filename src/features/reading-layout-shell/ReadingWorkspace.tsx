@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Cluster, ClusterItem, Stack } from '@market-data/brand/ui'
+import { Cluster, ClusterItem, Stack } from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import {
   composeSymbolIdentity,
@@ -27,8 +27,8 @@ function regionDef(id: RegionId) {
 
 /**
  * Symbol Reading workspace shell: six Regions with implementation ratios
- * (Context strip → Analysis majority + Classification minority → Evidence majority |
- * Market Data minority → Diagnostics).
+ * (Context strip â†’ Analysis majority + Classification minority â†’ Evidence majority |
+ * Market Data minority â†’ Diagnostics).
  */
 export function ReadingWorkspace({
   symbol,

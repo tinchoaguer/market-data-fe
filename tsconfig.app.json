@@ -15,11 +15,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "resolveJsonModule": true,
-    "paths": {
-      "@market-data/brand/logo-config": [
-        "./node_modules/@market-data/brand/src/brand/logo-config.ts"
-      ]
-    },
 
     /* Linting */
     "noUnusedLocals": true,

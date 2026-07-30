@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react'
-import { Logo } from '@market-data/brand/logo'
-import { defaultLogoConfig } from '@market-data/brand/logo-config'
+import { Logo } from '@maguer/market-data-brand/logo'
+import { defaultLogoConfig } from '@maguer/market-data-brand/logo-config'
 import {
   AppBrand,
   AppBrandMark,
@@ -11,8 +11,8 @@ import {
   AppNav,
   AppShell,
   Button,
-} from '@market-data/brand/ui'
-import { wording } from '@market-data/brand/wording'
+} from '@maguer/market-data-brand/ui'
+import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage } from '../../i18n/messages'
 import { ReadingScreen } from '../reading-layout-shell/ReadingScreen'
 import {

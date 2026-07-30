@@ -1,4 +1,4 @@
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import type { ClassificationSignal } from '../../api/marketClassification/types'
 

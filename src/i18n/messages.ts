@@ -1,7 +1,7 @@
 /**
  * Feature / app message catalogs for market-data-fe.
- * Design-system copy: import from `@market-data/brand/wording`.
- * Default locale only — structure is ready for additional locales later.
+ * Design-system copy: import from `@maguer/market-data-brand/wording`.
+ * Default locale only â€” structure is ready for additional locales later.
  */
 import en from '../locales/en.json'
 

@@ -1,6 +1,6 @@
 import { describe, expect, it, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import { resolveUiMessages } from '../../content'
 import { getMessage, messages } from '../../i18n/messages'
 import type { MarketClassificationViewModel } from '../../api/marketClassification/types'

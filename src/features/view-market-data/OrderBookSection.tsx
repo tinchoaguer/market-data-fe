@@ -1,4 +1,4 @@
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import type { OrderBookLevel } from '../../api/marketData/types'
 
 export type OrderBookSectionProps = {

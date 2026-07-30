@@ -5,7 +5,7 @@ import {
   Label,
   Stack,
   Text,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import type { Assessment, ExposureProfile } from '../../api/marketAnalysis/types'
 import type { AssessmentPeerId } from './types'
@@ -104,7 +104,7 @@ function hasExplainability(
 
 /**
  * Independent Assessment peer unit (Regime | Risk | Economic | Exposure).
- * Outcome + claim-bound Narrative + Evidence reference only — no primary
+ * Outcome + claim-bound Narrative + Evidence reference only â€” no primary
  * components/factors tables (those live in Evidence).
  */
 export function AssessmentPeerUnit({

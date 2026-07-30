@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import {
   Badge,
   Button,
@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
   Text,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import type { CandleSeries, OrderBookLevel } from '../../api/marketData/types'
 import { getMessage } from '../../i18n/messages'
 import type { MarketDataBodyProps } from './types'
@@ -235,7 +235,7 @@ function CandlesObservation({ series }: { series: CandleSeries[] }) {
 
 /**
  * Market Data Region body: Price, Order book (Bids/Asks), and Candles by timeframe.
- * Supporting observation only — never primary interpretive content or Evidence.
+ * Supporting observation only â€” never primary interpretive content or Evidence.
  */
 export function MarketDataBody({ data }: MarketDataBodyProps) {
   return (

@@ -12,7 +12,7 @@ import {
   Inline,
   Stack,
   Text,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import { mapDiagnosticsFromAnalysis } from './mapDiagnosticsFromAnalysis'
 import type {
@@ -76,7 +76,7 @@ function SignalList({ signals }: { signals: DiagnosticSignal[] }) {
 
 /**
  * Diagnostics Region body: quiet when healthy, elevated when qualifying/blocking.
- * Qualifies trust only — does not own Analysis conclusions or Evidence tables.
+ * Qualifies trust only â€” does not own Analysis conclusions or Evidence tables.
  */
 export function DiagnosticsComposition(props: DiagnosticsCompositionProps) {
   const model = resolveModel(props)

@@ -10,7 +10,7 @@ import {
   Label,
   Stack,
   Text,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import type {
   ClaimAttachment,
@@ -130,7 +130,7 @@ export type ClaimAttachmentBlockProps = {
 }
 
 /**
- * Claim-attached Evidence depth: Drivers (visible) → Features / Contributions (on demand).
+ * Claim-attached Evidence depth: Drivers (visible) â†’ Features / Contributions (on demand).
  */
 export function ClaimAttachmentBlock({ attachment }: ClaimAttachmentBlockProps) {
   const headingId = `claim-attachment-${attachment.claimId}-label`

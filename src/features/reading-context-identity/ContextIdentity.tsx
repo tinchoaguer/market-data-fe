@@ -1,5 +1,5 @@
-import { Inline, Label, Stack, Text } from '@market-data/brand/ui'
-import { wording } from '@market-data/brand/wording'
+import { Inline, Label, Stack, Text } from '@maguer/market-data-brand/ui'
+import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage } from '../../i18n/messages'
 import type { SymbolIdentityViewModel } from './types'
 
@@ -25,7 +25,7 @@ function IdentityField({
 }
 
 /**
- * Context Region Identity body — display name / pair / base–quote / optional venue.
+ * Context Region Identity body â€” display name / pair / baseâ€“quote / optional venue.
  * Identity-only: no price, scores, signals, recommendations, or timeframe.
  */
 export function ContextIdentity({ identity }: ContextIdentityProps) {

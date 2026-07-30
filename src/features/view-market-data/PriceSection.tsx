@@ -1,11 +1,11 @@
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   Text,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 
 export type PriceSectionProps = {
   price: number

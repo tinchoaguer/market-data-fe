@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
   Text,
-} from '@market-data/brand/ui'
+} from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
 import { mapClassificationBody } from './mapClassificationBody'
 import type {
@@ -68,7 +68,7 @@ function DimensionSignalGroup({ group }: { group: ClassificationSignalGroup }) {
 
 /**
  * Classification Region body: compact per-dimension signal packaging
- * (source / score / reason). Subordinate and adjacent to Analysis — not a count-only summary.
+ * (source / score / reason). Subordinate and adjacent to Analysis â€” not a count-only summary.
  * Typography matches other Regions (SectionHeading + Text).
  */
 export function ClassificationBody({ data }: ClassificationBodyProps) {

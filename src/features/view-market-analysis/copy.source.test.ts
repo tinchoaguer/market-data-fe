@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 
 const featureSourceFiles = [
@@ -12,7 +12,7 @@ const featureSourceFiles = [
 ]
 
 const forbiddenHardcoded = [
-  'Loading…',
+  'Loadingâ€¦',
   'Something went wrong',
   'Try again',
   'Select a symbol to view analysis.',

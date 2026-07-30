@@ -11,8 +11,8 @@ import {
   Skeleton,
   Stack,
   Text,
-} from '@market-data/brand/ui'
-import { wording } from '@market-data/brand/wording'
+} from '@maguer/market-data-brand/ui'
+import { wording } from '@maguer/market-data-brand/wording'
 import { fetchMarketData } from '../../api/marketData/fetchMarketData'
 import type { MarketDataViewModel } from '../../api/marketData/types'
 import { getMessage } from '../../i18n/messages'

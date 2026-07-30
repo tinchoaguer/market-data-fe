@@ -1,7 +1,7 @@
 import { describe, expect, it, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import type { MarketAnalysisViewModel } from '../../api/marketAnalysis/types'
 import { AssessmentsWorkspace } from '../reading-analysis-composition'
@@ -260,7 +260,7 @@ describe('DiagnosticsComposition', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument()
     expect(screen.getByTestId('assessments-workspace')).toBeInTheDocument()
 
-    // Blocking trust is elevated in Diagnostics — not solely inside Evidence.
+    // Blocking trust is elevated in Diagnostics â€” not solely inside Evidence.
     const evidence = screen.getByTestId('evidence-composition')
     expect(
       within(evidence).queryByText(

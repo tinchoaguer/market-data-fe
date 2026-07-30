@@ -3,8 +3,8 @@ import {
   ClusterItem,
   SectionHeading,
   Stack,
-} from '@market-data/brand/ui'
-import { wording } from '@market-data/brand/wording'
+} from '@maguer/market-data-brand/ui'
+import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage } from '../../i18n/messages'
 import { AssessmentPeerUnit } from './AssessmentPeerUnit'
 import { RecommendationUnit } from './RecommendationUnit'

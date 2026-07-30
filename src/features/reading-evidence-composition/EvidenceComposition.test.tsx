@@ -1,7 +1,7 @@
 import { describe, expect, it, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import type { MarketAnalysisViewModel } from '../../api/marketAnalysis/types'
 import { EvidenceComposition } from './EvidenceComposition'
@@ -62,7 +62,7 @@ describe('EvidenceComposition', () => {
     cleanup()
   })
 
-  it('renders Drivers → Features → Contributions under claim-attached Evidence', () => {
+  it('renders Drivers â†’ Features â†’ Contributions under claim-attached Evidence', () => {
     render(
       <EvidenceComposition
         regime={fixture.regime}

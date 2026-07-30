@@ -1,6 +1,6 @@
 import { describe, expect, it, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
-import { wording } from '@market-data/brand/wording'
+import { wording } from '@maguer/market-data-brand/wording'
 import type { MarketDataViewModel } from '../../api/marketData/types'
 import { getMessage, messages } from '../../i18n/messages'
 import { MarketDataBody } from './MarketDataBody'

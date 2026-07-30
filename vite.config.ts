@@ -5,20 +5,10 @@ import { resolve } from 'node:path'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: [
-      {
-        find: /^@market-data\/brand(\/.*)?$/,
-        replacement: '@maguer/market-data-brand$1',
-      },
-      {
-        find: 'react',
-        replacement: resolve(__dirname, 'node_modules/react'),
-      },
-      {
-        find: 'react-dom',
-        replacement: resolve(__dirname, 'node_modules/react-dom'),
-      },
-    ],
+    alias: {
+      react: resolve(__dirname, 'node_modules/react'),
+      'react-dom': resolve(__dirname, 'node_modules/react-dom'),
+    },
     dedupe: ['react', 'react-dom'],
   },
   test: {
