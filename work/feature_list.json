@@ -270,6 +270,86 @@
         "Region body uses brand tokens/components already available to the FE."
       ],
       "status": "Done"
+    },
+    {
+      "id": 19,
+      "slug": "dashboard-app-chrome",
+      "title": "Dashboard App Chrome",
+      "description": "Adapt AppLayout / brand AppShell chrome to dashboard-mockup surface fidelity: slim header, brand mark + name, Reading-primary nav presentation, theme toggle, optional breadcrumb, and date/source/Live footer — Symbol Reading remains the primary product surface per knowledge/ux/reading-contract.md.",
+      "acceptance": [
+        "App chrome presents a slim header with brand mark and product name as primary chrome signals.",
+        "Navigation presentation keeps Symbol Reading as the primary product surface (no resurrecting legacy peer destinations as equal IA).",
+        "Theme toggle is present and uses `@market-data/brand/ui` primitives (no ad-hoc FE theme control).",
+        "Optional breadcrumb chrome may appear; it must not reintroduce competing equal destinations.",
+        "Footer (or equivalent quiet chrome) shows date/source and Live/status affordance using brand kit patterns.",
+        "Chrome styling uses brand tokens/CSS variables and UI components only — no second FE token set or Tailwind design system.",
+        "Existing Symbol selection, loading, and error flows remain usable on the Reading surface.",
+        "User-facing chrome labels use locale / brand wording — no hardcoded designed English in components."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 20,
+      "slug": "dashboard-hero-band",
+      "title": "Dashboard Hero Band",
+      "description": "Compose the top Reading band to the dashboard-mockup hero: Symbol identity (logo/pair/full name) with adjacent observation (price, change, sparkline, timeframe pills, 24H high/low/vol, last update) without making Context own scores or recommendations. Region ownership stays per knowledge/ux/reading-contract.md.",
+      "acceptance": [
+        "The top Reading band visually reads as one hero: identity adjacent to price observation (not a gray-box Context stub alone).",
+        "Identity content remains Context-owned (display name / pair / logo as available); Context does not own scores, signals, or recommendations.",
+        "Observation strip shows price, change, and supporting 24H/high-low/vol / last-update fields available from existing Market Data payloads.",
+        "Sparkline and timeframe pills use brand kit patterns/primitives — no ad-hoc FE chart chrome library.",
+        "Hero composition does not re-home Analysis interpretation or Recommendation into Context.",
+        "Surface uses `@market-data/brand` tokens and UI components only.",
+        "User-facing labels come from locale catalogs / brand wording."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 21,
+      "slug": "dashboard-analysis-cards",
+      "title": "Dashboard Analysis Cards",
+      "description": "Restyle Analysis Assessment peers (Regime, Risk, Economic, Exposure) as the dashboard mockup’s four vertical cards (icon, label, badge, score, summary) using brand Card/Badge/Text primitives, preserving Assessment peer ownership and Recommendation rules from knowledge/ux/analysis-contract.md.",
+      "acceptance": [
+        "Analysis Region presents four Assessment peers (Regime, Risk, Economic, Exposure) as vertical cards matching mockup card structure (icon, label, badge, score, summary as data allows).",
+        "Cards use `@market-data/brand/ui` Card, Badge, Text (and related) primitives — not a parallel FE card system.",
+        "No Overall Assessment / Overall Score / Synthesis Region or rollup that replaces the four Assessment dimensions.",
+        "Recommendation composition rules from knowledge/ux/analysis-contract.md remain intact (not a fifth Assessment card).",
+        "Assessment cards remain the primary interpretive surface; Classification stays out of Analysis ownership.",
+        "Existing analysis loading and error flows remain usable."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 22,
+      "slug": "dashboard-observation-row",
+      "title": "Dashboard Observation Row",
+      "description": "Restyle the Market Data Region as the dashboard-mockup middle observation row: price area chart (left) + Market Stats 24H card (right), with brand-styled timeframe controls. Market Data remains supporting observation per knowledge/ux/reading-contract.md.",
+      "acceptance": [
+        "Market Data Region layout presents a chart panel and a Market Stats 24H panel as a middle observation row (not a gray-box metric dump).",
+        "Price/area chart chrome uses brand kit chart/sparkline recipes and tokens — no second FE chart design system.",
+        "Market Stats 24H card shows available 24H stats (e.g. high/low/volume) from existing payloads using brand Card/Text primitives.",
+        "Timeframe controls are brand-styled (pill / segmented pattern from the brand kit).",
+        "Market Data remains a supporting Region — not the primary interpretive Region and not marked as Evidence.",
+        "Surface uses `@market-data/brand` tokens and UI components only.",
+        "Existing Market Data loading and error flows remain usable."
+      ],
+      "status": "Pending"
+    },
+    {
+      "id": 23,
+      "slug": "dashboard-classification-surface",
+      "title": "Dashboard Classification Surface",
+      "description": "Restyle the Classification Region as the dashboard-mockup Factor/Score/Reason table (and compact score visualization if needed) without inventing an Overall Assessment / Synthesis rollup that replaces the four Analysis dimensions. Remains subordinate per knowledge/ux/reading-contract.md.",
+      "acceptance": [
+        "Classification Region presents a Factor / Score / Reason table (or equivalent compact tabular packaging) for classification signals.",
+        "Each displayed row/signal shows factor (or source), score, and reason when available.",
+        "Any compact score visualization (e.g. gauge) is Classification packaging only — it must not become an Overall Assessment / Overall Score / Synthesis rollup that replaces Regime/Risk/Economic/Exposure peers.",
+        "Classification remains compact and visually subordinate / adjacent to Analysis — not equal prominence.",
+        "Classification is not nested as an Analysis-owned Region inside Assessments.",
+        "Surface uses `@market-data/brand` Table/Card/Text (and related) primitives and tokens only.",
+        "User-facing labels and reasons come from locale / Content-resolved copy — no hardcoded designed English in components."
+      ],
+      "status": "Pending"
     }
 
 ]
