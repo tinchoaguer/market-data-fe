@@ -33,6 +33,25 @@ const successFixture: MarketClassificationViewModel = {
   exposure: [],
 }
 
+const partialFixture: MarketClassificationViewModel = {
+  symbol: 'BTC/USDT',
+  regime: [
+    {
+      source: 'regime',
+      score: 0.5,
+      reason: '',
+    },
+    {
+      source: '',
+      score: Number.NaN,
+      reason: '   ',
+    },
+  ],
+  risk: [],
+  economic: [],
+  exposure: [],
+}
+
 function groupEl(id: string) {
   const el = document.querySelector(`[data-unit-id="${id}"]`)
   expect(el).not.toBeNull()
@@ -90,20 +109,24 @@ describe('ClassificationBody', () => {
     expect(screen.queryByText(/signal counts/i)).not.toBeInTheDocument()
   })
 
-  it('packages a displayed signal with catalog-linked source, score, and reason fields', () => {
+  it('presents Factor / Score / Reason table headers and signal row cells from the view model', () => {
     render(<ClassificationBody data={successFixture} />)
 
     const regime = groupEl('classification-regime')
+    const table = regime.querySelector('[data-unit-id="classification-table"]')
+    expect(table).not.toBeNull()
+    expect(table).toHaveAttribute('data-unit-role', 'classification-signal-table')
+
     expect(
-      within(regime).getByText(getMessage('viewMarketClassification.source')),
+      within(regime).getByText(getMessage('readingClassification.factor')),
     ).toBe(
-      within(regime).getByText(messages.viewMarketClassification.source),
+      within(regime).getByText(messages.readingClassification.factor),
     )
     expect(
-      within(regime).getByText(getMessage('viewMarketClassification.score')),
+      within(regime).getByText(getMessage('readingClassification.score')),
     ).toBeInTheDocument()
     expect(
-      within(regime).getByText(getMessage('viewMarketClassification.reason')),
+      within(regime).getByText(getMessage('readingClassification.reason')),
     ).toBeInTheDocument()
 
     expect(within(regime).getByText('regime')).toBeInTheDocument()
@@ -114,23 +137,42 @@ describe('ClassificationBody', () => {
     expect(signal).not.toBeNull()
     expect(signal).toHaveAttribute('data-unit-role', 'classification-signal')
 
-    // Empty groups remain labeled (not treated as error).
     expect(
       within(groupEl('classification-risk')).getByText(
         getMessage('readingClassification.emptyGroup'),
       ),
     ).toBeInTheDocument()
 
-    // Not count-only packaging: field labels and reason narrative are present.
     expect(screen.queryByText('1 regime signals')).not.toBeInTheDocument()
     expect(screen.queryByText(/Signal counts/i)).not.toBeInTheDocument()
   })
 
-  it('does not introduce Overall / Primary / Secondary Classification units', () => {
+  it('omits unavailable cells and drops rows only when all three fields are absent', () => {
+    render(<ClassificationBody data={partialFixture} />)
+
+    const regime = groupEl('classification-regime')
+    const rows = regime.querySelectorAll('[data-unit-id="classification-signal"]')
+    expect(rows).toHaveLength(1)
+
+    const row = rows[0]!
+    const cells = row.querySelectorAll('td')
+    expect(cells).toHaveLength(3)
+    expect(cells[0]?.textContent).toBe('regime')
+    expect(cells[1]?.textContent).toBe('0.5')
+    expect(cells[2]?.textContent).toBe('')
+  })
+
+  it('does not introduce Overall / Synthesis / Primary / Secondary Classification units', () => {
     render(<ClassificationBody data={successFixture} />)
 
     expect(
       document.querySelector('[data-unit-id="overall-classification"]'),
+    ).toBeNull()
+    expect(
+      document.querySelector('[data-unit-id="overall-score"]'),
+    ).toBeNull()
+    expect(
+      document.querySelector('[data-unit-id="synthesis"]'),
     ).toBeNull()
     expect(
       document.querySelector('[data-unit-id="primary-classification"]'),
@@ -139,9 +181,11 @@ describe('ClassificationBody', () => {
       document.querySelector('[data-unit-id="secondary-classification"]'),
     ).toBeNull()
     expect(screen.queryByText('Overall Classification')).not.toBeInTheDocument()
+    expect(screen.queryByText('Overall Assessment')).not.toBeInTheDocument()
+    expect(screen.queryByText('Overall Score')).not.toBeInTheDocument()
+    expect(screen.queryByText('Synthesis')).not.toBeInTheDocument()
     expect(screen.queryByText('Primary Classification')).not.toBeInTheDocument()
     expect(screen.queryByText('Secondary Classification')).not.toBeInTheDocument()
-    expect(screen.queryByText('Overall Score')).not.toBeInTheDocument()
   })
 
   it('maps the Classification view model into four dimension groups', () => {
@@ -161,12 +205,15 @@ describe('ClassificationBody', () => {
     expect(messages.readingClassification).toEqual({
       bodyLabel: 'Classification signals',
       emptyGroup: 'No signals for this dimension.',
+      factor: 'Factor',
+      score: 'Score',
+      reason: 'Reason',
     })
     expect(getMessage('readingClassification.bodyLabel')).toBe(
       messages.readingClassification.bodyLabel,
     )
-    expect(getMessage('viewMarketClassification.source')).toBe(
-      messages.viewMarketClassification.source,
+    expect(getMessage('readingClassification.factor')).toBe(
+      messages.readingClassification.factor,
     )
   })
 })

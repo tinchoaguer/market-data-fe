@@ -351,7 +351,7 @@
         "Surface uses `@maguer/market-data-brand` Table/Card/Text (and related) primitives and tokens only.",
         "User-facing labels and reasons come from locale / Content-resolved copy — no hardcoded designed English in components."
       ],
-      "status": "Pending"
+      "status": "Done"
     }
 
 ]

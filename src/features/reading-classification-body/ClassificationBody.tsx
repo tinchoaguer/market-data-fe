@@ -10,14 +10,43 @@ import {
   Text,
 } from '@maguer/market-data-brand/ui'
 import { getMessage } from '../../i18n/messages'
+import {
+  mapSignalToTableRow,
+  visibleSignals,
+} from './classificationTableRow'
 import { mapClassificationBody } from './mapClassificationBody'
 import type {
   ClassificationBodyProps,
   ClassificationSignalGroup,
 } from './types'
 
+function ClassificationSignalRow({
+  signal,
+  index,
+}: {
+  signal: ClassificationSignalGroup['signals'][number]
+  index: number
+}) {
+  const row = mapSignalToTableRow(signal)
+
+  return (
+    <TableRow
+      key={`${signal.source}-${index}`}
+      data-unit-id="classification-signal"
+      data-unit-role="classification-signal"
+    >
+      <TableCell>{row.factor ?? ''}</TableCell>
+      <TableCell variant="mono">
+        {row.score != null ? String(row.score) : ''}
+      </TableCell>
+      <TableCell>{row.reason ?? ''}</TableCell>
+    </TableRow>
+  )
+}
+
 function DimensionSignalGroup({ group }: { group: ClassificationSignalGroup }) {
   const headingId = `${group.id}-label`
+  const signals = visibleSignals(group.signals)
 
   return (
     <section
@@ -29,34 +58,33 @@ function DimensionSignalGroup({ group }: { group: ClassificationSignalGroup }) {
     >
       <Stack gap="xs">
         <SectionHeading id={headingId}>{group.identityLabel}</SectionHeading>
-        {group.signals.length === 0 ? (
+        {signals.length === 0 ? (
           <Text tone="muted">{getMessage('readingClassification.emptyGroup')}</Text>
         ) : (
-          <Table data-unit-role="classification-signal-table">
+          <Table
+            data-unit-id="classification-table"
+            data-unit-role="classification-signal-table"
+          >
             <TableHeader>
               <TableRow>
                 <TableHead>
-                  {getMessage('viewMarketClassification.source')}
+                  {getMessage('readingClassification.factor')}
                 </TableHead>
                 <TableHead>
-                  {getMessage('viewMarketClassification.score')}
+                  {getMessage('readingClassification.score')}
                 </TableHead>
                 <TableHead>
-                  {getMessage('viewMarketClassification.reason')}
+                  {getMessage('readingClassification.reason')}
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {group.signals.map((signal, index) => (
-                <TableRow
+              {signals.map((signal, index) => (
+                <ClassificationSignalRow
                   key={`${signal.source}-${index}`}
-                  data-unit-id="classification-signal"
-                  data-unit-role="classification-signal"
-                >
-                  <TableCell>{signal.source}</TableCell>
-                  <TableCell variant="mono">{signal.score}</TableCell>
-                  <TableCell>{signal.reason}</TableCell>
-                </TableRow>
+                  signal={signal}
+                  index={index}
+                />
               ))}
             </TableBody>
           </Table>
@@ -67,9 +95,8 @@ function DimensionSignalGroup({ group }: { group: ClassificationSignalGroup }) {
 }
 
 /**
- * Classification Region body: compact per-dimension signal packaging
- * (source / score / reason). Subordinate and adjacent to Analysis â€” not a count-only summary.
- * Typography matches other Regions (SectionHeading + Text).
+ * Classification Region body: compact Factor / Score / Reason tabular packaging
+ * per dimension group. Subordinate and adjacent to Analysis — not a count-only summary.
  */
 export function ClassificationBody({ data }: ClassificationBodyProps) {
   const model = mapClassificationBody(data)

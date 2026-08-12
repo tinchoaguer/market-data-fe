@@ -458,7 +458,7 @@ describe('ReadingScreen', () => {
     ).toBeInTheDocument()
     expect(
       within(classificationBody).getByText(
-        getMessage('viewMarketClassification.source'),
+        getMessage('readingClassification.factor'),
       ),
     ).toBeInTheDocument()
     expect(within(classificationBody).getByText('a')).toBeInTheDocument()

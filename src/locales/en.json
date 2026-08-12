@@ -22,7 +22,10 @@
   },
   "readingClassification": {
     "bodyLabel": "Classification signals",
-    "emptyGroup": "No signals for this dimension."
+    "emptyGroup": "No signals for this dimension.",
+    "factor": "Factor",
+    "score": "Score",
+    "reason": "Reason"
   },
   "readingAnalysis": {
     "assessmentsLabel": "Assessments",
