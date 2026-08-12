@@ -6,7 +6,9 @@
     "navAnalysis": "Analysis",
     "navClassification": "Classification",
     "analysisPlaceholder": "Analysis is not available yet.",
-    "classificationPlaceholder": "Classification is not available yet."
+    "classificationPlaceholder": "Classification is not available yet.",
+    "statusDate": "Date",
+    "statusSource": "Source"
   },
   "readingLayout": {
     "regionContext": "Context",

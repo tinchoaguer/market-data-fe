@@ -5,6 +5,7 @@ import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import { SUPPORTED_SYMBOLS } from '../../config/symbols'
 import type { MarketAnalysisViewModel } from '../../api/marketAnalysis/types'
+import { AppLayout } from '../app-layout/AppLayout'
 import { ReadingScreen } from './ReadingScreen'
 
 const fixtureViewModel: MarketAnalysisViewModel = {
@@ -560,5 +561,63 @@ describe('ReadingScreen', () => {
     expect(
       within(evidence).queryByRole('alert'),
     ).not.toBeInTheDocument()
+  })
+})
+
+describe('ReadingScreen under dashboard app chrome', () => {
+  afterEach(() => {
+    cleanup()
+    vi.restoreAllMocks()
+  })
+
+  it('keeps idle Symbol prompt usable inside AppLayout chrome', () => {
+    const loadReading = vi.fn()
+    render(
+      <AppLayout
+        readingScreen={
+          <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />
+        }
+      />,
+    )
+
+    expect(screen.getByTestId('app-layout-chrome')).toBeInTheDocument()
+    expect(
+      screen.getByText(getMessage('readingLayout.selectSymbolPrompt')),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('combobox', { name: wording.labels.symbol }),
+    ).toBeInTheDocument()
+    expect(loadReading).not.toHaveBeenCalled()
+  })
+
+  it('keeps loading and error+retry usable inside AppLayout chrome', async () => {
+    const user = userEvent.setup()
+    const loadReading = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('network'))
+      .mockResolvedValueOnce(fixtureViewModel)
+
+    render(
+      <AppLayout
+        readingScreen={
+          <ReadingScreen loadReading={loadReading} {...idleSupportingLoaders} />
+        }
+      />,
+    )
+
+    await selectSymbol('BTC/USDT')
+
+    expect(await screen.findByText(wording.common.error)).toBeInTheDocument()
+    expect(screen.getByTestId('app-layout-header-bar')).toHaveAttribute(
+      'data-header-density',
+      'slim',
+    )
+    expect(screen.getByTestId('app-layout-status-footer')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: wording.common.retry }))
+
+    expect(await screen.findByTestId('reading-workspace')).toBeInTheDocument()
+    expect(loadReading).toHaveBeenCalledTimes(2)
+    expect(screen.getByTestId('app-layout-theme-toggle')).toBeInTheDocument()
   })
 })

@@ -287,7 +287,7 @@
         "Existing Symbol selection, loading, and error flows remain usable on the Reading surface.",
         "User-facing chrome labels use locale / brand wording — no hardcoded designed English in components."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 20,
