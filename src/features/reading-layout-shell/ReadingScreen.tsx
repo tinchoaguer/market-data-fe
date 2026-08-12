@@ -195,6 +195,7 @@ export function ReadingScreen({
       {state.status === 'success' ? (
         <ReadingWorkspace
           symbol={state.symbol}
+          marketData={state.marketData}
           regionBodies={{
             analysis: <AnalysisRegionBody data={state.analysis} />,
             evidence: <EvidenceRegionBody data={state.analysis} />,

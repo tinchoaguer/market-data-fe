@@ -25,13 +25,24 @@ function IdentityField({
 }
 
 /**
- * Context Region Identity body â€” display name / pair / baseâ€“quote / optional venue.
+ * Context Region Identity body — display name / pair / base–quote / optional venue / optional logo.
  * Identity-only: no price, scores, signals, recommendations, or timeframe.
  */
 export function ContextIdentity({ identity }: ContextIdentityProps) {
+  const logoAlt = identity.displayName ?? identity.pairForm ?? identity.symbol
+
   return (
     <section data-testid="context-identity" data-identity-body="true">
       <Inline gap="lg" wrap>
+        {identity.logoSrc != null ? (
+          <img
+            src={identity.logoSrc}
+            alt={logoAlt}
+            width={40}
+            height={40}
+            data-testid="context-identity-logo"
+          />
+        ) : null}
         <IdentityField label={wording.labels.symbol} value={identity.symbol} />
         {identity.displayName != null ? (
           <IdentityField

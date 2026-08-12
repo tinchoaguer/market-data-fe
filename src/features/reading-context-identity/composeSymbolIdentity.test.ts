@@ -50,4 +50,10 @@ describe('composeSymbolIdentity', () => {
       'Binance',
     )
   })
+
+  it('resolves logoSrc from the Symbol logo catalog and omits it when absent', () => {
+    expect(composeSymbolIdentity('BTC/USDT').logoSrc).toBe('/symbols/btc.svg')
+    expect(composeSymbolIdentity('ETH/USDT').logoSrc).toBe('/symbols/eth.svg')
+    expect(composeSymbolIdentity('SOL/USDT').logoSrc).toBeNull()
+  })
 })

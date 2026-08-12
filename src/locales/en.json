@@ -62,6 +62,15 @@
     "hideCandles": "Hide Candles",
     "candleCount": "{count} Candles"
   },
+  "readingHero": {
+    "change": "Change",
+    "high24h": "24H high",
+    "low24h": "24H low",
+    "volume24h": "24H volume",
+    "lastUpdate": "Last update",
+    "timeframe": "Timeframe",
+    "sparkline": "Price sparkline"
+  },
   "readingContext": {
     "displayName": "Display name",
     "pair": "Pair",

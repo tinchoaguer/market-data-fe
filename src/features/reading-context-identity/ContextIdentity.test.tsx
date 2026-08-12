@@ -66,6 +66,24 @@ describe('ContextIdentity', () => {
     expect(screen.getByText('Binance')).toBeInTheDocument()
   })
 
+  it('renders a Symbol logo when cataloged and omits it when unavailable', () => {
+    const { rerender } = render(
+      <ContextIdentity identity={composeSymbolIdentity('BTC/USDT')} />,
+    )
+
+    const logo = screen.getByTestId('context-identity-logo')
+    expect(logo).toHaveAttribute('src', '/symbols/btc.svg')
+    expect(logo).toHaveAttribute(
+      'alt',
+      getMessage('readingContext.symbols.BTC_USDT.displayName'),
+    )
+
+    rerender(
+      <ContextIdentity identity={composeSymbolIdentity('SOL/USDT')} />,
+    )
+    expect(screen.queryByTestId('context-identity-logo')).not.toBeInTheDocument()
+  })
+
   it('does not render price, scores, signals, recommendation, or timeframe in Identity', () => {
     render(<ContextIdentity identity={composeSymbolIdentity('BTC/USDT')} />)
 

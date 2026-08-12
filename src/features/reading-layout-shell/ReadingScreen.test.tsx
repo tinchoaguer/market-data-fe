@@ -82,6 +82,9 @@ describe('ReadingScreen', () => {
     ).toBeInTheDocument()
     expect(screen.queryByTestId('reading-workspace')).not.toBeInTheDocument()
     expect(screen.queryByTestId('context-identity')).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('reading-hero-observation'),
+    ).not.toBeInTheDocument()
     expect(loadReading).not.toHaveBeenCalled()
   })
 
@@ -124,6 +127,9 @@ describe('ReadingScreen', () => {
       }),
     )
     expect(screen.queryByTestId('reading-workspace')).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('reading-hero-observation'),
+    ).not.toBeInTheDocument()
 
     resolveRequest(fixtureViewModel)
     await waitFor(() => {
@@ -144,6 +150,9 @@ describe('ReadingScreen', () => {
     await selectSymbol('BTC/USDT')
 
     expect(await screen.findByText(wording.common.error)).toBeInTheDocument()
+    expect(
+      screen.queryByTestId('reading-hero-observation'),
+    ).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: wording.common.retry }))
 
     expect(await screen.findByTestId('reading-workspace')).toBeInTheDocument()
@@ -382,7 +391,14 @@ describe('ReadingScreen', () => {
     expect(
       await screen.findByTestId('market-data-composition'),
     ).toBeInTheDocument()
-    expect(screen.getByText('42000')).toBeInTheDocument()
+    expect(screen.getByTestId('reading-hero-band')).toBeInTheDocument()
+    expect(screen.getByTestId('reading-hero-observation')).toBeInTheDocument()
+    expect(
+      within(screen.getByTestId('reading-hero-observation')).getByText('42000'),
+    ).toBeInTheDocument()
+    expect(
+      within(screen.getByTestId('market-data-composition')).getByText('42000'),
+    ).toBeInTheDocument()
 
     const marketDataRegion = screen.getByTestId('reading-region-market-data')
     const marketDataBody = within(marketDataRegion).getByTestId(

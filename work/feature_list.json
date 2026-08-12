@@ -304,7 +304,7 @@
         "Surface uses `@maguer/market-data-brand` tokens and UI components only.",
         "User-facing labels come from locale catalogs / brand wording."
       ],
-      "status": "Pending"
+      "status": "Done"
     },
     {
       "id": 21,

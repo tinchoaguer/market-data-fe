@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 import { Cluster, ClusterItem, Stack } from '@maguer/market-data-brand/ui'
+import type { MarketDataViewModel } from '../../api/marketData/types'
 import { getMessage } from '../../i18n/messages'
+import { HeroBand } from '../dashboard-hero-band'
 import {
   composeSymbolIdentity,
   ContextIdentity,
@@ -15,6 +17,8 @@ export type ReadingWorkspaceProps = {
   venue?: string | null
   /** Optional composed bodies keyed by Region id. Unset Regions render gray-box placeholders. */
   regionBodies?: Partial<Record<RegionId, ReactNode>>
+  /** Market Data VM for the hero observation strip; omit/null when unavailable. */
+  marketData?: MarketDataViewModel | null
 }
 
 function regionDef(id: RegionId) {
@@ -34,13 +38,11 @@ export function ReadingWorkspace({
   symbol,
   venue = null,
   regionBodies = {},
+  marketData = null,
 }: ReadingWorkspaceProps) {
+  const identity = composeSymbolIdentity(symbol, { venue })
   const bodies: Partial<Record<RegionId, ReactNode>> = {
-    context: (
-      <ContextIdentity
-        identity={composeSymbolIdentity(symbol, { venue })}
-      />
-    ),
+    context: <ContextIdentity identity={identity} />,
     ...regionBodies,
   }
 
@@ -48,20 +50,25 @@ export function ReadingWorkspace({
   const analysis = regionDef('analysis')
   const classification = regionDef('classification')
   const evidence = regionDef('evidence')
-  const marketData = regionDef('market-data')
+  const marketDataRegion = regionDef('market-data')
   const diagnostics = regionDef('diagnostics')
 
   return (
     <Stack gap="xl" data-testid="reading-workspace">
       <Stack gap="sm" data-reading-band="context" data-testid="reading-band-context">
-        <ReadingRegion
-          id={context.id}
-          label={getMessage(context.labelKey)}
-          band={context.band}
-          prominence={context.prominence}
-        >
-          {bodies.context}
-        </ReadingRegion>
+        <HeroBand
+          marketData={marketData}
+          identitySlot={
+            <ReadingRegion
+              id={context.id}
+              label={getMessage(context.labelKey)}
+              band={context.band}
+              prominence={context.prominence}
+            >
+              {bodies.context}
+            </ReadingRegion>
+          }
+        />
       </Stack>
 
       <Cluster
@@ -112,10 +119,10 @@ export function ReadingWorkspace({
         </ClusterItem>
         <ClusterItem share="minority" data-reading-slot="market-data">
           <ReadingRegion
-            id={marketData.id}
-            label={getMessage(marketData.labelKey)}
-            band={marketData.band}
-            prominence={marketData.prominence}
+            id={marketDataRegion.id}
+            label={getMessage(marketDataRegion.labelKey)}
+            band={marketDataRegion.band}
+            prominence={marketDataRegion.prominence}
           >
             {bodies['market-data']}
           </ReadingRegion>

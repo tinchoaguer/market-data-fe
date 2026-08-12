@@ -15,6 +15,8 @@ export type SymbolIdentityViewModel = {
   quote: string | null
   /** Venue when available; omit (null) when unknown. */
   venue: string | null
+  /** Symbol logo asset URL when a catalog entry exists; omit (null) when unavailable. */
+  logoSrc: string | null
 }
 
 export type ComposeSymbolIdentityOptions = {

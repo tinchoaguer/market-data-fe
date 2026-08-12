@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 19
-  slug: dashboard-app-chrome
+  id: 20
+  slug: dashboard-hero-band
 
 workflow_stage: Completed
 
@@ -15,11 +15,11 @@ updated: 2026-08-11
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-08-11T19:29:00
+  recorded_at: 2026-08-11T21:15:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for dashboard-app-chrome
+  - Produce requirements.md, design.md, and tasks.md for dashboard-hero-band
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Dashboard App Chrome (`dashboard-app-chrome`)
+**Feature:** Dashboard Hero Band (`dashboard-hero-band`)
 
 **Stage:** Completed
 
@@ -40,7 +40,7 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-08-11T19:29:00
+  recorded_at: 2026-08-11T21:15:00
   notes: User command — Approve specification
 ```
 
@@ -50,10 +50,10 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Brand ^0.2.0 slim AppHeaderBar chrome with brand mark + product.name,
-  Reading-primary nav, ThemeToggle + persistence, StatusFooter date/source/Live,
-  omitted breadcrumb, catalog-linked copy. Removed forbidden copy.source.test.ts
-  after first review rejection. App-layout + ReadingScreen tests passed.
+  Reading hero band: Context-owned Identity adjacent to a Market Data
+  observation strip (price, change with brand tones, ChartFrame sparkline,
+  TimeframeControl, 24H/last-update). Analysis/Recommendation stay in Analysis.
+  All tasks done. 281 tests passed.
 ```
 
 ## Code Review result
@@ -63,9 +63,8 @@ stage: Code Review
 status: COMPLETED
 decision: APPROVED
 summary: >
-  Prior required fix verified (copy.source.test.ts deleted). Chrome REQs/ACs
-  pass with strong layout/Reading-host oracles. No required findings.
+  All REQs, NFRs, ACs, and tasks T-001–T-012 satisfied. No required findings.
 ```
 
-Workflow terminated successfully. History archived to `work/history/dashboard-app-chrome.md`.
-Review report: `work/progress/reviews/dashboard-app-chrome.md`.
+Workflow terminated successfully. History archived to `work/history/dashboard-hero-band.md`.
+Review report: `work/progress/reviews/dashboard-hero-band.md`.

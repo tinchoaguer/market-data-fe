@@ -242,6 +242,46 @@ describe('ReadingWorkspace', () => {
     expect(regionEl('context')).not.toHaveAttribute('data-prominence', 'primary')
   })
 
+  it('places hero Identity adjacent to observation without moving Order book out of Market Data', () => {
+    render(
+      <ReadingWorkspace
+        symbol="BTC/USDT"
+        marketData={{
+          symbol: 'BTC/USDT',
+          price: 42000,
+          orderBook: { bids: [], asks: [] },
+          candlesByTimeframe: [],
+        }}
+        regionBodies={{
+          'market-data': (
+            <section
+              data-testid="market-data-composition"
+              data-prominence="supporting"
+            />
+          ),
+        }}
+      />,
+    )
+
+    const hero = screen.getByTestId('reading-hero-band')
+    expect(within(hero).getByTestId('context-identity')).toBeInTheDocument()
+    expect(within(hero).getByTestId('reading-hero-observation')).toBeInTheDocument()
+    expect(within(hero).getByText('42000')).toBeInTheDocument()
+    expect(
+      within(screen.getByTestId('context-identity')).queryByText(
+        wording.labels.price,
+      ),
+    ).not.toBeInTheDocument()
+
+    const marketData = regionEl('market-data')
+    expect(
+      within(marketData).getByTestId('market-data-composition'),
+    ).toBeInTheDocument()
+    expect(
+      within(hero).queryByTestId('market-data-composition'),
+    ).not.toBeInTheDocument()
+  })
+
   it('mounts Market Data body as supporting observation beside Evidence, not in the primary band', () => {
     render(
       <ReadingWorkspace
