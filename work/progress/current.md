@@ -1,7 +1,7 @@
 ---
 feature:
-  id: 21
-  slug: dashboard-analysis-cards
+  id: 22
+  slug: dashboard-observation-row
 
 workflow_stage: Completed
 
@@ -9,17 +9,17 @@ status: Done
 
 blocked_from_stage: null
 
-started: 2026-08-11
-updated: 2026-08-11
+started: 2026-08-12
+updated: 2026-08-12
 
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-08-11T21:33:00
+  recorded_at: 2026-08-12T10:38:00
   notes: User command — Approve specification
 
 plan:
-  - Produce requirements.md, design.md, and tasks.md for dashboard-analysis-cards
+  - Produce requirements.md, design.md, and tasks.md for dashboard-observation-row
   - Wait for human specification approval
   - Implement approved specification
   - Code review
@@ -28,7 +28,7 @@ plan:
 
 # Current progress
 
-**Feature:** Dashboard Analysis Cards (`dashboard-analysis-cards`)
+**Feature:** Dashboard Observation Row (`dashboard-observation-row`)
 
 **Stage:** Completed
 
@@ -40,7 +40,7 @@ plan:
 approval:
   specification: approved
   recorded_by: human
-  recorded_at: 2026-08-11T21:33:00
+  recorded_at: 2026-08-12T10:38:00
   notes: User command — Approve specification
 ```
 
@@ -50,9 +50,9 @@ approval:
 stage: Implementation
 status: COMPLETED
 summary: >
-  Four Assessment peers restyled as vertical brand Cards (icon, label, badge,
-  score, summary). Recommendation remains a compact composed band. No
-  Overall/Synthesis. Classification stays out of Analysis. 285 tests passed.
+  Market Data Region body restyled as dashboard middle observation row:
+  ChartFrame area chart + TimeframeControl (left), Market Stats 24H card (right).
+  Gray-box body removed. Host loading/error unchanged. 290 tests passed.
 ```
 
 ## Code Review result
@@ -65,5 +65,5 @@ summary: >
   All REQs, ACs, and tasks T-001–T-012 satisfied. No required findings.
 ```
 
-Workflow terminated successfully. History archived to `work/history/dashboard-analysis-cards.md`.
-Review report: `work/progress/reviews/dashboard-analysis-cards.md`.
+Workflow terminated successfully. History archived to `work/history/dashboard-observation-row.md`.
+Review report: `work/progress/reviews/dashboard-observation-row.md`.

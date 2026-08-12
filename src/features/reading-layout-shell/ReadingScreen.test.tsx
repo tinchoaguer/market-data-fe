@@ -408,10 +408,6 @@ describe('ReadingScreen', () => {
     expect(
       within(screen.getByTestId('reading-hero-observation')).getByText('42000'),
     ).toBeInTheDocument()
-    expect(
-      within(screen.getByTestId('market-data-composition')).getByText('42000'),
-    ).toBeInTheDocument()
-
     const marketDataRegion = screen.getByTestId('reading-region-market-data')
     const marketDataBody = within(marketDataRegion).getByTestId(
       'market-data-composition',
@@ -419,19 +415,19 @@ describe('ReadingScreen', () => {
     expect(marketDataBody).toHaveAttribute('data-prominence', 'supporting')
     expect(marketDataBody).not.toHaveAttribute('data-prominence', 'primary')
     expect(
-      within(marketDataBody).getByText(wording.labels.price),
-    ).toBeInTheDocument()
-    expect(
-      within(marketDataBody).getByText(wording.labels.orderBook),
-    ).toBeInTheDocument()
-    expect(
-      within(marketDataBody).getByText(wording.labels.candles),
+      within(marketDataBody).getByTestId('observation-row'),
     ).toBeInTheDocument()
     expect(
       within(marketDataBody).getByText(
-        getMessage('readingMarketData.emptyBids'),
+        getMessage('readingObservationRow.statsTitle'),
       ),
     ).toBeInTheDocument()
+    expect(
+      within(marketDataBody).queryByText(wording.labels.orderBook),
+    ).not.toBeInTheDocument()
+    expect(
+      within(marketDataBody).queryByText(wording.labels.candles),
+    ).not.toBeInTheDocument()
     expect(
       within(marketDataBody).queryByText(getMessage('readingEvidence.drivers')),
     ).not.toBeInTheDocument()

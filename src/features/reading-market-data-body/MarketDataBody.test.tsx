@@ -1,5 +1,6 @@
 import { describe, expect, it, afterEach } from 'vitest'
 import { cleanup, render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { wording } from '@maguer/market-data-brand/wording'
 import type { MarketDataViewModel } from '../../api/marketData/types'
 import { getMessage, messages } from '../../i18n/messages'
@@ -22,6 +23,13 @@ const successFixture: MarketDataViewModel = {
           low: 41800,
           close: 42000,
           timestamp: '2024-01-01T00:00:00Z',
+        },
+        {
+          open: 42000,
+          high: 42200,
+          low: 41900,
+          close: 42100,
+          timestamp: '2024-01-01T00:01:00Z',
         },
       ],
     },
@@ -61,7 +69,7 @@ describe('MarketDataBody', () => {
     cleanup()
   })
 
-  it('renders Price, Order book Bids/Asks, and Candles grouped by timeframe', () => {
+  it('renders dashboard observation row with chart panel and Market Stats 24H card', () => {
     render(<MarketDataBody data={successFixture} />)
 
     const body = screen.getByTestId('market-data-composition')
@@ -69,112 +77,103 @@ describe('MarketDataBody', () => {
     expect(body).toHaveAttribute('data-prominence', 'supporting')
     expect(body).not.toHaveAttribute('data-prominence', 'primary')
 
-    const price = within(unitEl('price'))
-    expect(price.getByText(wording.labels.price)).toBeInTheDocument()
-    expect(price.getByText('42000.5')).toBeInTheDocument()
+    expect(screen.getByTestId('observation-row')).toBeInTheDocument()
+    expect(screen.getByTestId('observation-chart')).toBeInTheDocument()
+    expect(screen.getByTestId('market-stats-24h')).toBeInTheDocument()
 
-    const orderBook = within(unitEl('order-book'))
-    expect(orderBook.getByText(wording.labels.orderBook)).toBeInTheDocument()
-    expect(within(unitEl('order-book-bids')).getByText(wording.labels.bids)).toBe(
-      within(unitEl('order-book-bids')).getByText(wording.labels.bids),
-    )
-    expect(within(unitEl('order-book-asks')).getByText(wording.labels.asks)).toBe(
-      within(unitEl('order-book-asks')).getByText(wording.labels.asks),
-    )
-    expect(within(unitEl('order-book-bids')).getByText('41999')).toBeInTheDocument()
-    expect(within(unitEl('order-book-asks')).getByText('42001')).toBeInTheDocument()
-
-    const candles = within(unitEl('candles'))
-    expect(candles.getByText(wording.labels.candles)).toBeInTheDocument()
     expect(
-      candles.getByLabelText(`${getMessage('viewMarketData.timeframe')} 1m`),
+      within(unitEl('market-stats-24h')).getByText(
+        getMessage('readingObservationRow.statsTitle'),
+      ),
     ).toBeInTheDocument()
     expect(
-      candles.getByLabelText(`${getMessage('viewMarketData.timeframe')} 1h`),
+      within(unitEl('market-stats-24h')).getByText(
+        getMessage('readingHero.high24h'),
+      ),
     ).toBeInTheDocument()
-    // Candles tables stay collapsed by default so Market Data does not outgrow Evidence.
-    expect(candles.queryByText('41900')).not.toBeInTheDocument()
-    expect(candles.queryByText('41000')).not.toBeInTheDocument()
     expect(
-      candles.getByLabelText(`${getMessage('viewMarketData.timeframe')} 1m`),
-    ).toHaveAttribute('data-candles-expanded', 'false')
+      within(unitEl('market-stats-24h')).getByText('42200'),
+    ).toBeInTheDocument()
+    expect(
+      within(unitEl('market-stats-24h')).getByText('41800'),
+    ).toBeInTheDocument()
 
-    const timeframeGroups = body.querySelectorAll(
-      '[data-unit-id="candles-timeframe"]',
-    )
-    expect(timeframeGroups).toHaveLength(2)
-    expect(timeframeGroups[0]).toHaveAttribute('data-timeframe', '1m')
-    expect(timeframeGroups[1]).toHaveAttribute('data-timeframe', '1h')
+    expect(
+      within(unitEl('observation-chart')).getByLabelText(
+        getMessage('readingObservationRow.chartTitle'),
+      ),
+    ).toBeInTheDocument()
+    expect(document.querySelector('[data-chart-frame]')).not.toBeNull()
+    expect(screen.getByTestId('observation-area-plot')).toBeInTheDocument()
   })
 
-  it('expands a Candles timeframe table on demand', async () => {
-    const { default: userEvent } = await import('@testing-library/user-event')
+  it('does not present gray-box Price / Order book / tabular Candles as the primary body', () => {
+    render(<MarketDataBody data={successFixture} />)
+
+    const body = screen.getByTestId('market-data-composition')
+    expect(within(body).queryByText(wording.labels.orderBook)).not.toBeInTheDocument()
+    expect(within(body).queryByText(wording.labels.bids)).not.toBeInTheDocument()
+    expect(within(body).queryByText(wording.labels.asks)).not.toBeInTheDocument()
+    expect(within(body).queryByText(wording.labels.candles)).not.toBeInTheDocument()
+    expect(body.querySelector('[data-unit-id="order-book"]')).toBeNull()
+    expect(body.querySelector('[data-unit-id="price"]')).toBeNull()
+    expect(body.querySelector('[data-unit-id="candles"]')).toBeNull()
+    expect(body.querySelector('[data-unit-id="candles-timeframe"]')).toBeNull()
+  })
+
+  it('frames the area chart with ChartFrame and TimeframeControl when series exist', async () => {
     const user = userEvent.setup()
     render(<MarketDataBody data={successFixture} />)
 
-    const candles = within(unitEl('candles'))
-    await user.click(
-      candles.getAllByRole('button', {
-        name: getMessage('readingMarketData.showCandles'),
-      })[0]!,
-    )
-    expect(candles.getByText('41900')).toBeInTheDocument()
+    const timeframe = screen.getByRole('radiogroup', {
+      name: getMessage('readingHero.timeframe'),
+    })
+    expect(timeframe).toBeInTheDocument()
     expect(
-      candles.getByLabelText(`${getMessage('viewMarketData.timeframe')} 1m`),
-    ).toHaveAttribute('data-candles-expanded', 'true')
+      within(timeframe).getByRole('radio', { name: '1m' }),
+    ).toHaveAttribute('aria-checked', 'true')
+
+    await user.click(within(timeframe).getByRole('radio', { name: '1h' }))
+
+    expect(
+      within(timeframe).getByRole('radio', { name: '1h' }),
+    ).toHaveAttribute('aria-checked', 'true')
+    expect(screen.getByTestId('observation-area-plot')).toBeInTheDocument()
   })
 
-  it('keeps labeled Price / Order book / Candles structure when book and candles are empty', () => {
+  it('keeps observation row structure when candle series are empty', () => {
     render(<MarketDataBody data={emptyStructureFixture} />)
 
     const body = screen.getByTestId('market-data-composition')
-    expect(within(unitEl('price')).getByText('3100')).toBeInTheDocument()
+    expect(screen.getByTestId('observation-row')).toBeInTheDocument()
+    expect(screen.getByTestId('observation-chart')).toBeInTheDocument()
+    expect(screen.getByTestId('market-stats-24h')).toBeInTheDocument()
     expect(
-      within(unitEl('order-book-bids')).getByText(
-        getMessage('readingMarketData.emptyBids'),
+      within(unitEl('observation-chart')).getByText(
+        getMessage('readingObservationRow.emptyChart'),
       ),
     ).toBeInTheDocument()
     expect(
-      within(unitEl('order-book-asks')).getByText(
-        getMessage('readingMarketData.emptyAsks'),
+      within(unitEl('market-stats-24h')).queryByText(
+        getMessage('readingHero.high24h'),
       ),
-    ).toBeInTheDocument()
-    expect(
-      within(unitEl('candles')).getByText(wording.labels.candles),
-    ).toBeInTheDocument()
-    expect(
-      within(unitEl('candles')).getAllByText(
-        getMessage('readingMarketData.emptyCandles'),
-      ),
-    ).toHaveLength(2)
+    ).not.toBeInTheDocument()
 
     expect(screen.queryByText(wording.common.error)).not.toBeInTheDocument()
     expect(body.querySelector('[data-evidence-kind]')).toBeNull()
   })
 
-  it('resolves labels from brand wording and feature locale; omits Evidence kinds', () => {
+  it('resolves labels from locale catalogs; omits Evidence kinds', () => {
     render(<MarketDataBody data={successFixture} />)
 
     const body = screen.getByTestId('market-data-composition')
-    expect(within(unitEl('price')).getByText(wording.labels.price)).toBeInTheDocument()
-    expect(within(unitEl('order-book')).getByText(wording.labels.orderBook)).toBeInTheDocument()
-    expect(within(unitEl('candles')).getByText(wording.labels.candles)).toBeInTheDocument()
-    expect(within(body).getAllByText(getMessage('viewMarketData.timeframe'))[0]).toBe(
-      within(body).getAllByText(messages.viewMarketData.timeframe)[0],
+    expect(
+      within(body).getByText(getMessage('readingObservationRow.statsTitle')),
+    ).toBeInTheDocument()
+    expect(getMessage('readingObservationRow.chartTitle')).toBe(
+      messages.readingObservationRow.chartTitle,
     )
-
-    expect(messages.readingMarketData).toEqual({
-      emptyBids: 'No Bids levels.',
-      emptyAsks: 'No Asks levels.',
-      emptyCandles: 'No Candles for this timeframe.',
-      sectionPlaceholder: 'Market observation for this section will appear here.',
-      showCandles: 'Show Candles',
-      hideCandles: 'Hide Candles',
-      candleCount: '{count} Candles',
-    })
-    expect(getMessage('readingMarketData.emptyBids')).toBe(
-      messages.readingMarketData.emptyBids,
-    )
+    expect(getMessage('readingHero.high24h')).toBe(messages.readingHero.high24h)
 
     expect(within(body).queryByText(getMessage('readingEvidence.drivers'))).not.toBeInTheDocument()
     expect(within(body).queryByText(getMessage('readingEvidence.features'))).not.toBeInTheDocument()
@@ -185,7 +184,7 @@ describe('MarketDataBody', () => {
     expect(body.querySelector('[data-unit-id="drivers"]')).toBeNull()
   })
 
-  it('shows Candles structure with section placeholder when no timeframe series exist', () => {
+  it('shows observation row shell with empty chart message when no timeframe series exist', () => {
     render(
       <MarketDataBody
         data={{
@@ -195,13 +194,16 @@ describe('MarketDataBody', () => {
       />,
     )
 
+    expect(screen.getByTestId('observation-row')).toBeInTheDocument()
     expect(
-      within(unitEl('candles')).getByText(
-        getMessage('readingMarketData.sectionPlaceholder'),
+      within(unitEl('observation-chart')).getByText(
+        getMessage('readingObservationRow.emptyChart'),
       ),
     ).toBeInTheDocument()
     expect(
-      document.querySelector('[data-unit-id="candles-timeframe"]'),
-    ).toBeNull()
+      screen.queryByRole('radiogroup', {
+        name: getMessage('readingHero.timeframe'),
+      }),
+    ).not.toBeInTheDocument()
   })
 })

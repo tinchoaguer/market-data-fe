@@ -71,6 +71,11 @@
     "timeframe": "Timeframe",
     "sparkline": "Price sparkline"
   },
+  "readingObservationRow": {
+    "chartTitle": "Price chart",
+    "statsTitle": "Market stats 24H",
+    "emptyChart": "No chart data for this timeframe."
+  },
   "readingContext": {
     "displayName": "Display name",
     "pair": "Pair",
