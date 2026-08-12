@@ -29,6 +29,7 @@ export function RecommendationUnit({
       aria-labelledby={headingId}
       data-unit-id="recommendation"
       data-unit-role="recommendation"
+      data-presentation="compact-band"
       data-compact="true"
     >
       <Stack gap="sm">

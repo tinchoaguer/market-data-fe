@@ -10,11 +10,9 @@ import { AssessmentPeerUnit } from './AssessmentPeerUnit'
 import { RecommendationUnit } from './RecommendationUnit'
 import type { AssessmentPeerId, AssessmentsWorkspaceProps } from './types'
 
-const PEER_ORDER: AssessmentPeerId[] = [
-  'regime',
-  'risk',
-  'economic',
-  'exposure',
+const PEER_ROWS: AssessmentPeerId[][] = [
+  ['regime', 'risk'],
+  ['economic', 'exposure'],
 ]
 
 const PEER_LABELS: Record<AssessmentPeerId, string> = {
@@ -24,9 +22,27 @@ const PEER_LABELS: Record<AssessmentPeerId, string> = {
   exposure: wording.labels.exposure,
 }
 
+function peerModel(
+  id: AssessmentPeerId,
+  props: AssessmentsWorkspaceProps,
+) {
+  return {
+    assessment:
+      id === 'regime'
+        ? props.regime
+        : id === 'risk'
+          ? props.risk
+          : id === 'economic'
+            ? props.economic
+            : null,
+    exposure: id === 'exposure' ? props.exposure : null,
+    narrative: props.narratives?.[id],
+  }
+}
+
 /**
  * Single Assessments workspace for the Analysis Region:
- * four peer Assessment units, then compact Recommendation.
+ * four vertical Assessment cards, then compact Recommendation.
  */
 export function AssessmentsWorkspace({
   regime = null,
@@ -37,6 +53,14 @@ export function AssessmentsWorkspace({
   narratives,
 }: AssessmentsWorkspaceProps) {
   const headingId = 'assessments-workspace-label'
+  const props: AssessmentsWorkspaceProps = {
+    regime,
+    risk,
+    economic,
+    exposure,
+    recommendation,
+    narratives,
+  }
 
   return (
     <section
@@ -50,27 +74,26 @@ export function AssessmentsWorkspace({
           {getMessage('readingAnalysis.assessmentsLabel')}
         </SectionHeading>
 
-        <Cluster data-assessment-peers>
-          {PEER_ORDER.map((id) => (
-            <ClusterItem key={id}>
-              <AssessmentPeerUnit
-                id={id}
-                label={PEER_LABELS[id]}
-                assessment={
-                  id === 'regime'
-                    ? regime
-                    : id === 'risk'
-                      ? risk
-                      : id === 'economic'
-                        ? economic
-                        : null
-                }
-                exposure={id === 'exposure' ? exposure : null}
-                narrative={narratives?.[id]}
-              />
-            </ClusterItem>
+        <Stack gap="md" data-assessment-peers>
+          {PEER_ROWS.map((row) => (
+            <Cluster key={row.join('-')}>
+              {row.map((id) => {
+                const model = peerModel(id, props)
+                return (
+                  <ClusterItem key={id}>
+                    <AssessmentPeerUnit
+                      id={id}
+                      label={PEER_LABELS[id]}
+                      assessment={model.assessment}
+                      exposure={model.exposure}
+                      narrative={model.narrative}
+                    />
+                  </ClusterItem>
+                )
+              })}
+            </Cluster>
           ))}
-        </Cluster>
+        </Stack>
 
         <RecommendationUnit
           recommendation={recommendation}

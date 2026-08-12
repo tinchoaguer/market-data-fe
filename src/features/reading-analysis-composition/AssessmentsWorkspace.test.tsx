@@ -3,6 +3,7 @@ import { cleanup, render, screen, within } from '@testing-library/react'
 import { wording } from '@maguer/market-data-brand/wording'
 import { getMessage, messages } from '../../i18n/messages'
 import type { MarketAnalysisViewModel } from '../../api/marketAnalysis/types'
+import { bindOutcomeSlots } from './assessmentCardSlots'
 import { AssessmentsWorkspace } from './AssessmentsWorkspace'
 
 const fixture: MarketAnalysisViewModel = {
@@ -80,6 +81,10 @@ describe('AssessmentsWorkspace', () => {
     ).toBe(screen.getByText(messages.readingAnalysis.assessmentsLabel))
 
     expect(unitEl('regime')).toHaveAttribute('data-unit-role', 'assessment-peer')
+    expect(unitEl('regime')).toHaveAttribute(
+      'data-presentation',
+      'vertical-card',
+    )
     expect(unitEl('risk')).toHaveAttribute('data-unit-role', 'assessment-peer')
     expect(unitEl('economic')).toHaveAttribute(
       'data-unit-role',
@@ -93,10 +98,27 @@ describe('AssessmentsWorkspace', () => {
       'data-unit-role',
       'recommendation',
     )
+    expect(unitEl('recommendation')).toHaveAttribute(
+      'data-presentation',
+      'compact-band',
+    )
     expect(unitEl('recommendation')).toHaveAttribute('data-compact', 'true')
 
     const peers = document.querySelectorAll('[data-unit-role="assessment-peer"]')
     expect(peers).toHaveLength(4)
+    for (const id of ['regime', 'risk', 'economic', 'exposure'] as const) {
+      expect(unitEl(id).querySelector('[data-assessment-card]')).not.toBeNull()
+      expect(unitEl(id).querySelector('[data-card-height]')).not.toBeNull()
+      expect(
+        unitEl(id).querySelector(`[data-card-slot="icon"]`),
+      ).not.toBeNull()
+      expect(
+        unitEl(id).querySelector('[data-card-slot="icon"]'),
+      ).toHaveAttribute('aria-hidden', 'true')
+      expect(
+        unitEl(id).querySelector('[data-card-slot="label"]'),
+      ).toHaveTextContent(wording.labels[id])
+    }
   })
 
   it('uses brand wording labels for peers and Recommendation', () => {
@@ -191,6 +213,123 @@ describe('AssessmentsWorkspace', () => {
     expect(
       unitEl('recommendation').querySelector('[data-recommendation-stance]'),
     ).not.toBeNull()
+  })
+
+  it('shows badge, score, and summary slots when mapped data allows', () => {
+    render(
+      <AssessmentsWorkspace
+        regime={fixture.regime}
+        risk={fixture.risk}
+        economic={fixture.economic}
+        exposure={fixture.exposure}
+        recommendation={fixture.recommendation}
+      />,
+    )
+
+    const regime = unitEl('regime')
+    expect(regime.querySelector('[data-card-slot="badge"]')).toHaveTextContent(
+      fixture.regime.level,
+    )
+    expect(regime.querySelector('[data-card-slot="score"]')).toBeNull()
+    expect(
+      regime.querySelector('[data-card-slot="summary"]'),
+    ).toHaveTextContent(fixture.regime.summary)
+
+    const risk = unitEl('risk')
+    expect(risk.querySelector('[data-card-slot="badge"]')).toBeNull()
+    expect(risk.querySelector('[data-card-slot="score"]')).toHaveTextContent(
+      fixture.risk.level,
+    )
+    expect(risk.querySelector('[data-card-slot="summary"]')).toBeNull()
+
+    const economic = unitEl('economic')
+    expect(
+      economic.querySelector('[data-card-slot="score"]'),
+    ).toHaveTextContent(fixture.economic.level)
+
+    const exposure = unitEl('exposure')
+    expect(exposure.querySelector('[data-card-slot="badge"]')).toBeNull()
+    expect(
+      exposure.querySelector('[data-card-slot="score"]'),
+    ).toHaveTextContent(fixture.exposure.summary)
+    expect(exposure.querySelector('[data-card-slot="summary"]')).toBeNull()
+  })
+
+  it('omits missing badge, score, and summary slots without dropping the peer', () => {
+    render(
+      <AssessmentsWorkspace
+        regime={{ summary: '', level: '' }}
+        risk={null}
+        economic={null}
+        exposure={null}
+      />,
+    )
+
+    for (const id of ['regime', 'risk', 'economic', 'exposure'] as const) {
+      expect(unitEl(id)).toHaveAttribute('data-unit-role', 'assessment-peer')
+      expect(
+        within(unitEl(id)).getByText(wording.labels[id]),
+      ).toBeInTheDocument()
+      expect(unitEl(id).querySelector('[data-card-slot="label"]')).not.toBeNull()
+      expect(unitEl(id).querySelector('[data-card-slot="icon"]')).not.toBeNull()
+      expect(unitEl(id).querySelector('[data-card-slot="badge"]')).toBeNull()
+      expect(unitEl(id).querySelector('[data-card-slot="score"]')).toBeNull()
+      expect(unitEl(id).querySelector('[data-card-slot="summary"]')).toBeNull()
+    }
+
+    expect(
+      within(unitEl('regime')).getByText(
+        getMessage('readingAnalysis.unitPlaceholder'),
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('keeps Recommendation as a compact band after peers, not an Assessment card', () => {
+    render(
+      <AssessmentsWorkspace
+        regime={fixture.regime}
+        risk={fixture.risk}
+        economic={fixture.economic}
+        exposure={fixture.exposure}
+        recommendation={fixture.recommendation}
+      />,
+    )
+
+    const recommendation = unitEl('recommendation')
+    expect(recommendation).toHaveAttribute('data-unit-role', 'recommendation')
+    expect(recommendation).not.toHaveAttribute(
+      'data-unit-role',
+      'assessment-peer',
+    )
+    expect(recommendation).toHaveAttribute(
+      'data-presentation',
+      'compact-band',
+    )
+    expect(recommendation).not.toHaveAttribute(
+      'data-presentation',
+      'vertical-card',
+    )
+    expect(recommendation.querySelector('[data-assessment-card]')).toBeNull()
+    expect(recommendation.querySelector('[data-card-slot="icon"]')).toBeNull()
+    expect(recommendation.querySelector('[data-card-slot="score"]')).toBeNull()
+    expect(
+      recommendation.querySelector('[data-card-slot="label"]'),
+    ).toBeNull()
+    expect(
+      within(recommendation).getByText(wording.labels.recommendation),
+    ).toBeInTheDocument()
+  })
+
+  it('binds numeric outcomes to score and labels to badge, omitting empty values', () => {
+    expect(bindOutcomeSlots('Trend up')).toEqual({
+      badge: 'Trend up',
+      score: null,
+    })
+    expect(bindOutcomeSlots('0.17')).toEqual({ badge: null, score: '0.17' })
+    expect(bindOutcomeSlots('35%')).toEqual({ badge: null, score: '35%' })
+    expect(bindOutcomeSlots('')).toEqual({ badge: null, score: null })
+    expect(bindOutcomeSlots(null)).toEqual({ badge: null, score: null })
+    expect(bindOutcomeSlots(undefined)).toEqual({ badge: null, score: null })
   })
 
   it('does not own assessment components or exposure factors as Assessment primary body', () => {

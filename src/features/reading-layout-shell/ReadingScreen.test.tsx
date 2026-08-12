@@ -81,6 +81,10 @@ describe('ReadingScreen', () => {
       screen.getByText(getMessage('readingLayout.selectSymbolPrompt')),
     ).toBeInTheDocument()
     expect(screen.queryByTestId('reading-workspace')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('assessments-workspace')).not.toBeInTheDocument()
+    expect(
+      document.querySelector('[data-unit-role="assessment-peer"]'),
+    ).toBeNull()
     expect(screen.queryByTestId('context-identity')).not.toBeInTheDocument()
     expect(
       screen.queryByTestId('reading-hero-observation'),
@@ -127,6 +131,10 @@ describe('ReadingScreen', () => {
       }),
     )
     expect(screen.queryByTestId('reading-workspace')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('assessments-workspace')).not.toBeInTheDocument()
+    expect(
+      document.querySelector('[data-presentation="vertical-card"]'),
+    ).toBeNull()
     expect(
       screen.queryByTestId('reading-hero-observation'),
     ).not.toBeInTheDocument()
@@ -150,6 +158,10 @@ describe('ReadingScreen', () => {
     await selectSymbol('BTC/USDT')
 
     expect(await screen.findByText(wording.common.error)).toBeInTheDocument()
+    expect(screen.queryByTestId('assessments-workspace')).not.toBeInTheDocument()
+    expect(
+      document.querySelector('[data-unit-role="assessment-peer"]'),
+    ).toBeNull()
     expect(
       screen.queryByTestId('reading-hero-observation'),
     ).not.toBeInTheDocument()
@@ -600,6 +612,7 @@ describe('ReadingScreen under dashboard app chrome', () => {
     expect(
       screen.getByText(getMessage('readingLayout.selectSymbolPrompt')),
     ).toBeInTheDocument()
+    expect(screen.queryByTestId('assessments-workspace')).not.toBeInTheDocument()
     expect(
       screen.getByRole('combobox', { name: wording.labels.symbol }),
     ).toBeInTheDocument()
@@ -624,6 +637,7 @@ describe('ReadingScreen under dashboard app chrome', () => {
     await selectSymbol('BTC/USDT')
 
     expect(await screen.findByText(wording.common.error)).toBeInTheDocument()
+    expect(screen.queryByTestId('assessments-workspace')).not.toBeInTheDocument()
     expect(screen.getByTestId('app-layout-header-bar')).toHaveAttribute(
       'data-header-density',
       'slim',
